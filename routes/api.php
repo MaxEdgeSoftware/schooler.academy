@@ -96,7 +96,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     //Academic Session
     Route::get('/sessions/year', [SessionController::class, 'getSessionYear']);
-    Route::put('/sessions/year/{session}', [SessionController::class, 'setSessionYear']);
+    Route::post('/sessions/year/{session}', [SessionController::class, 'setSessionYear']);
     Route::get('/sessions/{session_id}/classes', [SessionController::class, 'getClasses']);
     Route::apiResource('sessions', SessionController::class);
 

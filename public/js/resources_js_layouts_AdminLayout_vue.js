@@ -379,21 +379,27 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         return _regeneratorRuntime().wrap(function _callee2$(_context2) {
           while (1) switch (_context2.prev = _context2.next) {
             case 0:
-              if (!confirm("Are you sure you want to change academic year?")) {
-                _context2.next = 8;
+              if (!(_this2.session == "")) {
+                _context2.next = 2;
                 break;
               }
-              _context2.next = 3;
+              return _context2.abrupt("return", false);
+            case 2:
+              if (!confirm("Are you sure you want to change academic year?")) {
+                _context2.next = 10;
+                break;
+              }
+              _context2.next = 5;
               return axios.put("/api/sessions/year/".concat(_this2.session));
-            case 3:
+            case 5:
               response = _context2.sent;
               _this2.toastSuccess(response.data.message);
               window.location.reload();
-              _context2.next = 9;
+              _context2.next = 11;
               break;
-            case 8:
+            case 10:
               _this2.session = _this2.selectedSession.default_session_id;
-            case 9:
+            case 11:
             case "end":
               return _context2.stop();
           }
@@ -1803,7 +1809,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n@media (max-width: 768px) {\n.navbar-brand[data-v-65bb863c] {\n        width: 110px;\n}\nbutton[data-v-65bb863c] {\n        order: 2;\n}\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n@media (max-width: 768px) {\n.navbar-brand[data-v-65bb863c] {\r\n        width: 110px;\n}\nbutton[data-v-65bb863c] {\r\n        order: 2;\n}\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -1826,7 +1832,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.notification-max-height[data-v-64942daf] {\n    max-height: 400px\n}\n.notification-min-width[data-v-64942daf] {\n    min-width: 400px\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.notification-max-height[data-v-64942daf] {\r\n    max-height: 400px\n}\n.notification-min-width[data-v-64942daf] {\r\n    min-width: 400px\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -1872,7 +1878,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\nselect {\n    width: 150px;\n    line-height: 49px;\n    height: 38px;\n    font-size: 22px;\n    outline: 0;\n    margin-bottom: 15px;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\nselect {\r\n    width: 150px;\r\n    line-height: 49px;\r\n    height: 38px;\r\n    font-size: 22px;\r\n    outline: 0;\r\n    margin-bottom: 15px;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 

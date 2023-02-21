@@ -30,6 +30,7 @@ export default {
     },
     methods: {
         async changeSession() {
+            if(this.session == "")return false;
             if (confirm("Are you sure you want to change academic year?")) {
                 let response = await axios.put(
                     `/api/sessions/year/${this.session}`
