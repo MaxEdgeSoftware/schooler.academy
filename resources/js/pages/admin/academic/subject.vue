@@ -316,7 +316,7 @@ export default {
         },
         async deleteData() {
             try {
-                const response = await axios.delete(
+                const response = await axios.post(
                     `/api/subjects/${this.selectedId}`
                 );
                 this.subjects.splice(this.subjects.indexOf(this.selectedId), 1);

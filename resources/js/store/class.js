@@ -55,7 +55,7 @@ export default {
         },
         async removeClass(context, id) {
             try {
-                const response = await axios.delete(`/api/classes/${id}`)
+                const response = await axios.post(`/api/classes/${id}`)
                 context.commit('REMOVE_CLASS', id);
             } catch (error) {
                 this.toastError(error.response.data.message);

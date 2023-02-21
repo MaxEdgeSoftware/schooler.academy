@@ -120,7 +120,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) switch (_context.prev = _context.next) {
             case 0:
               _context.next = 2;
-              return axios["delete"]("/api/users/".concat(_this.selectedId));
+              return axios.post("/api/users/".concat(_this.selectedId));
             case 2:
               response = _context.sent;
               _this.isModalShow = false;

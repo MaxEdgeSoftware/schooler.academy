@@ -15082,7 +15082,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               }
               _context3.prev = 1;
               _context3.next = 4;
-              return axios["delete"]("/api/calendars/".concat(_this3.selectedId));
+              return axios.post("/api/calendars/".concat(_this3.selectedId));
             case 4:
               response = _context3.sent;
               _this3.isEditModalShow = false;

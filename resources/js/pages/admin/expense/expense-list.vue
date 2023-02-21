@@ -144,7 +144,7 @@ export default {
         },
         async deleteData(expenseId) {
             try {
-                let { data } = await axios.delete(`/api/expenses/${expenseId}`);
+                let { data } = await axios.post(`/api/expenses/${expenseId}`);
                 await this.$store.commit("expense/REMOVE_EXPENSE", expenseId);
                 this.toastSuccess(data.message);
             } catch (err) {

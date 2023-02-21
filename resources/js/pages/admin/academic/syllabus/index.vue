@@ -168,7 +168,7 @@ export default {
         },
         async deleteSyllabus(syllabus_id) {
             try {
-                const response = await axios.delete(
+                const response = await axios.post(
                     `/api/syllabuses/${syllabus_id}`
                 );
                 this.syllabuses.splice(

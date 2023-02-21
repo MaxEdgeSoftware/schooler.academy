@@ -156,7 +156,7 @@ function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input ==
             case 0:
               _context2.prev = 0;
               _context2.next = 3;
-              return axios["delete"]("/api/fees/".concat(id));
+              return axios.post("/api/fees/".concat(id));
             case 3:
               response = _context2.sent;
               _this5.fees = _this5.fees.filter(function (item) {

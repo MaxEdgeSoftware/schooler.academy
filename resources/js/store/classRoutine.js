@@ -37,7 +37,7 @@ export default {
             });
         },
         removeRoutine(context, id){
-            axios.delete(`/api/remove-class-routines/${id}`).then(response=>{
+            axios.post(`/api/remove-class-routines/${id}`).then(response=>{
                 context.commit('REMOVE_ROUTINE', id);
             })
             .catch(err=>{

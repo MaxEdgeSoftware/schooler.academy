@@ -9075,7 +9075,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             case 0:
               _context4.prev = 0;
               _context4.next = 3;
-              return axios__WEBPACK_IMPORTED_MODULE_0___default()["delete"]("/api/classes/".concat(id));
+              return axios__WEBPACK_IMPORTED_MODULE_0___default().post("/api/classes/".concat(id));
             case 3:
               response = _context4.sent;
               context.commit('REMOVE_CLASS', id);
@@ -9151,7 +9151,7 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     removeRoutine: function removeRoutine(context, id) {
-      axios__WEBPACK_IMPORTED_MODULE_0___default()["delete"]("/api/remove-class-routines/".concat(id)).then(function (response) {
+      axios__WEBPACK_IMPORTED_MODULE_0___default().post("/api/remove-class-routines/".concat(id)).then(function (response) {
         context.commit('REMOVE_ROUTINE', id);
       })["catch"](function (err) {
         console.log(err);
@@ -9487,7 +9487,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             case 0:
               _context2.prev = 0;
               _context2.next = 3;
-              return axios__WEBPACK_IMPORTED_MODULE_0___default()["delete"]("/api/exam-result-rules/".concat(id));
+              return axios__WEBPACK_IMPORTED_MODULE_0___default().post("/api/exam-result-rules/".concat(id));
             case 3:
               response = _context2.sent;
               context.commit('REMOVE_RESULT_RULE', id);
@@ -9602,7 +9602,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             case 0:
               _context2.prev = 0;
               _context2.next = 3;
-              return axios__WEBPACK_IMPORTED_MODULE_0___default()["delete"]("/api/exams/".concat(data.exam_id, "/schedules/").concat(data.schedule_id));
+              return axios__WEBPACK_IMPORTED_MODULE_0___default().post("/api/exams/".concat(data.exam_id, "/schedules/").concat(data.schedule_id));
             case 3:
               response = _context2.sent;
               context.commit('REMOVE_SCHEDULE', data.schedule_id);

@@ -122,7 +122,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             case 0:
               _context4.prev = 0;
               _context4.next = 3;
-              return axios["delete"]("/api/homeworks/".concat(id));
+              return axios.post("/api/homeworks/".concat(id));
             case 3:
               response = _context4.sent;
               _this4.toastSuccess(response.data.message);

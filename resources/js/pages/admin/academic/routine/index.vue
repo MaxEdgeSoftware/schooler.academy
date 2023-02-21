@@ -281,7 +281,7 @@ export default {
         },
         async deleteData() {
             try {
-                const response = await axios.delete(
+                const response = await axios.post(
                     `/api/remove-class-routines/${this.selectedId}`
                 );
                 this.toggleDeleteModal();

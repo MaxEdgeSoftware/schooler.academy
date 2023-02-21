@@ -230,7 +230,7 @@ export default {
         },
         async deleteData(id) {
             try {
-                const response = await axios.delete(`/api/fees/${id}`);
+                const response = await axios.post(`/api/fees/${id}`);
                 this.fees = this.fees.filter(item => item.id !== id);
                 this.toastSuccess(response.data.message);
             } catch (err) {

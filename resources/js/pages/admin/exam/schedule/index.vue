@@ -141,7 +141,7 @@ export default {
         },
         async deleteData(id) {
             try {
-                const response = await axios.delete(
+                const response = await axios.post(
                     `/api/exam-schedules/${id}`
                 );
                 this.toastSuccess(response.data.message);

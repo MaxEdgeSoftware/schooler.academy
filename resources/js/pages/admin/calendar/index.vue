@@ -234,7 +234,7 @@
             async eventDelete() {
                 if (this.checkPermission("calendar-delete")) {
                     try {
-                        let response = await axios.delete(
+                        let response = await axios.post(
                             `/api/calendars/${this.selectedId}`
                         );
                         this.isEditModalShow = false;

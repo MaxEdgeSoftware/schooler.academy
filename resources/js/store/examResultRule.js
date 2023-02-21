@@ -38,7 +38,7 @@ export default {
         },
         async removeResultRule(context, id) {
             try {
-                const response = await axios.delete(`/api/exam-result-rules/${id}`);
+                const response = await axios.post(`/api/exam-result-rules/${id}`);
                 context.commit('REMOVE_RESULT_RULE', id);
             } catch (error) {
                 this.toastError(error.response.data.message);

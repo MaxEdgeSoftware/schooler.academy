@@ -106,7 +106,7 @@ export default {
             this.selectedId = id;
         },
         async deleteUser() {
-            let response = await axios.delete(
+            let response = await axios.post(
                 `/api/teachers/${this.selectedId}`
             );
             this.isModalShow = false;

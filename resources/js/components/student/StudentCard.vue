@@ -67,7 +67,7 @@
             },
             async deleteStudent() {
                 try {
-                    const response = await axios.delete(`/api/students/${this.student.id}`);
+                    const response = await axios.post(`/api/students/${this.student.id}`);
                     this.$emit("delete-item");
                     this.toastSuccess("Student delete successfully!");
                 } catch (error) {
