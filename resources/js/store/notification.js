@@ -41,11 +41,11 @@ export default {
             context.commit('FETCH_UNREAD_NOTIFICATIONS', response.data)
         },
         async markToggleNotification(context, notificationId) {
-            await axios.put(`/api/notifications/mark-toggle/${notificationId}`);
+            await axios.post(`/api/notifications/mark-toggle/${notificationId}`);
             context.dispatch('fetchUnreadNotifications')
         },
         async markReadNotification(context, notificationId) {
-            await axios.put(`/api/notifications/mark-read/${notificationId}`);
+            await axios.post(`/api/notifications/mark-read/${notificationId}`);
             context.dispatch('fetchUnreadNotifications')
         }
     }

@@ -10200,7 +10200,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) switch (_context5.prev = _context5.next) {
             case 0:
               _context5.next = 2;
-              return axios.put("/api/notifications/mark-toggle/".concat(notificationId));
+              return axios.post("/api/notifications/mark-toggle/".concat(notificationId));
             case 2:
               context.dispatch('fetchUnreadNotifications');
             case 3:
@@ -10216,7 +10216,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) switch (_context6.prev = _context6.next) {
             case 0:
               _context6.next = 2;
-              return axios.put("/api/notifications/mark-read/".concat(notificationId));
+              return axios.post("/api/notifications/mark-read/".concat(notificationId));
             case 2:
               context.dispatch('fetchUnreadNotifications');
             case 3:
