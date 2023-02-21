@@ -157,7 +157,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     //Exam Schedule
     Route::post('/exam-schedules/{schedule}', [ExamScheduleController::class, 'update']);
-    Route::delete('exam-schedules/{schedule}', [ExamScheduleController::class, 'destroy']);
+    Route::post('exam-schedules/{schedule}', [ExamScheduleController::class, 'destroy']);
     Route::get('exam-schedule/{schedule}', [ExamScheduleController::class, 'show']);
     Route::post('exam-schedules', [ExamScheduleController::class, 'store']);
     Route::get('exams/{exam}/schedules', [ExamScheduleController::class, 'index']);
@@ -189,7 +189,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('get-class-routines-preview', [ClassRoutineController::class, 'getClassRoutinePreview']);
     Route::post('save-class-routines', [ClassRoutineController::class, 'store']);
     Route::post('update-class-routines/{classRoutine}', [ClassRoutineController::class, 'update']);
-    Route::delete('remove-class-routines/{classRoutine}', [ClassRoutineController::class, 'destroy']);
+    Route::post('remove-class-routines/{classRoutine}', [ClassRoutineController::class, 'destroy']);
 
     // Route::post('reports/exam-results', [ReportController::class, 'getExamResults']);
     Route::post('exams-by-session-and-term', [ExamController::class, 'getExamBySessionAndTerm']);
