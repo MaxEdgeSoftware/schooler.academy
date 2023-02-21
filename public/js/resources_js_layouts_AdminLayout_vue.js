@@ -385,21 +385,27 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               }
               return _context2.abrupt("return", false);
             case 2:
-              if (!confirm("Are you sure you want to change academic year?")) {
-                _context2.next = 10;
+              if (!(!_this2.session || _this2.session == undefined)) {
+                _context2.next = 4;
                 break;
               }
-              _context2.next = 5;
-              return axios.put("/api/sessions/year/".concat(_this2.session));
-            case 5:
+              return _context2.abrupt("return", false);
+            case 4:
+              if (!confirm("Are you sure you want to change academic year?")) {
+                _context2.next = 12;
+                break;
+              }
+              _context2.next = 7;
+              return axios.post("/api/sessions/year/".concat(_this2.session));
+            case 7:
               response = _context2.sent;
               _this2.toastSuccess(response.data.message);
               window.location.reload();
-              _context2.next = 11;
+              _context2.next = 13;
               break;
-            case 10:
+            case 12:
               _this2.session = _this2.selectedSession.default_session_id;
-            case 11:
+            case 13:
             case "end":
               return _context2.stop();
           }
