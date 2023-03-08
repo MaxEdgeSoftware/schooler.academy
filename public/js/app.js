@@ -9075,7 +9075,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             case 0:
               _context4.prev = 0;
               _context4.next = 3;
-              return axios__WEBPACK_IMPORTED_MODULE_0___default()["delete"]("/api/classes/".concat(id));
+              return axios__WEBPACK_IMPORTED_MODULE_0___default().post("/api/classes/".concat(id));
             case 3:
               response = _context4.sent;
               context.commit('REMOVE_CLASS', id);
@@ -9151,7 +9151,7 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     removeRoutine: function removeRoutine(context, id) {
-      axios__WEBPACK_IMPORTED_MODULE_0___default()["delete"]("/api/remove-class-routines/".concat(id)).then(function (response) {
+      axios__WEBPACK_IMPORTED_MODULE_0___default().post("/api/remove-class-routines/".concat(id)).then(function (response) {
         context.commit('REMOVE_ROUTINE', id);
       })["catch"](function (err) {
         console.log(err);
@@ -9487,7 +9487,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             case 0:
               _context2.prev = 0;
               _context2.next = 3;
-              return axios__WEBPACK_IMPORTED_MODULE_0___default()["delete"]("/api/exam-result-rules/".concat(id));
+              return axios__WEBPACK_IMPORTED_MODULE_0___default().post("/api/exam-result-rules/".concat(id));
             case 3:
               response = _context2.sent;
               context.commit('REMOVE_RESULT_RULE', id);
@@ -9602,7 +9602,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             case 0:
               _context2.prev = 0;
               _context2.next = 3;
-              return axios__WEBPACK_IMPORTED_MODULE_0___default()["delete"]("/api/exams/".concat(data.exam_id, "/schedules/").concat(data.schedule_id));
+              return axios__WEBPACK_IMPORTED_MODULE_0___default().post("/api/exams/".concat(data.exam_id, "/schedules/").concat(data.schedule_id));
             case 3:
               response = _context2.sent;
               context.commit('REMOVE_SCHEDULE', data.schedule_id);
@@ -10200,7 +10200,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) switch (_context5.prev = _context5.next) {
             case 0:
               _context5.next = 2;
-              return axios.put("/api/notifications/mark-toggle/".concat(notificationId));
+              return axios.post("/api/notifications/mark-toggle/".concat(notificationId));
             case 2:
               context.dispatch('fetchUnreadNotifications');
             case 3:
@@ -10216,7 +10216,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) switch (_context6.prev = _context6.next) {
             case 0:
               _context6.next = 2;
-              return axios.put("/api/notifications/mark-read/".concat(notificationId));
+              return axios.post("/api/notifications/mark-read/".concat(notificationId));
             case 2:
               context.dispatch('fetchUnreadNotifications');
             case 3:
@@ -15582,7 +15582,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.page-loading[data-v-e79ec684] {\n    height: 50px;\n    width: 100%;\n    display: flex;\n    justify-content: center;\n    align-items: center;\n}\n.page-loading span[data-v-e79ec684]{\n    display: contents\n}\n.page-loading span div[data-v-e79ec684]{\n    width: 30px;\n    height: 30px;\n    border-width: 2px;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.page-loading[data-v-e79ec684] {\r\n    height: 50px;\r\n    width: 100%;\r\n    display: flex;\r\n    justify-content: center;\r\n    align-items: center;\n}\n.page-loading span[data-v-e79ec684]{\r\n    display: contents\n}\n.page-loading span div[data-v-e79ec684]{\r\n    width: 30px;\r\n    height: 30px;\r\n    border-width: 2px;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 

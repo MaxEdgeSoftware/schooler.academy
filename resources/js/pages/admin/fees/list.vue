@@ -230,7 +230,7 @@ export default {
         },
         async deleteData(id) {
             try {
-                const response = await axios.delete(`/api/fees/${id}`);
+                const response = await axios.post(`/api/fees/${id}`);
                 this.fees = this.fees.filter(item => item.id !== id);
                 this.toastSuccess(response.data.message);
             } catch (err) {
@@ -260,14 +260,14 @@ export default {
         },
         async markPaid(feeId) {
             if (confirm("Are you sure you want to mark this fee as paid?")) {
-                let response = await axios.put(`/api/fees/${feeId}/mark-paid`);
+                let response = await axios.post(`/api/fees/${feeId}/mark-paid`);
                 this.fees = this.fees.filter(item => item.id !== feeId);
                 this.toastSuccess(response.data.message);
             }
         },
         async markUnpaid(feeId) {
             if (confirm("Are you sure you want to mark this fee as unpaid?")) {
-                let response = await axios.put(
+                let response = await axios.post(
                     `/api/fees/${feeId}/mark-unpaid`
                 );
                 this.fees = this.fees.filter(item => item.id !== feeId);

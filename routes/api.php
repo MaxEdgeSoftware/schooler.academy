@@ -78,13 +78,13 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/setting', [AdminSettingController::class, 'fetchSetting'])->withoutMiddleware('auth:sanctum');
     Route::post('/setting', [AdminSettingController::class, 'updateSetting']);
     Route::get('/setting/system', [AdminSettingController::class, 'getSystemSettings']);
-    Route::put('/setting/system', [AdminSettingController::class, 'updateSystemSettings']);
+    Route::post('/setting/system', [AdminSettingController::class, 'updateSystemSettings']);
     Route::get('/setting/layout', [AdminSettingController::class, 'getLayoutSettings']);
-    Route::put('/setting/layout', [AdminSettingController::class, 'updateLayoutSettings']);
+    Route::post('/setting/layout', [AdminSettingController::class, 'updateLayoutSettings']);
     Route::get('/setting/mail', [AdminSettingController::class, 'getMailSettings']);
-    Route::put('/setting/mail', [AdminSettingController::class, 'updateMailSettings']);
+    Route::post('/setting/mail', [AdminSettingController::class, 'updateMailSettings']);
     Route::get('/setting/payment', [AdminSettingController::class, 'getPaymentSettings']);
-    Route::put('/setting/payment/{provider}', [AdminSettingController::class, 'updatePaymentSettings']);
+    Route::post('/setting/payment/{provider}', [AdminSettingController::class, 'updatePaymentSettings']);
     Route::post('/setting/send-test-mail', [AdminSettingController::class, 'sendTestMail']);
     Route::get('/setting/routine-time_difference', [AdminSettingController::class, 'getRoutineTimeDifference']);
     Route::get('/setting/check-mail-setting', [AdminSettingController::class, 'checkMailSetting']);
@@ -92,18 +92,18 @@ Route::middleware('auth:sanctum')->group(function () {
     // language route
     Route::get('languages/{locale}', [LanguageController::class, 'show']);
     Route::post('language', [LanguageController::class, 'store']);
-    Route::put('language', [LanguageController::class, 'update']);
+    Route::post('language', [LanguageController::class, 'update']);
 
     //Academic Session
     Route::get('/sessions/year', [SessionController::class, 'getSessionYear']);
-    Route::put('/sessions/year/{session}', [SessionController::class, 'setSessionYear']);
+    Route::post('/sessions/year/{session}', [SessionController::class, 'setSessionYear']);
     Route::get('/sessions/{session_id}/classes', [SessionController::class, 'getClasses']);
     Route::apiResource('sessions', SessionController::class);
 
     // users & profile setting
     Route::get('/users/authuser-details', [UserController::class, 'getAuthUserDetails']);
     Route::post('/user/profile/update', [UserController::class, 'profileUpdate']);
-    Route::put('/user/password/update/{user}', [UserController::class, 'passwordUpdate']);
+    Route::post('/user/password/update/{user}', [UserController::class, 'passwordUpdate']);
     Route::apiResource('users', UserController::class);
 
     // roles & permission
@@ -156,8 +156,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('get-admin/{admin}', [AdminController::class, 'getAdmin']);
 
     //Exam Schedule
-    Route::put('/exam-schedules/{schedule}', [ExamScheduleController::class, 'update']);
-    Route::delete('exam-schedules/{schedule}', [ExamScheduleController::class, 'destroy']);
+    Route::post('/exam-schedules/{schedule}', [ExamScheduleController::class, 'update']);
+    Route::post('exam-schedules/{schedule}', [ExamScheduleController::class, 'destroy']);
     Route::get('exam-schedule/{schedule}', [ExamScheduleController::class, 'show']);
     Route::post('exam-schedules', [ExamScheduleController::class, 'store']);
     Route::get('exams/{exam}/schedules', [ExamScheduleController::class, 'index']);
@@ -188,8 +188,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('class-routines/{classRoutine}', [ClassRoutineController::class, 'show']);
     Route::post('get-class-routines-preview', [ClassRoutineController::class, 'getClassRoutinePreview']);
     Route::post('save-class-routines', [ClassRoutineController::class, 'store']);
-    Route::put('update-class-routines/{classRoutine}', [ClassRoutineController::class, 'update']);
-    Route::delete('remove-class-routines/{classRoutine}', [ClassRoutineController::class, 'destroy']);
+    Route::post('update-class-routines/{classRoutine}', [ClassRoutineController::class, 'update']);
+    Route::post('remove-class-routines/{classRoutine}', [ClassRoutineController::class, 'destroy']);
 
     // Route::post('reports/exam-results', [ReportController::class, 'getExamResults']);
     Route::post('exams-by-session-and-term', [ExamController::class, 'getExamBySessionAndTerm']);
@@ -205,14 +205,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::resource('messages', MessageController::class)->only(['store']);
     Route::get('notifications', [NotificationController::class, 'index']);
     Route::post('notifications/markallread', [NotificationController::class, 'markAllRead']);
-    Route::put('notifications/mark-toggle/{notification_id}', [NotificationController::class, 'markToggleRead']);
-    Route::put('notifications/mark-read/{notification_id}', [NotificationController::class, 'markRead']);
+    Route::post('notifications/mark-toggle/{notification_id}', [NotificationController::class, 'markToggleRead']);
+    Route::post('notifications/mark-read/{notification_id}', [NotificationController::class, 'markRead']);
     Route::get('notifications/unread-count', [NotificationController::class, 'unreadCount']);
     Route::get('notifications/get-notification/{notification_id}', [NotificationController::class, 'getSingleNotification']);
 
     // Fees
-    Route::put('/fees/{fee}/mark-paid', [FeeController::class, 'feeMarkPaid']);
-    Route::put('/fees/{fee}/mark-unpaid', [FeeController::class, 'feeMarkUnpaid']);
+    Route::post('/fees/{fee}/mark-paid', [FeeController::class, 'feeMarkPaid']);
+    Route::post('/fees/{fee}/mark-unpaid', [FeeController::class, 'feeMarkUnpaid']);
     Route::post('/feetypes/{feetype}/update', [FeesTypeController::class, 'update']);
     Route::apiResource('feetypes', FeesTypeController::class)->except(['create', 'edit', 'show']);
     Route::apiResource('fees', FeeController::class)->except(['create', 'edit']);
@@ -226,7 +226,7 @@ Route::middleware('auth:sanctum')->group(function () {
     //Student attendance
     Route::post('attendance/get-students', [AttendanceController::class, 'getStudents']);
     Route::post('attendance/check', [AttendanceController::class, 'getAttaendance']);
-    Route::put('attendance/student', [AttendanceController::class, 'saveStudentAttendance']);
+    Route::post('attendance/student', [AttendanceController::class, 'saveStudentAttendance']);
 
     //Teacher Attendance
     Route::post('attendance/get-teachers', [TeacherAttendanceController::class, 'getTeachers']);
@@ -245,7 +245,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Promotions
     Route::post('promotions/student-list', [PromotionController::class, 'getPromotionStudents']);
-    Route::put('promotions/{student}', [PromotionController::class, 'promoteStudents']);
+    Route::post('promotions/{student}', [PromotionController::class, 'promoteStudents']);
 });
 
 // Route::post('student/{user}/get-class-routines',[StudentController::class, 'getClassRoutine']);

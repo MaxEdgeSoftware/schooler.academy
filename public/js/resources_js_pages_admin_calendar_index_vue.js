@@ -15082,7 +15082,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               }
               _context3.prev = 1;
               _context3.next = 4;
-              return axios["delete"]("/api/calendars/".concat(_this3.selectedId));
+              return axios.post("/api/calendars/".concat(_this3.selectedId));
             case 4:
               response = _context3.sent;
               _this3.isEditModalShow = false;
@@ -15631,7 +15631,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.btn-loading-effect[data-v-08036c4f]{\n    padding-left: 30px\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.btn-loading-effect[data-v-08036c4f]{\r\n    padding-left: 30px\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 

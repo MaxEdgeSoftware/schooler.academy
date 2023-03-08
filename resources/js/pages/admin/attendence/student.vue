@@ -206,7 +206,7 @@ export default {
                     };
                 });
 
-                const response = await axios.put(`/api/attendance/student`, {
+                const response = await axios.post(`/api/attendance/student`, {
                     student_data: data
                 });
                 this.toastSuccess(response.data.message);

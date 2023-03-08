@@ -45,7 +45,7 @@ export default {
         },
         async removeSchedule(context, data) {
             try {
-                const response = await axios.delete(`/api/exams/${data.exam_id}/schedules/${data.schedule_id}`);
+                const response = await axios.post(`/api/exams/${data.exam_id}/schedules/${data.schedule_id}`);
                 context.commit('REMOVE_SCHEDULE', data.schedule_id);
             } catch (error) {
                 this.toastError(error.response.data.message);

@@ -156,7 +156,7 @@ function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input ==
             case 0:
               _context2.prev = 0;
               _context2.next = 3;
-              return axios["delete"]("/api/fees/".concat(id));
+              return axios.post("/api/fees/".concat(id));
             case 3:
               response = _context2.sent;
               _this5.fees = _this5.fees.filter(function (item) {
@@ -239,7 +239,7 @@ function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input ==
                 break;
               }
               _context5.next = 3;
-              return axios.put("/api/fees/".concat(feeId, "/mark-paid"));
+              return axios.post("/api/fees/".concat(feeId, "/mark-paid"));
             case 3:
               response = _context5.sent;
               _this8.fees = _this8.fees.filter(function (item) {
@@ -265,7 +265,7 @@ function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input ==
                 break;
               }
               _context6.next = 3;
-              return axios.put("/api/fees/".concat(feeId, "/mark-unpaid"));
+              return axios.post("/api/fees/".concat(feeId, "/mark-unpaid"));
             case 3:
               response = _context6.sent;
               _this9.fees = _this9.fees.filter(function (item) {

@@ -143,7 +143,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 };
               });
               _context2.next = 4;
-              return axios.put("/api/attendance/student", {
+              return axios.post("/api/attendance/student", {
                 student_data: data
               });
             case 4:

@@ -30,8 +30,10 @@ export default {
     },
     methods: {
         async changeSession() {
+            if(this.session == "")return false;
+            if(!this.session || this.session == undefined) return false;
             if (confirm("Are you sure you want to change academic year?")) {
-                let response = await axios.put(
+                let response = await axios.post(
                     `/api/sessions/year/${this.session}`
                 );
                 this.toastSuccess(response.data.message);
