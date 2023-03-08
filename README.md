@@ -41,4 +41,4 @@ yarn watch or yarn hot
 php artisan serve
 ```
 
-# vue_school_management
+# vue_school_management system
