@@ -23,6 +23,8 @@ class CreateAdminSettingsTable extends Migration
             $table->string('logo')->nullable();
             $table->string('dark_logo')->nullable();
             $table->string('head')->nullable();
+            $table->string('pass')->default(50);
+            $table->string('template')->nullable();
             $table->timestamps();
         });
     }

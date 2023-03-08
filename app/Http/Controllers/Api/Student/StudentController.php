@@ -271,7 +271,7 @@ class StudentController extends Controller
         $school = adminSetting()->name;
 
         $students = Student::with(['user:name,id', 'marks' => function ($q) use ($request, $student, $session_id) {
-            $q->select('id', 'subject_id', 'roll_no', 'class_work', 'assign', 'attend', 'project', 'ca', 'mark');
+            $q->select('id', 'subject_id', 'roll_no', 'class_work', 'assign', 'attend', 'project', 'ca', 'ca2', 'ca3', 'mark');
             $q->where('session_id', $session_id);
             $q->where('exam_id', $request->exam_id);
             $q->where('class_id', $student->class_id);
@@ -304,22 +304,22 @@ class StudentController extends Controller
         
 
         // get students rank
-        $studentsRank = Student::with(['user:name,id', 'marks' => function ($q) use ($request, $student, $session_id) {
-            $q->select('id', 'subject_id', 'roll_no', 'class_work', 'assign', 'attend', 'project', 'ca', 'mark');
-            $q->where('session_id',  $session_id);
-            $q->where('exam_id', $request->exam_id);
-            $q->where('class_id', $student->class_id);
-            $q->where('section_id', $student->section_id);
-            $q->with(['subject:id,name,code']);
-        }])
-            ->where('session_id',  $session_id)
-            ->where('class_id', $student->class_id)
-            ->where('section_id', $student->section_id)
-            ->select(['roll_no', 'id', 'user_id', 'class_id', 'section_id'])
-            ->get();
+        // $studentsRank = Student::with(['user:name,id', 'marks' => function ($q) use ($request, $student, $session_id) {
+        //     $q->select('id', 'subject_id', 'roll_no', 'class_work', 'assign', 'attend', 'project', 'ca', 'mark');
+        //     $q->where('session_id',  $session_id);
+        //     $q->where('exam_id', $request->exam_id);
+        //     $q->where('class_id', $student->class_id);
+        //     $q->where('section_id', $student->section_id);
+        //     $q->with(['subject:id,name,code']);
+        // }])
+        //     ->where('session_id',  $session_id)
+        //     ->where('class_id', $student->class_id)
+        //     ->where('section_id', $student->section_id)
+        //     ->select(['roll_no', 'id', 'user_id', 'class_id', 'section_id'])
+        //     ->get();
 
 
-            $ranks = [];
+        //     $ranks = [];
 
         return response()->json([
             'students'       =>  $this->formatStudentsResultData($students, $subjects),
@@ -331,7 +331,7 @@ class StudentController extends Controller
             'session'  =>$session,
             'term'  =>$term,
             'school_info' =>['school'=>$school, 'admin'=>$admin],
-            'ranks' => $this->formatStudentsRanks($studentsRank, $subjects, $ranks)
+            //'ranks' => $this->formatStudentsRanks($studentsRank, $subjects, $ranks)
         ]);
     }
 

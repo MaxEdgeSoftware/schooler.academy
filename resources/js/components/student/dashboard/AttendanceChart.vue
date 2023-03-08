@@ -12,11 +12,11 @@
                     <ul class="list-group list-group-horizontal mt-2">
                         <li class="list-group-item">
                             <icon-check stroke="#2A8737" />
-                            {{ $t("present") }} - <span>{{ attendance.total_absent }}</span>
+                            {{ $t("present") }} - <span>{{ attendance.total_present }}</span>
                         </li>
                         <li class="list-group-item">
                             <icon-cross stroke="#F23D4E" />
-                            {{ $t("absent") }} - <span>{{ attendance.total_present }}</span>
+                            {{ $t("absent") }} - <span>{{ attendance.total_absent }}</span>
                         </li>
                     </ul>
                 </template>

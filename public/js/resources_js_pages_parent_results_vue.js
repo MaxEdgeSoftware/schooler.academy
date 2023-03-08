@@ -44,45 +44,90 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       result_rules: [],
       session: '',
       term: '',
+      template: '',
+      attendance: "",
+      gender: "",
       url: "/images/default.png"
     };
   },
-  methods: {
-    getExamResults: function getExamResults() {
+  watch: {
+    "searchForm.student_id": function searchFormStudent_id(student_id) {
       var _this = this;
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-        var response;
         return _regeneratorRuntime().wrap(function _callee$(_context) {
           while (1) switch (_context.prev = _context.next) {
             case 0:
-              _context.prev = 0;
-              _context.next = 3;
-              return _this.searchForm.post("/api/parent/exam-results");
-            case 3:
-              response = _context.sent;
-              _this.students = response.data.students;
-              _this.subjects = response.data.subjects;
-              _this.total_students = response.data.total_students;
-              _this.classs = response.data.classs;
-              _this.class_section = response.data.class_section;
-              _this.result_rules = response.data.result_rules;
-              _this.session = response.data.session;
-              _this.term = response.data.term;
-              _this.school_info = response.data.school_info;
-              _this.subjectmarks = response.data.students[0].marks;
-              _this.finalResult = response.data.students[0].final_results;
-              _context.next = 21;
-              break;
-            case 17:
-              _context.prev = 17;
-              _context.t0 = _context["catch"](0);
-              _this.toastError(_context.t0.response.data.message);
-              console.log(_context.t0);
-            case 21:
+              if (student_id) {
+                axios.get("/getid/".concat(student_id)).then(function (response) {
+                  var id = response.data;
+                  console.log(id);
+                  axios.get("/api/parent/student/".concat(id, "/attendance")).then(function (response) {
+                    _this.attendance = response.data;
+                    console.log(response.data);
+                  });
+                });
+              }
+            case 1:
             case "end":
               return _context.stop();
           }
-        }, _callee, null, [[0, 17]]);
+        }, _callee);
+      }))();
+    }
+  },
+  methods: {
+    getExamResults: function getExamResults() {
+      var _this2 = this;
+      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+        var response;
+        return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+          while (1) switch (_context2.prev = _context2.next) {
+            case 0:
+              _context2.prev = 0;
+              _context2.next = 3;
+              return _this2.searchForm.post("/api/parent/exam-results");
+            case 3:
+              response = _context2.sent;
+              _this2.students = response.data.students;
+              _this2.subjects = response.data.subjects;
+              _this2.total_students = response.data.total_students;
+              _this2.classs = response.data.classs;
+              _this2.class_section = response.data.class_section;
+              _this2.result_rules = response.data.result_rules;
+              _this2.session = response.data.session;
+              _this2.term = response.data.term;
+              _this2.school_info = response.data.school_info;
+              _this2.subjectmarks = response.data.students[0].marks;
+              _this2.finalResult = response.data.students[0].final_results;
+              _context2.next = 21;
+              break;
+            case 17:
+              _context2.prev = 17;
+              _context2.t0 = _context2["catch"](0);
+              _this2.toastError(_context2.t0.response.data.message);
+              console.log(_context2.t0);
+            case 21:
+            case "end":
+              return _context2.stop();
+          }
+        }, _callee2, null, [[0, 17]]);
+      }))();
+    },
+    getTemplate: function getTemplate() {
+      var _this3 = this;
+      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+        return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+          while (1) switch (_context3.prev = _context3.next) {
+            case 0:
+              axios.get("/api/setting").then(function (response) {
+                _this3.template = response.data.setting.template;
+                console.log(response.data.setting.template);
+              });
+            case 1:
+            case "end":
+              return _context3.stop();
+          }
+        }, _callee3);
       }))();
     },
     getResult: function getResult(subject, student) {
@@ -126,7 +171,37 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         return "<span class=\"text-danger\">(Null)</span>";
       }
     },
-    setCa: function setCa(subject_id) {
+    setCa1: function setCa1(subject_id) {
+      if (this.subjectmarks && this.subjectmarks.length) {
+        var subjectMark = this.subjectmarks.find(function (subject) {
+          return subject.subject_id == subject_id;
+        });
+        return subjectMark.ca;
+      } else {
+        return "<span class=\"text-danger\">(Null)</span>";
+      }
+    },
+    setCa2: function setCa2(subject_id) {
+      if (this.subjectmarks && this.subjectmarks.length) {
+        var subjectMark = this.subjectmarks.find(function (subject) {
+          return subject.subject_id == subject_id;
+        });
+        return subjectMark.ca2;
+      } else {
+        return "<span class=\"text-danger\">(Null)</span>";
+      }
+    },
+    setCa3: function setCa3(subject_id) {
+      if (this.subjectmarks && this.subjectmarks.length) {
+        var subjectMark = this.subjectmarks.find(function (subject) {
+          return subject.subject_id == subject_id;
+        });
+        return subjectMark.ca3;
+      } else {
+        return "<span class=\"text-danger\">(Null)</span>";
+      }
+    },
+    setAllCa: function setAllCa(subject_id) {
       if (this.subjectmarks && this.subjectmarks.length) {
         var subjectMark = this.subjectmarks.find(function (subject) {
           return subject.subject_id == subject_id;
@@ -152,24 +227,24 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     childs: "parent/getChilds"
   })),
   created: function created() {
-    var _this2 = this;
-    return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
-      return _regeneratorRuntime().wrap(function _callee2$(_context2) {
-        while (1) switch (_context2.prev = _context2.next) {
+    var _this4 = this;
+    return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
+      return _regeneratorRuntime().wrap(function _callee4$(_context4) {
+        while (1) switch (_context4.prev = _context4.next) {
           case 0:
-            if (_this2.authenticateUser.original_role != "Guardian") {
-              _this2.redirect("401");
+            if (_this4.authenticateUser.original_role != "Guardian") {
+              _this4.redirect("401");
             }
-            _context2.next = 3;
-            return _this2.$store.dispatch("exam/fetchExamsList");
+            _context4.next = 3;
+            return _this4.$store.dispatch("exam/fetchExamsList");
           case 3:
-            _context2.next = 5;
-            return _this2.$store.dispatch("parent/fetchChilds");
+            _context4.next = 5;
+            return _this4.$store.dispatch("parent/fetchChilds");
           case 5:
           case "end":
-            return _context2.stop();
+            return _context4.stop();
         }
-      }, _callee2);
+      }, _callee4);
     }))();
   },
   mounted: function mounted() {
@@ -178,6 +253,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       this.searchForm.student_id = this.childs[0].student_id;
       this.getExamResults();
     }
+    this.getTemplate();
   }
 });
 
@@ -311,7 +387,7 @@ var render = function render() {
     attrs: {
       id: "report_sheet"
     }
-  }, [_c("div", {
+  }, [_vm.template == "a" ? _c("div", {
     staticClass: "mt-5 justify-content-center align-items-center mx-auto text-center",
     staticStyle: {
       "max-width": "700px"
@@ -365,7 +441,7 @@ var render = function render() {
       key: index
     }, [_c("td", [_vm._v(_vm._s(subject.name))]), _vm._v(" "), _c("td", [_c("span", {
       domProps: {
-        innerHTML: _vm._s(_vm.setCa(subject.id))
+        innerHTML: _vm._s(_vm.setAllCa(subject.id))
       }
     })]), _vm._v(" "), _c("td", [_c("span", {
       domProps: {
@@ -427,7 +503,108 @@ var render = function render() {
     return _c("tbody", {
       key: index
     }, [_c("tr", [_c("td", [_vm._v(_vm._s(result_rule.min_mark) + "-" + _vm._s(result_rule.max_mark) + "%")]), _vm._v(" "), _c("td", [_vm._v(_vm._s(result_rule.name))])])]);
-  })], 2)])])])])])])]) : [_c("NotFound", {
+  })], 2)])])])])])]) : _vm._e(), _vm._v(" "), _vm.template == "b" ? _c("div", {
+    staticClass: "mt-5 justify-content-center align-items-center mx-auto text-center",
+    staticStyle: {
+      "max-width": "700px"
+    }
+  }, [_c("div", {
+    staticClass: "row justify-content-center align-items-center mx-auto text-center"
+  }, [_c("div", {
+    staticStyle: {
+      border: "3px solid grey"
+    }
+  }, [_c("div", {
+    staticClass: "col-12 mb-3"
+  }, [_c("div", {
+    staticClass: "row"
+  }, [_c("div", {
+    staticClass: "col-12"
+  }, [_c("table", [_c("tr", [_c("th", [_vm._v("Name")]), _vm._v(" "), _c("td", {
+    attrs: {
+      colspan: "4"
+    }
+  }, [_vm._v(_vm._s(_vm.students[0].user.name))])]), _vm._v(" "), _c("tr", [_c("th", [_vm._v("Class")]), _vm._v(" "), _c("td", {
+    attrs: {
+      colspan: "4"
+    }
+  }, [_vm._v(_vm._s(_vm.classs[0].name) + " (" + _vm._s(_vm.class_section[0].name) + ")")])]), _vm._v(" "), _c("tr", [_c("th", [_vm._v("Gender")]), _vm._v(" "), _c("td", {
+    attrs: {
+      colspan: "4"
+    }
+  }, [_vm._v(_vm._s(_vm.students[0].user.gender))])]), _vm._v(" "), _c("tr", [_c("th", [_vm._v("Term")]), _vm._v(" "), _c("td", {
+    attrs: {
+      id: "term"
+    }
+  }, [_vm._v(_vm._s(_vm.term[0].name))]), _vm._v(" "), _c("th", {
+    attrs: {
+      colspan: "2"
+    }
+  }, [_vm._v("School Session:")]), _vm._v(" "), _c("td", [_vm._v(_vm._s(_vm.session[0].name))])]), _vm._v(" "), _c("tr", [_c("th", [_vm._v("Attendance")]), _vm._v(" "), _c("td", {
+    attrs: {
+      colspan: "4"
+    }
+  }, [_vm._v(_vm._s(_vm.attendance.total_present) + " out of " + _vm._s(_vm.attendance.total_attendance))])])])])])]), _vm._v(" "), _c("h1", [_vm._v("Assessment of Cognitive Domain")]), _vm._v(" "), _c("div", {
+    staticClass: "col-12"
+  }, [_c("table", {
+    staticClass: "table-striped table-responsive"
+  }, [_vm._m(5), _vm._v(" "), _c("tbody", _vm._l(_vm.subjects, function (subject, index) {
+    return _c("tr", {
+      key: index
+    }, [_c("td", [_vm._v(_vm._s(subject.name))]), _vm._v(" "), _c("td", [_c("span", {
+      domProps: {
+        innerHTML: _vm._s(_vm.setCa1(subject.id))
+      }
+    })]), _vm._v(" "), _c("td", [_c("span", {
+      domProps: {
+        innerHTML: _vm._s(_vm.setCa2(subject.id))
+      }
+    })]), _vm._v(" "), _c("td", [_c("span", {
+      domProps: {
+        innerHTML: _vm._s(_vm.setCa3(subject.id))
+      }
+    })]), _vm._v(" "), _c("td", [_c("span", {
+      domProps: {
+        innerHTML: _vm._s(_vm.setAllCa(subject.id))
+      }
+    })]), _vm._v(" "), _c("td", [_c("span", {
+      domProps: {
+        innerHTML: _vm._s(_vm.setExam(subject.id))
+      }
+    })]), _vm._v(" "), _c("td", [_c("span", {
+      domProps: {
+        innerHTML: _vm._s(_vm.setMarks(subject.id))
+      }
+    })]), _vm._v(" "), _c("td", [_c("span", {
+      domProps: {
+        innerHTML: _vm._s(_vm.setMarks(subject.id))
+      }
+    })]), _vm._v(" "), _vm.students[0] ? _c("td", {
+      domProps: {
+        innerHTML: _vm._s(_vm.setRemark(_vm.students[0].subjects[subject.id].results))
+      }
+    }) : _vm._e()]);
+  }), 0)])]), _vm._v(" "), _vm._m(6), _vm._v(" "), _c("div", {
+    staticClass: "col-12"
+  }, [_c("div", {
+    staticClass: "row justify-content-center align-items-center"
+  }, [_c("div", {
+    staticClass: "col-8"
+  }, [_c("table", [_c("tr", [_c("td", [_vm._v("Class Tutor's Comment")]), _vm._v(" "), _c("td", [_vm.finalResult.pass ? _c("span", {
+    staticClass: "text-success"
+  }, [_vm._v(_vm._s(_vm.$t("Good Result, keep it up")))]) : _c("span", {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.$t("Poor result, put more effort")))])])]), _vm._v(" "), _c("tr", [_c("td", [_vm._v("Administrator")]), _vm._v(" "), _c("td", [_vm._v(_vm._s(_vm.school_info.admin))])]), _vm._v(" "), _c("tr", [_c("td", [_vm._v("Administrator's Comment")]), _vm._v(" "), _c("td", [_vm.finalResult.pass ? _c("span", {
+    staticClass: "text-success"
+  }, [_vm._v(_vm._s(_vm.$t("Good Result, keep it up")))]) : _c("span", {
+    staticClass: "text-danger"
+  }, [_vm._v(_vm._s(_vm.$t("Poor result, put more effort")))])])]), _vm._v(" "), _vm._m(7)])]), _vm._v(" "), _c("div", {
+    staticClass: "col-4"
+  }, [_c("table", [_vm._m(8), _vm._v(" "), _vm._l(_vm.result_rules, function (result_rule, index) {
+    return _c("tbody", {
+      key: index
+    }, [_c("tr", [_c("td", [_vm._v(_vm._s(result_rule.min_mark) + "-" + _vm._s(result_rule.max_mark) + "%")]), _vm._v(" "), _c("td", [_vm._v(_vm._s(result_rule.name))])])]);
+  })], 2)])])])])])]) : _vm._e()]) : [_c("NotFound", {
     attrs: {
       word: "results"
     }
@@ -461,6 +638,34 @@ var staticRenderFns = [function () {
   var _vm = this,
     _c = _vm._self._c;
   return _c("thead", [_c("tr", [_c("th", [_vm._v("Subject")]), _vm._v(" "), _c("th", [_vm._v("Ca Score(30)")]), _vm._v(" "), _c("th", [_vm._v("Exam Score(70)")]), _vm._v(" "), _c("th", [_vm._v("Total Score(100)")]), _vm._v(" "), _c("th", [_vm._v("Remarks")])])]);
+}, function () {
+  var _vm = this,
+    _c = _vm._self._c;
+  return _c("thead", [_c("tr", [_c("th", [_vm._v("Key")]), _vm._v(" "), _c("th", [_vm._v("Point")])])]);
+}, function () {
+  var _vm = this,
+    _c = _vm._self._c;
+  return _c("thead", [_c("tr", [_c("th", [_vm._v("Mark Obtained")]), _vm._v(" "), _c("th", [_vm._v("100")]), _vm._v(" "), _c("th", [_vm._v("100")]), _vm._v(" "), _c("th", [_vm._v("100")]), _vm._v(" "), _c("th", [_vm._v("100")]), _vm._v(" "), _c("th", [_vm._v("100")]), _vm._v(" "), _c("th", [_vm._v("100")]), _vm._v(" "), _c("th", [_vm._v("100")]), _vm._v(" "), _c("th", {
+    attrs: {
+      colspan: "2"
+    }
+  })]), _vm._v(" "), _c("tr", [_c("th", [_vm._v("Subject")]), _vm._v(" "), _c("th", [_vm._v("T1")]), _vm._v(" "), _c("th", [_vm._v("T2")]), _vm._v(" "), _c("th", [_vm._v("T3")]), _vm._v(" "), _c("th", [_vm._v("T4 (T1+T2+T3/3)")]), _vm._v(" "), _c("th", [_vm._v("Exam")]), _vm._v(" "), _c("th", [_vm._v("Total (T4+Exam/2)")]), _vm._v(" "), _c("th", [_vm._v("Pre_cum")]), _vm._v(" "), _c("th", [_vm._v("Remarks")])])]);
+}, function () {
+  var _vm = this,
+    _c = _vm._self._c;
+  return _c("div", {
+    staticClass: "col-12"
+  }, [_c("div", {
+    staticClass: "row justify-content-center align-items-center"
+  }, [_c("div", {
+    staticClass: "col-6"
+  }, [_c("table", [_c("tr", [_c("th", [_vm._v("Affective Domain")]), _vm._v(" "), _c("th", [_vm._v("Ratings")])]), _vm._v(" "), _c("tr", [_c("td", [_vm._v("Punctuality")]), _vm._v(" "), _c("td")]), _vm._v(" "), _c("tr", [_c("td", [_vm._v("Attendance")]), _vm._v(" "), _c("td")]), _vm._v(" "), _c("tr", [_c("td", [_vm._v("Neatness")]), _vm._v(" "), _c("td")]), _vm._v(" "), _c("tr", [_c("td", [_vm._v("Relationship with others")]), _vm._v(" "), _c("td")]), _vm._v(" "), _c("tr", [_c("td", [_vm._v("Self-control")]), _vm._v(" "), _c("td")]), _vm._v(" "), _c("tr", [_c("td", [_vm._v("Promptness in completing work")]), _vm._v(" "), _c("td")])])]), _vm._v(" "), _c("div", {
+    staticClass: "col-6"
+  }, [_c("table", [_c("tr", [_c("th", [_vm._v("Psychomotor Domain")]), _vm._v(" "), _c("th", [_vm._v("Ratings")])]), _vm._v(" "), _c("tr", [_c("th", [_vm._v("Handwriting")]), _vm._v(" "), _c("td")]), _vm._v(" "), _c("tr", [_c("th", [_vm._v("Games & Sports")]), _vm._v(" "), _c("td")]), _vm._v(" "), _c("tr", [_c("td", [_vm._v("Handling tools")]), _vm._v(" "), _c("td")]), _vm._v(" "), _c("tr", [_c("td", [_vm._v("Drawing & Painting")]), _vm._v(" "), _c("td")]), _vm._v(" "), _c("tr", [_c("td", [_vm._v("Musical skills")]), _vm._v(" "), _c("td")])])])])]);
+}, function () {
+  var _vm = this,
+    _c = _vm._self._c;
+  return _c("tr", [_c("td", [_vm._v("Resumption Day")]), _vm._v(" "), _c("td")]);
 }, function () {
   var _vm = this,
     _c = _vm._self._c;

@@ -15866,13 +15866,13 @@ var render = function render() {
     attrs: {
       stroke: "#2A8737"
     }
-  }), _vm._v("\n                        " + _vm._s(_vm.$t("present")) + " - "), _c("span", [_vm._v(_vm._s(_vm.attendance.total_absent))])], 1), _vm._v(" "), _c("li", {
+  }), _vm._v("\n                        " + _vm._s(_vm.$t("present")) + " - "), _c("span", [_vm._v(_vm._s(_vm.attendance.total_present))])], 1), _vm._v(" "), _c("li", {
     staticClass: "list-group-item"
   }, [_c("icon-cross", {
     attrs: {
       stroke: "#F23D4E"
     }
-  }), _vm._v("\n                        " + _vm._s(_vm.$t("absent")) + " - "), _c("span", [_vm._v(_vm._s(_vm.attendance.total_present))])], 1)])]], 2)])]);
+  }), _vm._v("\n                        " + _vm._s(_vm.$t("absent")) + " - "), _c("span", [_vm._v(_vm._s(_vm.attendance.total_absent))])], 1)])]], 2)])]);
 };
 var staticRenderFns = [];
 render._withStripped = true;

@@ -23,7 +23,9 @@ class CreateExamMarksTable extends Migration
             $table->unsignedBigInteger('roll_no');
             $table->unsignedBigInteger('mark')->nullable();
             $table->unsignedBigInteger('ca')->nullable();
-            $table->unsignedBigInteger('class_work')->default(0);
+            $table->unsignedBigInteger('ca2')->nullable();
+            $table->unsignedBigInteger('ca3')->nullable();
+            $table->unsignedBigInteger('class_work')->nullable();
             $table->unsignedBigInteger('assign')->nullable();
             $table->unsignedBigInteger('attend')->nullable();
             $table->unsignedBigInteger('project')->nullable();

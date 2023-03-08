@@ -305,6 +305,19 @@ var render = function render() {
     staticClass: "nav-link-title"
   }, [_vm._v(" " + _vm._s(_vm.$t("teachers_list")) + " ")])])], 1), _vm._v(" "), _c("li", {
     staticClass: "nav-item"
+  }, [_c("router-link", {
+    staticClass: "nav-link",
+    attrs: {
+      to: {
+        name: "user-profile"
+      }
+    }
+  }, [_c("span", {
+    staticClass: "nav-link-icon d-md-none d-lg-inline-block"
+  }, [_c("icon-user")], 1), _vm._v(" "), _c("span", {
+    staticClass: "nav-link-title"
+  }, [_vm._v(" " + _vm._s(_vm.$t("profile")) + " ")])])], 1), _vm._v(" "), _c("li", {
+    staticClass: "nav-item"
   }, [_c("logout", {
     attrs: {
       linkClass: "nav-link",

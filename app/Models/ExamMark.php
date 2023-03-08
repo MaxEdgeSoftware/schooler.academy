@@ -10,7 +10,7 @@ class ExamMark extends Model
     use HasFactory;
 
     protected $fillable = [
-        'session_id', 'exam_id', 'class_id', 'section_id', 'subject_id', 'roll_no', 'class_work', 'assign', 'attend', 'project', 'ca', 'mark', 'note'
+        'session_id', 'exam_id', 'class_id', 'section_id', 'subject_id', 'roll_no', 'class_work', 'assign', 'attend', 'project', 'ca', 'ca2', 'ca3', 'mark', 'note'
     ];
 
     public function setSessionIdAttribute()

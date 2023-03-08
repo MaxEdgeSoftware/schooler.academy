@@ -167,6 +167,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       students: [],
       mark_form: [],
       ca_form: [],
+      ca_form2: [],
+      ca_form3: [],
       cw_form: [],
       assign_form: [],
       attend_form: [],
@@ -199,33 +201,35 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             case 0:
               _context.prev = 0;
               _this.cw_form = [];
+              _this.cw_form2 = [];
+              _this.cw_form3 = [];
               _this.assign_form = [];
               _this.attend_form = [];
               _this.pro_form = [];
               _this.ca_form = [];
               _this.mark_form = [];
-              _context.next = 9;
+              _context.next = 11;
               return axios.get("/api/classes/".concat(_this.form.class_id, "/subjects"));
-            case 9:
+            case 11:
               subjectResponse = _context.sent;
-              _context.next = 12;
+              _context.next = 14;
               return axios.get("/api/classes/".concat(_this.form.class_id, "/sections"));
-            case 12:
+            case 14:
               sectionResponse = _context.sent;
               _this.subjects = subjectResponse.data.subjects;
               _this.sections = sectionResponse.data.sections;
-              _context.next = 21;
+              _context.next = 23;
               break;
-            case 17:
-              _context.prev = 17;
+            case 19:
+              _context.prev = 19;
               _context.t0 = _context["catch"](0);
               _this.toastError(_context.t0.response.data.message);
               console.log(_context.t0);
-            case 21:
+            case 23:
             case "end":
               return _context.stop();
           }
-        }, _callee, null, [[0, 17]]);
+        }, _callee, null, [[0, 19]]);
       }))();
     },
     loadStudents: function loadStudents() {
@@ -349,6 +353,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 single_student.attend = _this3.attend_form[index];
                 single_student.project = _this3.pro_form[index];
                 single_student.ca = _this3.ca_form[index];
+                single_student.ca2 = _this3.ca_form2[index];
+                single_student.ca3 = _this3.ca_form3[index];
                 single_student.mark = _this3.mark_form[index];
                 single_student.roll_no = _this3.students[index].roll_no;
                 data.push(single_student);
@@ -392,6 +398,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               _this4.mark_load = false;
               _this4.mark_form = [];
               _this4.ca_form = [];
+              _this4.ca_form2 = [];
+              _this4.ca_form3 = [];
               _this4.cw_form = [];
               _this4.assign_form = [];
               _this4.attend_form = [];
@@ -407,9 +415,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 subject_id: _this4.form.subject_id,
                 roll_numbers: roll_numbers
               };
-              _context4.next = 13;
+              _context4.next = 15;
               return axios.post("/api/exam-mark/marks", data);
-            case 13:
+            case 15:
               response = _context4.sent;
               response.data.forEach(function (mark, index) {
                 _this4.cw_form[index] = mark.class_work;
@@ -417,21 +425,23 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _this4.attend_form[index] = mark.attend;
                 _this4.pro_form[index] = mark.project;
                 _this4.ca_form[index] = mark.ca;
+                _this4.ca_form2[index] = mark.ca2;
+                _this4.ca_form3[index] = mark.ca3;
                 _this4.mark_form[index] = mark.mark;
               });
               _this4.mark_load = true;
-              _context4.next = 22;
+              _context4.next = 24;
               break;
-            case 18:
-              _context4.prev = 18;
+            case 20:
+              _context4.prev = 20;
               _context4.t0 = _context4["catch"](0);
               _this4.toastError(_context4.t0.response.data.message);
               console.log(_context4.t0);
-            case 22:
+            case 24:
             case "end":
               return _context4.stop();
           }
-        }, _callee4, null, [[0, 18]]);
+        }, _callee4, null, [[0, 20]]);
       }))();
     }
   },
@@ -1044,10 +1054,10 @@ var render = function render() {
     staticClass: "card-body table-responsive"
   }, [_c("table", {
     staticClass: "table table-bordered table-striped table-hover table-vcenter text-nowrap mb-3"
-  }, [_c("thead", [_c("tr", [_c("th", [_vm._v(_vm._s(_vm.$t("name")))]), _vm._v(" "), _c("th", [_vm._v(_vm._s(_vm.$t("roll")))]), _vm._v(" "), _c("th", [_vm._v(_vm._s(_vm.$t("class")))]), _vm._v(" "), _c("th", [_vm._v(_vm._s(_vm.$t("section")))]), _vm._v(" "), _c("th", [_vm._v(_vm._s(_vm.$t("Class-work")))]), _vm._v(" "), _c("th", [_vm._v(_vm._s(_vm.$t("Assignment")))]), _vm._v(" "), _c("th", [_vm._v(_vm._s(_vm.$t("Attendance")))]), _vm._v(" "), _c("th", [_vm._v(_vm._s(_vm.$t("Project")))]), _vm._v(" "), _c("th", [_vm._v(_vm._s(_vm.$t("ca")))]), _vm._v(" "), _c("th", [_vm._v(_vm._s(_vm.$t("Exam")))])])]), _vm._v(" "), _c("tbody", _vm._l(_vm.students, function (student, index) {
+  }, [_c("thead", [_c("tr", [_c("th", [_vm._v(_vm._s(_vm.$t("name")))]), _vm._v(" "), _c("th", [_vm._v(_vm._s(_vm.$t("roll")))]), _vm._v(" "), _c("th", [_vm._v(_vm._s(_vm.$t("class")))]), _vm._v(" "), _c("th", [_vm._v(_vm._s(_vm.$t("section")))]), _vm._v(" "), _c("th", [_vm._v(_vm._s(_vm.$t("Class-work")))]), _vm._v(" "), _c("th", [_vm._v(_vm._s(_vm.$t("Assignment")))]), _vm._v(" "), _c("th", [_vm._v(_vm._s(_vm.$t("Attendance")))]), _vm._v(" "), _c("th", [_vm._v(_vm._s(_vm.$t("Project")))]), _vm._v(" "), _c("th", [_vm._v(_vm._s(_vm.$t("ca")))]), _vm._v(" "), _c("th", [_vm._v(_vm._s(_vm.$t("ca2")))]), _vm._v(" "), _c("th", [_vm._v(_vm._s(_vm.$t("ca3")))]), _vm._v(" "), _c("th", [_vm._v(_vm._s(_vm.$t("Exam")))])])]), _vm._v(" "), _c("tbody", _vm._l(_vm.students, function (student, index) {
     return _c("tr", {
       key: student.id
-    }, [_c("td", [_vm._v(_vm._s(student.user.name) + " " + _vm._s(student.id))]), _vm._v(" "), _c("td", [_vm._v(_vm._s(student.roll_no))]), _vm._v(" "), _c("td", [_vm._v(_vm._s(student.classs.name))]), _vm._v(" "), _c("td", [_vm._v(_vm._s(student.section.name))]), _vm._v(" "), _c("td", [_c("input", {
+    }, [_c("td", [_vm._v(_vm._s(student.user.name))]), _vm._v(" "), _c("td", [_vm._v(_vm._s(student.roll_no))]), _vm._v(" "), _c("td", [_vm._v(_vm._s(student.classs.name))]), _vm._v(" "), _c("td", [_vm._v(_vm._s(student.section.name))]), _vm._v(" "), _c("td", [_c("input", {
       directives: [{
         name: "model",
         rawName: "v-model",
@@ -1183,6 +1193,50 @@ var render = function render() {
     }), _vm._v(" "), _vm.isCaValidationError(index) ? _c("div", {
       staticClass: "help-block invalid-feedback"
     }, [_vm._v("\n                                        " + _vm._s(_vm.getCaValidationErrorMessage(index)) + "\n                                    ")]) : _vm._e()]), _vm._v(" "), _c("td", [_c("input", {
+      directives: [{
+        name: "model",
+        rawName: "v-model",
+        value: _vm.ca_form2[index],
+        expression: "ca_form2[index]"
+      }],
+      staticClass: "form-control",
+      attrs: {
+        type: "number",
+        min: "0",
+        max: "100"
+      },
+      domProps: {
+        value: _vm.ca_form2[index]
+      },
+      on: {
+        input: function input($event) {
+          if ($event.target.composing) return;
+          _vm.$set(_vm.ca_form2, index, $event.target.value);
+        }
+      }
+    })]), _vm._v(" "), _c("td", [_c("input", {
+      directives: [{
+        name: "model",
+        rawName: "v-model",
+        value: _vm.ca_form3[index],
+        expression: "ca_form3[index]"
+      }],
+      staticClass: "form-control",
+      attrs: {
+        type: "number",
+        min: "0",
+        max: "100"
+      },
+      domProps: {
+        value: _vm.ca_form3[index]
+      },
+      on: {
+        input: function input($event) {
+          if ($event.target.composing) return;
+          _vm.$set(_vm.ca_form3, index, $event.target.value);
+        }
+      }
+    })]), _vm._v(" "), _c("td", [_c("input", {
       directives: [{
         name: "model",
         rawName: "v-model",
