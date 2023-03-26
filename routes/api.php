@@ -98,12 +98,15 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/sessions/year', [SessionController::class, 'getSessionYear']);
     Route::post('/sessions/year/{session}', [SessionController::class, 'setSessionYear']);
     Route::get('/sessions/{session_id}/classes', [SessionController::class, 'getClasses']);
+    Route::post('/sessions/{session_id}/delete', [SessionController::class, 'destroy']);
+
     Route::apiResource('sessions', SessionController::class);
 
     // users & profile setting
     Route::get('/users/authuser-details', [UserController::class, 'getAuthUserDetails']);
     Route::post('/user/profile/update', [UserController::class, 'profileUpdate']);
     Route::post('/user/password/update/{user}', [UserController::class, 'passwordUpdate']);
+    Route::post('/users/{user}/delete', [UserController::class, 'destroy']);
     Route::apiResource('users', UserController::class);
 
     // roles & permission
@@ -119,49 +122,60 @@ Route::middleware('auth:sanctum')->group(function () {
     // sections
     Route::get('allsections', [SectionController::class, 'fetchAllSections']);
     Route::get('classes/{class}/section', [SectionController::class, 'classSection']);
+    Route::post('sections/{section}/delete', [SectionController::class, 'destroy']);
     Route::apiResource('sections', SectionController::class)->except('show');
 
     // subjects
     Route::get('subjects/allclasses', [SubjectController::class, 'create']);
     Route::get('classes/{class_id}/subjects', [SubjectController::class, 'classSubjects']);
     Route::post('subjects/{subject}/update', [SubjectController::class, 'update']);
+    Route::post('subjects/{subject}/delete', [SubjectController::class, 'destroy']);
     Route::apiResource('subjects', SubjectController::class);
 
     // classes
     Route::get('classes/{class}/sections', [ClassController::class, 'getSectionsByClass']);
+    Route::post('classes/{class}/delete', [ClassController::class, 'destroy']);
     Route::apiResource('classes', ClassController::class);
     Route::post('classrooms/{classroom}/update', [ClassRoomController::class, 'update']);
+    Route::post('classrooms/{classroom}/delete', [ClassRoomController::class, 'destroy']);
     Route::apiResource('classrooms', ClassRoomController::class);
 
     // departments
     Route::post('departments/{department}/update', [DepartmentController::class, 'update']);
+    Route::post('departments/{department}/delete', [DepartmentController::class, 'destroy']);
     Route::apiResource('departments', DepartmentController::class);
     // syllabus
     Route::post('syllabuses/download', [SyllabusController::class, 'downloadAttachment']);
     Route::get('syllabuses/classes/{class_id}/terms/{exam_id}/get-syllabus-details', [SyllabusController::class, 'getSyllabusDetails']);
     Route::get('syllabuses/{class_id}/get-class-exams', [SyllabusController::class, 'getTermsByClass']);
     Route::get('syllabuses/{class_id}/classes', [SyllabusController::class, 'getSyllabusesByClass']);
+    Route::post('syllabuses/{id}/delete', [SyllabusController::class, 'destroy']);
     Route::apiResource('syllabuses', SyllabusController::class);
 
     //Student, teachers, guardians, accountants
     Route::get('classes/{class_id}/section/{section_id}/students', [StudentController::class, 'getStudentsByClassSection']);
+    Route::post('students/{student}/delete', [StudentController::class, 'destroy']);
     Route::apiResource('students', StudentController::class);
+    Route::post("guardians/{guardian}/delete", [GuardianController::class, 'destroy']);
     Route::apiResource('guardians', GuardianController::class);
     Route::apiResource('staffs', StaffController::class);
     Route::post('accountants/{accountant}', [AccountantController::class, 'update']);
+    Route::post('accountants/{accountant}/delete', [AccountantController::class, 'destroy']);
     Route::apiResource('accountants', AccountantController::class);
     Route::post('teachers/{teacher}', [TeacherController::class, 'update']);
+    Route::post('teachers/{teacher}/delete', [TeacherController::class, 'destory']);
     Route::apiResource('teachers', TeacherController::class)->except('update');
     Route::get('get-all-teachers', [TeacherController::class, 'getAllTeacher']);
     Route::get('get-admin/{admin}', [AdminController::class, 'getAdmin']);
 
     //Exam Schedule
     Route::post('/exam-schedules/{schedule}', [ExamScheduleController::class, 'update']);
-    Route::post('exam-schedules/{schedule}', [ExamScheduleController::class, 'destroy']);
+    Route::delete('exam-schedules/{schedule}', [ExamScheduleController::class, 'destroy']);
     Route::get('exam-schedule/{schedule}', [ExamScheduleController::class, 'show']);
     Route::post('exam-schedules', [ExamScheduleController::class, 'store']);
     Route::get('exams/{exam}/schedules', [ExamScheduleController::class, 'index']);
-    // Route::apiResource('exams.schedules', ExamScheduleController::class);
+    Route::post('/exam-schedules/{schedule}/delete', [ExamScheduleController::class, 'destroy']);
+    Route::apiResource('exams.schedules', ExamScheduleController::class);
 
     //Exam Marks
     Route::post('exam-mark/students', [ExamMarkController::class, 'getStudents']);
@@ -189,7 +203,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('get-class-routines-preview', [ClassRoutineController::class, 'getClassRoutinePreview']);
     Route::post('save-class-routines', [ClassRoutineController::class, 'store']);
     Route::post('update-class-routines/{classRoutine}', [ClassRoutineController::class, 'update']);
-    Route::post('remove-class-routines/{classRoutine}', [ClassRoutineController::class, 'destroy']);
+    Route::post('remove-class-routines/{classRoutine}/delete', [ClassRoutineController::class, 'destroy']);
 
     // Route::post('reports/exam-results', [ReportController::class, 'getExamResults']);
     Route::post('exams-by-session-and-term', [ExamController::class, 'getExamBySessionAndTerm']);
@@ -214,12 +228,16 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/fees/{fee}/mark-paid', [FeeController::class, 'feeMarkPaid']);
     Route::post('/fees/{fee}/mark-unpaid', [FeeController::class, 'feeMarkUnpaid']);
     Route::post('/feetypes/{feetype}/update', [FeesTypeController::class, 'update']);
+    Route::post('/feetypes/{feetype}/delete', [FeesTypeController::class, 'destroy']);
     Route::apiResource('feetypes', FeesTypeController::class)->except(['create', 'edit', 'show']);
+    Route::post('/fees/{fee}/delete', [FeeController::class, 'destroy']);
     Route::apiResource('fees', FeeController::class)->except(['create', 'edit']);
 
     // Expense
     Route::post('/expensetypes/{expensetype}/update', [ExpenseTypeController::class, 'update']);
+    Route::post('/expensetypes/{expensetype}/delete', [ExpenseTypeController::class, 'destroy']);
     Route::apiResource('expensetypes', ExpenseTypeController::class)->except(['create', 'edit', 'show']);
+    Route::post('/expenses/{expenses}/delete', [ExpenseController::class, 'destroy']);
     Route::apiResource('expenses', ExpenseController::class)->except(['create', 'edit', 'show']);
 
 
@@ -236,11 +254,13 @@ Route::middleware('auth:sanctum')->group(function () {
     // Exams
     Route::get('exams/list', [ExamController::class, 'getExamsList']);
     Route::get('exams/upcoming-exams', [ExamController::class, 'getUpcomingExams']);
+    Route::post('exams/{exam}/delete', [ExamController::class, 'destroy']);
     Route::apiResource('exams', ExamController::class);
 
 
     // homeworks
     Route::get('homeworks/teachers', [HomeworkController::class, 'getTeachers']);
+    Route::post('homeworks/{id}/delete', [HomeworkController::class, 'destroy']);
     Route::apiResource('homeworks', HomeworkController::class);
 
     // Promotions

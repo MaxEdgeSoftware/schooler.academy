@@ -141,7 +141,7 @@ function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input ==
           while (1) switch (_context2.prev = _context2.next) {
             case 0:
               _context2.next = 2;
-              return axios.post("/api/guardians/".concat(_this2.selectedId));
+              return axios.post("/api/guardians/".concat(_this2.selectedId, "/delete"));
             case 2:
               response = _context2.sent;
               _this2.isModalShow = false;

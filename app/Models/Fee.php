@@ -10,7 +10,7 @@ class Fee extends Model
     use HasFactory;
 
     protected $fillable = [
-        'session_id', 'parent_id', 'student_id', 'class_id', 'section_id', 'type_id', 'amount', 'due_date', 'pay_date', 'transaction_no', 'description', 'status',
+        'session_id', 'parent_id', 'student_id', 'class_id', 'section_id', 'type_id', 'amount', 'due_date', 'pay_date', 'transaction_no', 'description', 'status','school_id'
     ];
 
     public function student()

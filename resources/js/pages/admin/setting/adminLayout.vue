@@ -17,21 +17,10 @@
                                 {{ $t('basic') }}</router-link>
                         </li>
                         <li class="nav-item">
-                            <router-link :to="{ name:'setting-admin-system' }" class="nav-link" data-bs-toggle="tab">
-                                {{ $t('system') }}</router-link>
-                        </li>
-                        <li class="nav-item">
                             <router-link :to="{ name:'setting-admin-theme' }" class="nav-link" data-bs-toggle="tab">
                                 {{ $t('theme') }}</router-link>
                         </li>
-                        <li class="nav-item">
-                            <router-link :to="{ name:'setting-admin-mail' }" class="nav-link" data-bs-toggle="tab">
-                                {{ $t('mail') }}</router-link>
-                        </li>
-                        <li class="nav-item">
-                            <router-link :to="{ name:'setting-admin-payment' }" class="nav-link" data-bs-toggle="tab">
-                                {{ $t('payment') }}</router-link>
-                        </li>
+                     
                         <!-- <li class="nav-item">
                             <router-link
                             :to="{ name:'setting-admin-language' }"

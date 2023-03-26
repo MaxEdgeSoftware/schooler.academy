@@ -17,7 +17,12 @@ use App\Notifications\MessageNotification;
 class FeeController extends Controller
 {
     use PaymentTrait;
+    public $school;
 
+    public function __construct()
+    {
+        $this->school = school();
+    }
     /**
      * Display a listing of the resource.
      *
@@ -33,7 +38,7 @@ class FeeController extends Controller
             ->whereClassId($request->class_id)
             ->whereSectionId($request->section_id)
             ->whereTypeId($request->type_id)
-            ->whereStatus($request->status)
+            ->whereStatus($request->status)->where("school_id", $this->school->id)
             ->latest('due_date')
             ->simplePaginate(10)
             ->withQueryString();
@@ -54,7 +59,7 @@ class FeeController extends Controller
         if ($request->invoice_type == 'bulk') {
             Student::whereSessionId($session_id)
                 ->where('class_id', $request->class_id)
-                ->where('section_id', $request->section_id)
+                ->where('section_id', $request->section_id)->where("school_id", $this->school->id)
                 ->get()
                 ->each(function ($student) use ($request, $session_id) {
                     $data = $request->only(['type_id', 'class_id', 'section_id', 'amount', 'due_date', 'status', 'description']);
@@ -62,6 +67,7 @@ class FeeController extends Controller
                     $data['student_id'] = $student->id;
                     $data['parent_id'] = $student->guardian->id;
                     $data['transaction_no'] = uniqid();
+                    $data['school_id'] = $this->school->id;
                     $fee = Fee::create($data);
 
                     if ($request->send_notification) {
@@ -78,7 +84,7 @@ class FeeController extends Controller
         } else {
             $student = Student::whereSessionId($session_id)
                 ->where('class_id', $request->class_id)
-                ->where('section_id', $request->section_id)
+                ->where('section_id', $request->section_id)->where("school_id", $this->school->id)
                 ->first();
 
             $data = $request->only(['type_id', 'class_id', 'section_id', 'amount', 'due_date', 'status', 'description']);
@@ -86,6 +92,7 @@ class FeeController extends Controller
             $data['student_id'] = $student->id;
             $data['parent_id'] = $student->guardian->id;
             $data['transaction_no'] = uniqid();
+            $data['school'] = $this->school->id;
             $fee = Fee::create($data);
 
             if ($request->send_notification) {
@@ -139,8 +146,9 @@ class FeeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Fee $fee)
+    public function destroy($fee)
     {
+        $fee = Fee::find($fee);
         $fee->delete();
         return responseSuccess('', '', 'Fee Deleted Successfully');
     }
@@ -149,7 +157,7 @@ class FeeController extends Controller
     {
         $fee_details = $fee->load('type', 'student');
 
-        $users = User::where('role', 'admin')->orWhere('role', 'staff')->get();
+        $users = User::where('role', 'admin')->orWhere('role', 'staff')->where("school_id", $this->school->id)->get();
         $users->each(function ($user) use ($fee_details) {
             if ($user->original_role == 'Admin' || $user->original_role == 'Accountant') {
                 $user->notify(new FeePaidNotification($user, $fee_details->student->user, $fee_details->amount, $fee_details->type->name));

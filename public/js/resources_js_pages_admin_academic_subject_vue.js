@@ -276,7 +276,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             case 0:
               _context2.prev = 0;
               _context2.next = 3;
-              return axios.post("/api/subjects/".concat(_this2.selectedId));
+              return axios.post("/api/subjects/".concat(_this2.selectedId, "/delete"));
             case 3:
               response = _context2.sent;
               _this2.subjects.splice(_this2.subjects.indexOf(_this2.selectedId), 1);

@@ -109,7 +109,7 @@
                 this.selectedId = id;
             },
             async deleteUser() {
-                let response = await axios.post(`/api/accountants/${this.selectedId}`);
+                let response = await axios.post(`/api/accountants/${this.selectedId}/delete`);
                 this.isModalShow = false;
                 this.$store.commit("accountant/REMOVE_ACCOUNTANT", this.selectedId);
                 this.toastSuccess(response.data.message);

@@ -16,6 +16,12 @@ use Spatie\Permission\Models\Role;
 
 class MessageController extends Controller
 {
+    public $school;
+
+    public function __construct()
+    {
+        $this->school = school();
+    }
     /**
      * Store a newly created resource in storage.
      *
@@ -30,7 +36,9 @@ class MessageController extends Controller
             'message'       =>  ['required'],
         ]);
 
-        Role::find($request->user_type)->users->each(function ($user) use ($request) {
+        $role = Role::where("user_type", $request->user_type)->where("school_id", $this->school->id)->first();
+
+        $role->users->each(function ($user) use ($request) {
             $user->notify(new MessageNotification($user->name, auth()->user(), $request->title, $request->message));
         });
 
@@ -40,7 +48,7 @@ class MessageController extends Controller
     public function messageSending(Request $request)
     {
         if ($request->user_type == 'student') {
-            $students = Student::with('user')->get();
+            $students = Student::with('user')->where("school_id", $this->school->id)->get();
             foreach ($students as $student) {
                 $message = $student->messages()->create($request->only(['message', 'message_type']));
                 if ($request->message_type == 'email') {
@@ -83,7 +91,7 @@ class MessageController extends Controller
         $messages = Message::with('user:name,id')->where('message_type', $request->message_type)->where(function ($q) {
             $type = sprintf('App\Models\%s', ucfirst(request('user_type')));
             $q->where('messageable_type', $type);
-        })->get();
+        })->where("school_id", $this->school->id)->get();
 
         return responseSuccess('messages', $messages);
     }
@@ -91,7 +99,7 @@ class MessageController extends Controller
     public function getRoles()
     {
         return response()->json([
-            'roles' => Role::where('id', '!=', 1)->get(['id', 'name'])
+            'roles' => Role::where('id', '!=', 1)->where("school_id", $this->school->id)->get(['id', 'name'])
         ]);
     }
 }

@@ -9,7 +9,7 @@ class Syllabus extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['subject_id', 'class_id', 'exam_id', 'attachment', 'session_id'];
+    protected $fillable = ['subject_id', 'class_id', 'exam_id', 'attachment', 'session_id','school_id'];
 
     public function class()
     {

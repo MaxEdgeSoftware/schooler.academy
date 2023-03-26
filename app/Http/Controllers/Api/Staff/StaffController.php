@@ -10,6 +10,12 @@ use App\Http\Resources\Staff\StaffResource;
 
 class StaffController extends Controller
 {
+    public $school;
+
+    public function __construct()
+    {
+        $this->school = school();
+    }
     /**
      * Display a listing of the resource.
      *
@@ -17,7 +23,7 @@ class StaffController extends Controller
      */
     public function index()
     {
-        $staffs = Staff::with('user')->paginate(12);
+        $staffs = Staff::with('user')->where("school_id", $this->school->id)->paginate(12);
 
         return StaffResource::collection($staffs);
     }
@@ -31,9 +37,9 @@ class StaffController extends Controller
     public function store(StaffRequest $request)
     {
         $data = $request->except(['role', 'password']) + ['role' => 'staff', 'password' => bcrypt($request->password)];
-
+        $data['school_id'] = $this->school->id;
         $user = User::create($data);
-        $staff  = Staff::create($request->all() + ['user_id' => $user->id]);
+        $staff  = Staff::create($request->all() + ['user_id' => $user->id, 'school_id' => $this->school->id]);
 
         return responseSuccess('staff', $staff, 'Staff create successfully');
     }
@@ -46,6 +52,9 @@ class StaffController extends Controller
      */
     public function show(Staff $staff)
     {
+        if($staff->school_id != $this->school->id){
+            return responseError("invalid request", 404);
+        }
         return new StaffResource($staff->load('user'));
     }
 
@@ -58,6 +67,9 @@ class StaffController extends Controller
      */
     public function update(StaffRequest $request, Staff $staff)
     {
+        if($staff->school_id != $this->school->id){
+            return responseError("invalid request", 404);
+        }
         $staff->update($request->except('user_id'));
         $staff->user()->update($request->only(['name', 'email']));
 
@@ -70,8 +82,12 @@ class StaffController extends Controller
      * @param  \App\Models\Staff  $staff
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Staff $staff)
+    public function destroy($staff)
     {
+        $staff = Staff::find($staff);
+        if($staff->school_id != $this->school->id){
+            return responseError("invalid request", 404);
+        }
         $staff->user()->delete();
         $staff->delete();
 

@@ -11,7 +11,7 @@ class Department extends Model
 
     protected $fillable = [
         'name',
-        'image'
+        'image','school_id'
     ];
     protected $appends = ['image_url'];
 

@@ -13,7 +13,12 @@ use App\Http\Requests\ExpenseRequest;
 class ExpenseController extends Controller
 {
     use PaymentTrait;
+    public $school;
 
+    public function __construct()
+    {
+        $this->school = school();
+    }
     /**
      * Display a listing of the resource.
      *
@@ -21,7 +26,7 @@ class ExpenseController extends Controller
      */
     public function index()
     {
-        $exenses = Expense::with('expenseType:id,name')->whereSessionId(currentSession())->latest()->simplePaginate(10);
+        $exenses = Expense::with('expenseType:id,name')->whereSessionId(currentSession())->latest()->where("school_id", $this->school->id)->simplePaginate(10);
         return response()->json($exenses);
     }
 
@@ -36,8 +41,9 @@ class ExpenseController extends Controller
         $data = $request->only(['type_id', 'amount', 'description']);
         $data['session_id'] = currentSession();
         $data['transaction_no'] = uniqid();
+        $data["school_id"] = $this->school->id;
         $expense = Expense::create($data);
-        $expense_type = ExpenseType::whereId($expense->type_id)->first()->name;
+        $expense_type = ExpenseType::whereId($expense->type_id)->where("school_id", $this->school->id)->first()->name;
 
         $this->createExpenseTransaction($expense->transaction_no, $expense_type, $expense->amount);
 
@@ -65,8 +71,9 @@ class ExpenseController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Expense $expense)
+    public function destroy($expense)
     {
+        $expense = Expense::find($expense);
         if ($expense) {
             $expense->delete();
             Transaction::where('transaction_no', $expense->transaction_no)->delete();

@@ -11,7 +11,7 @@ trait Results
      */
     public function formatStudentsResultData($students, $subjects)
     {
-        $result_rules = ExamResultRule::orderBy('id', 'ASC')->get();
+        $result_rules = ExamResultRule::where('school_id', school()->id)->orderBy('id', 'ASC')->get();
 
         $data = [];
         
@@ -48,7 +48,7 @@ trait Results
     public function formatStudentsRanks($students, $subjects, $ranks)
     {
     
-        $result_rules = ExamResultRule::orderBy('id', 'ASC')->get();
+        $result_rules = ExamResultRule::where('school_id', school()->id)->orderBy('id', 'ASC')->get();
 $ranks = [];
         foreach ($students as $student) {
 

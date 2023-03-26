@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class ClassRoomUpdateRequest extends FormRequest
 {
@@ -24,7 +25,10 @@ class ClassRoomUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'room_no' => "required|numeric|unique:class_rooms,room_no,{$this->classroom->id}",
+            'room_no' => ['required', Rule::unique('class_rooms')->where(function ($query) {
+                return $query->where('room_no', $this->room_no)->where('school_id', school()->id)->where("id", "!=", $this->classroom->id );
+            })],
+            // 'room_no' => "required|numeric|unique:class_rooms,room_no,{$this->classroom->id}",
             'capacity' => 'required|numeric'
         ];
     }

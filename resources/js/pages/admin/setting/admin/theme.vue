@@ -183,7 +183,7 @@ export default {
         },
         async saveSetting() {
             try {
-                let { data } = await this.typeForm.put("/api/setting/layout");
+                let { data } = await this.typeForm.post("/api/setting/layout");
                 this.toastSuccess(data.message);
                 setTimeout(() => {
                     this.$store.commit(

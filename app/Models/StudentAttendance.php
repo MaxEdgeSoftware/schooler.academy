@@ -9,7 +9,7 @@ class StudentAttendance extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['student_id', 'session_id', 'class_id', 'section_id', 'date', 'status'];
+    protected $fillable = ['student_id', 'session_id', 'class_id', 'section_id', 'date', 'status','school_id'];
 
     protected $casts = [
         'type' => 'boolean',

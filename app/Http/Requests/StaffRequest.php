@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StaffRequest extends FormRequest
 {
@@ -26,7 +27,10 @@ class StaffRequest extends FormRequest
         if ($this->method() == 'POST') {
             return [
                 'name'      =>  ['required',],
-                'email'      =>  ['required', 'email', 'unique:users,email'],
+                // 'email'      =>  ['required', 'email', 'unique:users,email'],
+                'email' => ['required', Rule::unique('users')->where(function ($query) {
+                    return $query->where('email', $this->email)->where('school_id', school()->id);
+                })],
                 'joining_date'    =>  ['required', 'date',],
                 'designation'    =>  ['required',],
                 'department_id'    =>  ['required', 'exists:departments,id'],
@@ -39,7 +43,10 @@ class StaffRequest extends FormRequest
         } else {
             return [
                 'name'      =>  ['required',],
-                'email'      =>  ['required', 'email', 'unique:users,email,' . $this->staff->user->id],
+                'email' => ['required', Rule::unique('users')->where(function ($query) {
+                    return $query->where('email', $this->email)->where('school_id', school()->id)->where("id", "!=", $this->staff->user->id );
+                })],
+                // 'email'      =>  ['required', 'email', 'unique:users,email,' . $this->staff->user->id],
                 'joining_date'    =>  ['required', 'date',],
                 'designation'    =>  ['required',],
                 'department_id'    =>  ['required', 'exists:departments,id'],

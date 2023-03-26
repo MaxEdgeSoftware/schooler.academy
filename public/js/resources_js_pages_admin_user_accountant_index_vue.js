@@ -122,7 +122,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             case 0:
               _context.prev = 0;
               _context.next = 3;
-              return axios.post("/api/teachers/".concat(_this.teacher.id));
+              return axios.post("/api/teachers/".concat(_this.teacher.id, "/delete"));
             case 3:
               response = _context.sent;
               _this.$emit("delete-item");
@@ -231,7 +231,7 @@ function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input ==
           while (1) switch (_context2.prev = _context2.next) {
             case 0:
               _context2.next = 2;
-              return axios.post("/api/accountants/".concat(_this2.selectedId));
+              return axios.post("/api/accountants/".concat(_this2.selectedId, "/delete"));
             case 2:
               response = _context2.sent;
               _this2.isModalShow = false;

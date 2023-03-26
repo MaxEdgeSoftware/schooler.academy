@@ -181,7 +181,7 @@ export default {
         async deleteData() {
             try {
                 const response = await axios.post(
-                    `/api/feetypes/${this.selectedId}`
+                    `/api/feetypes/${this.selectedId}/delete`
                 );
                 this.$store.commit("fee/REMOVE_FEE_TYPE", this.selectedId);
                 this.reset();

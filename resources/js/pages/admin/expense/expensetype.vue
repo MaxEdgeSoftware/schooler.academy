@@ -195,7 +195,7 @@
             async deleteData() {
                 try {
                     const response = await axios.post(
-                        `/api/expensetypes/${this.selectedId}`
+                        `/api/expensetypes/${this.selectedId}/delete`
                     );
                     this.$store.commit("expense/REMOVE_EXPENSE_TYPE", this.selectedId);
                     this.reset();

@@ -13,6 +13,12 @@ use App\Http\Requests\StudentAttendanceSaveRequest;
 
 class AttendanceController extends Controller
 {
+    public $school;
+
+    public function __construct()
+    {
+        $this->school = school();
+    }
     /**
      * Get students by class.
      *
@@ -28,6 +34,7 @@ class AttendanceController extends Controller
             ->where('session_id', $session_id)
             ->where('class_id', $request->class_id)
             ->where('section_id', $request->section_id)
+            ->where("school_id", $this->school->id)
             ->get();
 
         $attendences = $this->getStudentAttendancesByDate($request, $students, $session_id);
@@ -59,12 +66,14 @@ class AttendanceController extends Controller
                 ->where('session_id', $session_id)
                 ->where('class_id', $row['class_id'])
                 ->where('section_id', $row['section_id'])
+                ->where("school_id", $this->school->id)
                 ->where('date', $row['date'])
                 ->first();
 
             if ($attendance) {
                 $attendance->update(['status' => $row['status']]);
             } else {
+                $row["school_id"] = $this->school->id;
                 StudentAttendance::create($row);
             }
         }
@@ -84,6 +93,7 @@ class AttendanceController extends Controller
             ->where('class_id', $request->class_id)
             ->where('section_id', $request->section_id)
             ->where('date', $request->date)
+            ->where("school_id", $this->school->id)
             ->get(['student_id', 'session_id', 'class_id', 'section_id', 'date', 'status'])
             ->groupBy('student_id');
     }
@@ -118,6 +128,7 @@ class AttendanceController extends Controller
             ->where('session_id', $session_id)
             ->where('class_id', $student->class_id)
             ->where('section_id', $student->section_id)
+            ->where("school_id", $this->school->id)
             ->where('date', '>=', Carbon::now()->subDays(7)->format('Y-m-d'))
             ->take(7)
             ->get(['date', 'status'])

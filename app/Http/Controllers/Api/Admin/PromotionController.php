@@ -8,11 +8,18 @@ use Illuminate\Http\Request;
 
 class PromotionController extends Controller
 {
+    public $school;
+
+    public function __construct()
+    {
+        $this->school = school();
+    }
     public function getPromotionStudents(Request $request)
     {
         $students =  Student::with('user:id,name,image','section:id,name','classs:id,name')
             ->whereSessionId($request->session_from)
             ->whereClassId($request->class_from)
+            ->where("school_id", $this->school->id)
             ->get()
             ->groupBy('section.name');
 

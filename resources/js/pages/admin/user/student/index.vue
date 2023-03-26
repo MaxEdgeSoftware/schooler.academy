@@ -100,7 +100,7 @@ export default {
         },
         async deleteUser() {
             let response = await axios.post(
-                `/api/students/${this.selectedId}`
+                `/api/students/${this.selectedId}/delete`
             );
             this.isModalShow = false;
             this.fetchStudents();

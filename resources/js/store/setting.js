@@ -19,6 +19,9 @@ export default {
         async fetchSetting(context) {
             try {
                 let response = await axios.get("/api/setting");
+                if(response.data.setting == 'not-found'){
+                    window.location.assign('/not-found');
+                }
                 context.commit("SET_ADMIN_SETTING", response.data.setting);
             } catch (error) {
                 this.toastError(error.response.data.message);

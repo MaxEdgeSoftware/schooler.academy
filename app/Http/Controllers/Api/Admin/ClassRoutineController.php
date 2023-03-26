@@ -12,6 +12,12 @@ use App\Http\Resources\Classs\ClassRoutineResource;
 
 class ClassRoutineController extends Controller
 {
+    public $school;
+
+    public function __construct()
+    {
+        $this->school = school();
+    }
     /**
      * Display a listing of the resource.
      *
@@ -25,7 +31,7 @@ class ClassRoutineController extends Controller
         }])
             ->where('session_id', currentSession())
             ->where('class_id', $request->class_id)
-            ->where('section_id',$request->section_id)
+            ->where('section_id',$request->section_id)->where("school_id", $this->school->id)
             ->oldest('start_time')
             ->get()
             ->groupBy(['weekday']);
@@ -45,7 +51,7 @@ class ClassRoutineController extends Controller
             $q->with('user:name,id');
         }])
             ->where('session_id', currentSession())
-            ->where('class_id', $request->class_id)
+            ->where('class_id', $request->class_id)->where("school_id", $this->school->id)
             ->where('section_id',$request->section_id)
             ->get();
 
@@ -68,6 +74,7 @@ class ClassRoutineController extends Controller
     {
         $data = $request->all();
         $data['session_id'] = currentSession();
+        $data["school_id"] = $this->school->id;
         $classRoutine = ClassRoutine::create($data);
 
         return responseSuccess('class_routine', $classRoutine, 'Class routine create successfully');
@@ -110,8 +117,9 @@ class ClassRoutineController extends Controller
      * @param  \App\Models\ClassRoutine  $classRoutine
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ClassRoutine $classRoutine)
+    public function destroy($classRoutine)
     {
+        $classRoutine = ClassRoutine::find($classRoutine);
         $classRoutine->delete();
 
         return responseSuccess('', '', 'Class routine delete successfully');

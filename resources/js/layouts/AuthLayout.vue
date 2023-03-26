@@ -4,7 +4,7 @@
             <div class="container-tight">
                 <div class="text-center mb-2">
                     <router-link :to="{ name: 'home' }">
-                        <img :src="setting.dark_logo ? setting.dark_logo_url : logo" alt="Schooling - School Management System PHP Script">
+                        <img :src="setting.dark_logo ? setting.dark_logo_url : logo" alt="Edutech">
                     </router-link>
                 </div>
                 <vue-page-transition name="fade">

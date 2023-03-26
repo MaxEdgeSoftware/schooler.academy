@@ -102,7 +102,7 @@ export default {
         },
         async deleteUser() {
             let response = await axios.post(
-                `/api/guardians/${this.selectedId}`
+                `/api/guardians/${this.selectedId}/delete`
             );
             this.isModalShow = false;
             this.$store.commit("parent/REMOVE_GUARDIAN", this.selectedId);

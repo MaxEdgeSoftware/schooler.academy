@@ -9,7 +9,7 @@ class ExamTerm extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'note'];
+    protected $fillable = ['name', 'note','school_id'];
 
 
 

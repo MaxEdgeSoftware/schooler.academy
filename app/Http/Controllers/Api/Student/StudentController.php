@@ -36,23 +36,27 @@ use App\Models\ExamResultRule;
 class StudentController extends Controller
 {
     use Results;
-
+    public $school;
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
+    function __construct()
+    {
+        $this->school = school();
+    }
     public function index()
     {
         if (request()->has('search') && request()->search != null) {
             $search = request('search');
             $students = Student::whereHas('user', function ($q) use ($search) {
                 $q->where('name', 'LIKE', "%$search%");
-            })
+            })->where('school_id', school()->id)
                 ->with('user')
                 ->paginate(10);
         } else {
-            $students = Student::with(['user'])->paginate(12);
+            $students = Student::where('school_id', school()->id)->with(['user'])->paginate(12);
         }
 
         return StudentResource::collection($students);
@@ -68,10 +72,12 @@ class StudentController extends Controller
     {
        //dd($request->parent_id);
        //die();
+       $school = school();
         // User info
         $user_data = $request->only('name', 'email', 'password');
         $user_data['role'] = 'student';
         $user_data['password'] = bcrypt($request->password);
+        $user_data['school_id'] = $school->id;
         $user = User::create($user_data);
         $user->assignRole('Student');
 
@@ -80,6 +86,7 @@ class StudentController extends Controller
         $student_data['parent_id'] = $request->parent_id['id'];
         $student_data['user_id'] = $user->id;
         $student_data['session_id'] = currentSession();
+        $student_data['school_id'] = $school->id;
         $student = Student::create($student_data);
 
         // Mail Send
@@ -96,6 +103,7 @@ class StudentController extends Controller
      */
     public function show(Student $student)
     {
+        if ($student->school_id != school()->id) return response(null);
         return $student->load('user', 'section:id,name', 'classs:id,name', 'guardian.user');
     }
 
@@ -137,8 +145,9 @@ class StudentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Student $student)
+    public function destroy($student)
     {
+        $student = Student::where("id", $student)->where("school_id", school()->id)->first();
         $student->user()->delete();
         $student->delete();
 
@@ -148,7 +157,7 @@ class StudentController extends Controller
     public function fetchAllGuardians()
     {
             $search = request()->keyword;
-        $guardians = Guardian::select(['id', 'user_id'])->whereHas('user', function ($q) use ($search) {
+        $guardians = Guardian::where('school_id', school()->id)->select(['id', 'user_id'])->whereHas('user', function ($q) use ($search) {
             $q->where('name', 'LIKE', $search . '%');
         })
             ->with(['user:name,id,image'])
@@ -182,6 +191,7 @@ class StudentController extends Controller
             ->where('session_id', currentSession())
             ->where('class_id', $student->class_id)
             ->where('section_id', $student->section_id)
+            ->where('school_id', school()->id)
             ->get();
 
         $weekDays     = ClassRoutine::WEEK_DAYS;
@@ -199,7 +209,7 @@ class StudentController extends Controller
         $user = auth()->user();
         // $user = User::where('id', 5)->first();
         $student = $user->student;
-        $settings = AdminSetting::first();
+        $settings = school();
 
         $request->validate([
             'month'         =>   ['required', 'min:1', 'max:12', 'numeric'],
@@ -211,6 +221,7 @@ class StudentController extends Controller
             ->where('session_id', $settings->default_session_id)
             ->where('class_id', $student->class_id)
             ->where('section_id', $student->section_id)
+            ->where('school_id', $settings->id)
             ->whereMonth('date', $request->month)
             ->whereYear('date', $request->year)
             ->orderBy('student_id', 'ASC')
@@ -220,7 +231,8 @@ class StudentController extends Controller
         $students = Student::select(['id', 'user_id', 'parent_id', 'session_id', 'class_id', 'section_id', 'roll_no',])
             ->with(['user', 'attendances' => function ($q) {
                 $q->select('id', 'status', 'date', 'student_id');
-            }])->whereIn('id', $student_ids)->get();
+            }])->where("school_id", $settings->id)
+            ->whereIn('id', $student_ids)->get();
 
         $data = [];
         foreach ($students as $student) {
@@ -239,7 +251,7 @@ class StudentController extends Controller
         $user = auth()->user();
         // $user = User::where('id', 5)->first();
         $student = $user->student;
-        $settings = AdminSetting::first();
+        $settings = school();
 
         $request->validate([
             'exam_id'           =>  ['required'],
@@ -252,6 +264,7 @@ class StudentController extends Controller
             ->where('exam_id', $request->exam_id)
             ->where('class_id', $student->class_id)
             ->where('section_id', $student->section_id)
+            ->where('school_id', school()->id)
             ->get();
 
         return ExamScheduleResource::collection($routines);
@@ -266,9 +279,10 @@ class StudentController extends Controller
 
         $user = auth()->user();
         $student = $user->student;
-        $session_id = adminSetting()->default_session_id;
-        $admin = adminSetting()->head;
-        $school = adminSetting()->name;
+        $session_id = school()->default_session_id;
+        $admin = school()->head;
+        $school = school()->name;
+        $school_ = school();
 
         $students = Student::with(['user:name,id', 'marks' => function ($q) use ($request, $student, $session_id) {
             $q->select('id', 'subject_id', 'roll_no', 'class_work', 'assign', 'attend', 'project', 'ca', 'mark');
@@ -282,25 +296,27 @@ class StudentController extends Controller
             ->where('session_id', $session_id)
             ->where('class_id', $student->class_id)
             ->where('section_id', $student->section_id)
+            ->where('school_id', $school_->id)
             ->select(['roll_no', 'id', 'user_id', 'class_id', 'section_id'])
             ->get();
 
         // return $students;
 
-        $subjects = Subject::where('class_id', $student->class_id)->get();
+        $subjects = Subject::where("school_id", $school_->id)->where('class_id', $student->class_id)->where("school_id", school()->id)->get();
         $total_students = Student::where('session_id',  $session_id)
             ->where('class_id', $student->class_id)
+            ->where("school_id", school()->id)
             ->where('section_id', $student->section_id)->count();
 
-        $class= DB::table('classses')->where('id', $student->class_id)->get('name');
+        $class= DB::table('classses')->where('id', $student->class_id)->where("school_id", school()->id)->get('name');
 
-        $class_section= DB::table('sections')->where('id', $student->section_id)->get('name');
+        $class_section= DB::table('sections')->where('id', $student->section_id)->where("school_id", school()->id)->get('name');
 
-        $session= DB::table('sessions')->where('id', $student->session_id)->get('name');
+        $session= DB::table('sessions')->where('id', $student->session_id)->where("school_id", $this->school->id)->get('name');
 
-        $term= DB::table('exams')->where('session_id', $student->session_id)->get('name');
+        $term= DB::table('exams')->where('session_id', $student->session_id)->where("school_id", $this->school->id)->get('name');
 
-        $result_rules = ExamResultRule::orderBy('id', 'ASC')->get();
+        $result_rules = ExamResultRule::orderBy('id', 'ASC')->where("school_id", $this->school->id)->get();
         
 
         // get students rank
@@ -315,6 +331,7 @@ class StudentController extends Controller
             ->where('session_id',  $session_id)
             ->where('class_id', $student->class_id)
             ->where('section_id', $student->section_id)
+            ->where("school_id", $this->school->id)
             ->select(['roll_no', 'id', 'user_id', 'class_id', 'section_id'])
             ->get();
 
@@ -338,7 +355,7 @@ class StudentController extends Controller
 
     public function getExamBySession()
     {
-        $exams = Exam::where('session_id', adminSetting()->default_session_id)->get();
+        $exams = Exam::where('session_id', adminSetting()->default_session_id)->where("school_id", $this->school->id)->get();
 
         return ExamResource::collection($exams);
     }
@@ -346,7 +363,7 @@ class StudentController extends Controller
 
     public function getExamByTerm(Request $request)
     {
-        $exams = Exam::where('session_id', adminSetting()->default_session_id)->get();
+        $exams = Exam::where('session_id', adminSetting()->default_session_id)->where("school_id", $this->school->id)->get();
 
         return ExamResource::collection($exams);
     }
@@ -367,6 +384,7 @@ class StudentController extends Controller
             ->with('exam')
             ->where('class_id', auth()->user()->student->class_id)
             ->where('session_id', adminSetting()->default_session_id)
+            ->where("school_id", $this->school->id)
             ->oldest('exam_id')
             ->get();
 
@@ -378,7 +396,7 @@ class StudentController extends Controller
 
     public function getAttendanceChartOverview()
     {
-        $student_attendance = StudentAttendance::where('student_id', auth()->user()->student->id)->get();
+        $student_attendance = StudentAttendance::where('student_id', auth()->user()->student->id)->where("school_id", $this->school->id)->get();
         $total_attendance = $student_attendance->count();
         $total_absent = $student_attendance->where('status', 0)->count();
         $total_present = $student_attendance->where('status', 1)->count();
@@ -396,10 +414,10 @@ class StudentController extends Controller
 
     public function getDashboardOverview()
     {
-        $total_event = Calendar::count();
-        $total_exam = Exam::where('session_id', adminSetting()->default_session_id)->count();
-        $total_subject = Subject::where('class_id', auth()->user()->student->class_id)->count();
-        $total_attendance = StudentAttendance::where('student_id', auth()->user()->student->id)->count();
+        $total_event = Calendar::where("school_id", $this->school->id)->get()->count();
+        $total_exam = Exam::where('session_id', adminSetting()->default_session_id)->where("school_id", $this->school->id)->count();
+        $total_subject = Subject::where('class_id', auth()->user()->student->class_id)->where("school_id", $this->school->id)->count();
+        $total_attendance = StudentAttendance::where('student_id', auth()->user()->student->id)->where("school_id", $this->school->id)->count();
 
         return response()->json([
             'total_event' => $total_event,
@@ -420,6 +438,7 @@ class StudentController extends Controller
             ->whereClassId($student->class_id)
             ->whereSectionId($student->section_id)
             ->whereStartDate($date)
+            ->where("school_id", $this->school->id)
             ->latest('start_date')
             ->get();
 
@@ -431,6 +450,7 @@ class StudentController extends Controller
         $students = Student::whereSessionId(currentSession())
             ->where('class_id', $class_id)
             ->where('section_id', $section_id)
+            ->where("school_id", $this->school->id)
             ->get();
 
         return StudentShortResource::collection($students);

@@ -23,9 +23,10 @@ class AdminSettingController extends Controller
      */
     public function fetchSetting()
     {
-        $setting = AdminSetting::first();
-        $setting['name'] = config('app.name');
-        $setting['short_name'] = env('APP_SHORT_NAME');
+        if(!school()) return responseSuccess('setting', 'not-found');
+        $setting = school();
+        $setting['name'] = $setting['name'];
+        $setting['short_name'] = $setting['name'];
 
         return responseSuccess('setting', $setting);
     }
@@ -39,20 +40,20 @@ class AdminSettingController extends Controller
     public function updateSetting(Request $request)
     {
         $env = new Env;
-        $setting = AdminSetting::first();
+        $setting = school();
         $setting['name'] = $request->name;
         $setting['email'] = $request->email;
         $setting['phone'] = $request->phone;
         $setting['address'] = $request->address;
         $setting['head'] = $request->head;
 
-        if ($request->has('name') && $request->name != config('app.name')) {
-            $env->setValue('APP_NAME', $request->name);
-        }
+        // if ($request->has('name') && $request->name != config('app.name')) {
+        //     $env->setValue('APP_NAME', $request->name);
+        // }
 
-        if ($request->has('short_name') && $request->name != env('APP_SHORT_NAME')) {
-            $env->setValue('APP_SHORT_NAME', $request->short_name);
-        }
+        // if ($request->has('short_name') && $request->name != env('APP_SHORT_NAME')) {
+        //     $env->setValue('APP_SHORT_NAME', $request->short_name);
+        // }
 
         if ($request->has('short_name') || $request->has('name')) \Artisan::call('config:clear');
 
@@ -133,7 +134,7 @@ class AdminSettingController extends Controller
      */
     public function getLayoutSettings()
     {
-        $setting = AdminSetting::first();
+        $setting = school();
 
         return responseSuccess('setting', $setting, 'Setting updated successfully');
     }
@@ -151,7 +152,7 @@ class AdminSettingController extends Controller
             'nav_position' => 'required',
         ]);
 
-        $setting = AdminSetting::first();
+        $setting = school();
 
         if ($request->has('layout')) {
             $layoutArray = ['boxed', 'full-width'];
@@ -294,25 +295,25 @@ class AdminSettingController extends Controller
     
         $env = new Env;
 
-        if ($request->has('host') && $request->host != config('mail.mailers.smtp.host')) {
-            setEnv('MAIL_HOST', $request->host);
-        }
+        // if ($request->has('host') && $request->host != config('mail.mailers.smtp.host')) {
+        //     setEnv('MAIL_HOST', $request->host);
+        // }
 
-        if ($request->has('port') && $request->host != config('mail.mailers.smtp.port')) {
-            setEnv('MAIL_PORT', $request->port);
-        }
+        // if ($request->has('port') && $request->host != config('mail.mailers.smtp.port')) {
+        //     setEnv('MAIL_PORT', $request->port);
+        // }
 
-        if ($request->has('username') && $request->username != config('mail.mailers.smtp.username')) {
-            setEnv('MAIL_USERNAME', $request->username);
-        }
+        // if ($request->has('username') && $request->username != config('mail.mailers.smtp.username')) {
+        //     setEnv('MAIL_USERNAME', $request->username);
+        // }
 
-        if ($request->has('password') && $request->password != config('mail.mailers.smtp.password')) {
-            setEnv('MAIL_PASSWORD', $request->password);
-        }
+        // if ($request->has('password') && $request->password != config('mail.mailers.smtp.password')) {
+        //     setEnv('MAIL_PASSWORD', $request->password);
+        // }
 
-        if ($request->has('encryption') && $request->encryption != config('mail.mailers.smtp.encryption')) {
-            setEnv('MAIL_ENCRYPTION', $request->encryption);
-        }
+        // if ($request->has('encryption') && $request->encryption != config('mail.mailers.smtp.encryption')) {
+        //     setEnv('MAIL_ENCRYPTION', $request->encryption);
+        // }
 
         if ($request->has('from_name') && $request->from_name != config('mail.from.name')) {
             $env->setValue('MAIL_FROM_NAME', $request->from_name);

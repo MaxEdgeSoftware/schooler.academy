@@ -16,20 +16,32 @@ use App\Http\Resources\Parent\ParentFeesResource;
 
 class AdminController extends Controller
 {
+    public $school;
+
+    public function __construct()
+    {
+        $this->school = school();
+    }
     public function getDashboardOverview()
     {
-        $students = Student::whereSessionId(currentSession())->get();
+        $school = school();
+        $students = Student::where('school_id', $school->id)->whereSessionId(currentSession())->get();
         $total_student = $students->count();
-        $total_parent = Guardian::whereSessionId(currentSession())->count();
-        $total_teacher = Role::whereName('Teacher')->first()->users()->count();
-        $total_staff = User::whereRole('staff')->count() - $total_teacher;
-        $total_exam = Exam::whereSessionId(currentSession())->count();
-        $total_event = Calendar::count();
+        $total_parent = Guardian::whereSessionId(currentSession())->where("school_id", $this->school->id)->count();
+        $total_teacher = Role::where("school_id", $this->school->id)->whereName('Teacher')->first();
+        if($total_teacher){
+            $total_teacher = $total_teacher->users()->count();
+        }else{
+            $total_teacher = 0;
+        }
+        $total_staff = User::whereRole('staff')->where("school_id", $this->school->id)->count() - $total_teacher;
+        $total_exam = Exam::whereSessionId(currentSession())->where("school_id", $this->school->id)->count();
+        $total_event = Calendar::where("school_id", $this->school->id)->count();
         $male_student = $students->where('gender', 'male')->count();
         $female_student = $students->where('gender', 'female')->count();
         $male_student_percentage =  $male_student && $total_student ? round(($male_student / $total_student) * 100):1;
         $female_student_percentage =  $male_student && $total_student && $female_student ? 100 - $male_student_percentage:0;
-        $transactions = Transaction::whereSessionId(currentSession())->get();
+        $transactions = Transaction::whereSessionId(currentSession())->where("school_id", $this->school->id)->get();
 
         return response()->json([
             'overview' => [
@@ -56,7 +68,7 @@ class AdminController extends Controller
         $duefees = Fee::with('student.user', 'type', 'class', 'section')
             ->whereSessionId(currentSession())
             ->whereClassId($class_id)
-            ->whereStatus(0)
+            ->whereStatus(0)->where("school_id", $this->school->id)
             ->take(5)
             ->get();
 
@@ -73,12 +85,12 @@ class AdminController extends Controller
                 ->whereSessionId(currentSession())
                 ->whereType('income')
                 ->whereYear('created_at', date('Y'))
-                ->whereMonth('created_at', $i + 1)
+                ->whereMonth('created_at', $i + 1)->where("school_id", $this->school->id)
                 ->sum('amount');
 
             $expense_chats[$i] = (int)Transaction::select('amount')
                 ->whereSessionId(currentSession())
-                ->whereType('expense')
+                ->whereType('expense')->where("school_id", $this->school->id)
                 ->whereYear('created_at', date('Y'))
                 ->whereMonth('created_at', $i + 1)
                 ->sum('amount');
@@ -92,7 +104,7 @@ class AdminController extends Controller
 
     public function getAdmin($admin)
     {
-        $user = User::whereRole('admin')->find($admin);
+        $user = User::whereRole('admin')->where("school_id", $this->school->id)->find($admin);
 
         return response()->json([
             'user' => $user,

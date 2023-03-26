@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class RoleFormRequest extends FormRequest
 {
@@ -25,12 +26,18 @@ class RoleFormRequest extends FormRequest
     {
         if ($this->method() === 'POST') {
             return [
-                'name' => 'required|unique:roles,name',
+                // 'name' => 'required|unique:roles,name',
+                'name' => ['required', Rule::unique('roles')->where(function ($query) {
+                    return $query->where('name', $this->name)->where('school_id', school()->id);
+                })], 
                 'permission' => 'required',
             ];
         }else{
             return [
-                'name' => "required|unique:roles,name,{$this->role->id}",
+                // 'name' => "required|unique:roles,name,{$this->role->id}",
+                'name' => ['required', Rule::unique('roles')->where(function ($query) {
+                    return $query->where('name', $this->name)->where('school_id', school()->id)->where("id", "!=", $this->role->id);
+                })], 
                 'permission' => 'required',
             ];
         }

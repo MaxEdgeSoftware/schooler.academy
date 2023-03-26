@@ -85,7 +85,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             case 0:
               _context2.prev = 0;
               _context2.next = 3;
-              return _this2.typeForm.put("/api/setting/layout");
+              return _this2.typeForm.post("/api/setting/layout");
             case 3:
               _yield$_this2$typeFor = _context2.sent;
               data = _yield$_this2$typeFor.data;

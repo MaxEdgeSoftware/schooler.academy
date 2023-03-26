@@ -10,6 +10,12 @@ use App\Http\Requests\ClassRoomUpdateRequest;
 
 class ClassRoomController extends Controller
 {
+    public $school;
+
+    public function __construct()
+    {
+        $this->school = school();
+    }
     /**
      * Display a listing of the resource.
      *
@@ -17,7 +23,7 @@ class ClassRoomController extends Controller
      */
     public function index()
     {
-        return responseSuccess('classrooms', ClassRoom::all());
+        return responseSuccess('classrooms', ClassRoom::where("school_id", $this->school->id)->get());
     }
 
     /**
@@ -29,7 +35,9 @@ class ClassRoomController extends Controller
     public function store(ClassRoomRequest $request)
     {
         try {
-            $classroom = ClassRoom::create($request->all());
+            $data = $request->all();
+            $data["school_id"] = $this->school->id;
+            $classroom = ClassRoom::create();
 
             if ($request->hasFile('image') && $request->file('image')->isValid()) {
                 $url = uploadFileToPublic($request->image, 'room');
@@ -72,8 +80,9 @@ class ClassRoomController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ClassRoom $classroom)
+    public function destroy($classroom)
     {
+        $classroom = ClassRoom::where("id", $classroom)->where("school_id", $this->school->id)->first();
         try {
             $classroom->delete();
 

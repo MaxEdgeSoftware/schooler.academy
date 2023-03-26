@@ -1542,22 +1542,7 @@ __webpack_require__.r(__webpack_exports__);
 var render = function render() {
   var _vm = this,
     _c = _vm._self._c;
-  return !_vm.isMailConfigured ? _c("div", {
-    staticClass: "alert alert-danger my-1",
-    attrs: {
-      role: "alert"
-    }
-  }, [_c("h4", {
-    staticClass: "alert-title"
-  }, [_vm._v("Please configuration mail setting")]), _vm._v(" "), _c("div", {
-    staticClass: "text-muted"
-  }, [_vm._v("You need to configure your mail setting to send mail. "), _c("router-link", {
-    attrs: {
-      to: {
-        name: "setting-admin-mail"
-      }
-    }
-  }, [_vm._v("Go to setting")])], 1)]) : _vm._e();
+  return _c("div");
 };
 var staticRenderFns = [];
 render._withStripped = true;

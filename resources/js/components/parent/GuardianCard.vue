@@ -69,7 +69,7 @@
             },
             async deleteGuardian() {
                 try {
-                    await axios.post(`/api/guardians/${this.guardian.id}`);
+                    await axios.post(`/api/guardians/${this.guardian.id}/delete`);
                     this.$emit("delete-item");
                     this.toastSuccess("Parent Deleted successfully!");
                 } catch (error) {

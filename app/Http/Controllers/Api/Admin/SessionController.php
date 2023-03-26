@@ -12,6 +12,12 @@ use App\Models\Classs;
 
 class SessionController extends Controller
 {
+    public $school;
+
+    public function __construct()
+    {
+        $this->school = school();
+    }
     /**
      * Get all session year.
      *
@@ -21,8 +27,8 @@ class SessionController extends Controller
     {
         return response()->json(
             [
-                'sessions' => Session::latest()->get(['id', 'name']),
-                'selectedSession' => AdminSetting::with('session:id,name')->first('default_session_id'),
+                'sessions' => Session::latest()->where("school_id", $this->school->id)->get(['id', 'name']),
+                'selectedSession' => ["default_session_id" => school()->default_session_id],
             ]
         );
     }
@@ -34,7 +40,7 @@ class SessionController extends Controller
      */
     public function setSessionYear($session_id)
     {
-        AdminSetting::first()->update(['default_session_id' => $session_id]);
+        school()->update(['default_session_id' => $session_id]);
         return response()->json(['message' => 'Academic Session year updated successfully.']);
     }
 
@@ -45,7 +51,7 @@ class SessionController extends Controller
      */
     public function index()
     {
-        $sessions = Session::latest()->get();
+        $sessions = Session::where("school_id", $this->school->id)->latest()->get();
 
         return SessionResource::collection($sessions);
     }
@@ -58,7 +64,7 @@ class SessionController extends Controller
      */
     public function store(SessionRequest $request)
     {
-        $session = Session::create($request->all());
+        $session = Session::create($request->all()+["school_id" => $this->school->id]);
 
         return responseSuccess('session', $session, 'Session create successfully!');
     }
@@ -94,8 +100,9 @@ class SessionController extends Controller
      * @param  \App\Models\Session  $session
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Session $session)
+    public function destroy($session)
     {
+        $session = Session::find($session);
         $session->delete();
 
         return responseSuccess(null, 'Session delete successfully!');
@@ -103,12 +110,12 @@ class SessionController extends Controller
 
     public function getCurrentSession()
     {
-        return Session::select('id', 'name')->findOrFail(currentSession());
+        return Session::select('id', 'name')->where("school_id", $this->school->id)->findOrFail(currentSession());
     }
 
     public function getClasses($session_id)
     {
-        $classes = Classs::whereSessionId($session_id)->get();
+        $classes = Classs::whereSessionId($session_id)->where("school_id", $this->school->id)->get();
         return response()->json(['classes' => $classes]);
     }
 }

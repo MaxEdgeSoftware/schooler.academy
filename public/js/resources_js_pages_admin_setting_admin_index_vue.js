@@ -113,15 +113,37 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           }
         }, _callee2);
       }))();
+    },
+    getSettings: function getSettings() {
+      var _this3 = this;
+      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+        var response;
+        return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+          while (1) switch (_context3.prev = _context3.next) {
+            case 0:
+              _context3.next = 2;
+              return axios.get("/api/setting");
+            case 2:
+              response = _context3.sent;
+              if (response.data.setting == 'not-found') {
+                window.location.assign('/not-found');
+              }
+              console.log(response.data.setting);
+              _this3.setting = response.data.setting;
+              setTimeout(function () {
+                _this3.loadData();
+              }, 500);
+            case 7:
+            case "end":
+              return _context3.stop();
+          }
+        }, _callee3);
+      }))();
     }
   },
-  computed: {
-    setting: function setting() {
-      return this.$store.getters["setting/setting"];
-    }
-  },
+  computed: {},
   created: function created() {
-    this.loadData();
+    this.getSettings();
   }
 });
 
@@ -286,7 +308,7 @@ var render = function render() {
       field: "short_name"
     }
   })], 1)]), _vm._v(" "), _c("div", {
-    staticClass: "form-group mb-3 row"
+    staticClass: "form-group mb-3 row d-none"
   }, [_c("label", {
     staticClass: "form-label col-md-3 col-form-label",
     attrs: {

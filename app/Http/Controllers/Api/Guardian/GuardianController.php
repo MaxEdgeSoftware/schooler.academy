@@ -34,6 +34,12 @@ use Illuminate\Support\Facades\DB;
 class GuardianController extends Controller
 {
     use Results;
+    public $school;
+
+    public function __construct()
+    {
+        $this->school = school();
+    }
     /**
      * Display a listing of the resource.
      *
@@ -45,11 +51,11 @@ class GuardianController extends Controller
             $search = request('search');
             $guardians = Guardian::whereHas('user', function ($q) use ($search) {
                 $q->where('name', 'LIKE', "%$search%");
-            })
+            })->where("school_id", $this->school->id)
                 ->with('user')
                 ->paginate(10);
         } else {
-            $guardians = Guardian::with('user')->paginate(12);
+            $guardians = Guardian::with('user')->where("school_id", $this->school->id)->paginate(12);
         }
 
         return ParentResource::collection($guardians);
@@ -66,6 +72,7 @@ class GuardianController extends Controller
         // User info
         $user_data = $request->only('name', 'email', 'password');
         $user_data['role'] = 'guardian';
+        $user_data['school_id'] = $this->school->id;
         $user_data['password'] = bcrypt($user_data['password']);
         $user = User::create($user_data);
         $user->assignRole('Guardian');
@@ -73,6 +80,7 @@ class GuardianController extends Controller
         // Student info
         $parent_data = $request->only('phone', 'gender');
         $parent_data['user_id'] = $user->id;
+        $parent_data['school_id'] = $this->school->id;
         $parent_data['session_id'] = currentSession();
         $guardian = Guardian::create($parent_data);
 
@@ -109,6 +117,9 @@ class GuardianController extends Controller
         if ($request->password) {
             $user->password = bcrypt($request->password);
         }
+        if($user->school_id != $this->school->id){
+            return responseError("invalid request", 404);
+        }
         $user->save();
 
         // Parent info
@@ -129,8 +140,9 @@ class GuardianController extends Controller
      * @param  \App\Models\Guardian  $guardian
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Guardian $guardian)
+    public function destroy($guardian)
     {
+        $guardian = Guardian::where("id", $guardian)->where("school_id", $this->school->id)->first();
         $guardian->user()->delete();
         $guardian->delete();
 
@@ -144,9 +156,9 @@ class GuardianController extends Controller
      */
     public function getStudentByGuardian()
     {
-        $guardian_id = Guardian::where('user_id', auth()->id())->value('id');
+        $guardian_id = Guardian::where('user_id', auth()->id())->where("school_id", $this->school->id)->value('id');
         $students = Student::with('user')
-            ->where('parent_id', $guardian_id)
+            ->where('parent_id', $guardian_id)->where("school_id", $this->school->id)
             ->get();
 
         return ParentStudentResource::collection($students);
@@ -159,9 +171,9 @@ class GuardianController extends Controller
      */
     public function getStudentByGuardianDetails()
     {
-        $guardian_id = Guardian::where('user_id', auth()->id())->value('id');
+        $guardian_id = Guardian::where('user_id', auth()->id())->where("school_id", $this->school->id)->value('id');
         $students = Student::with('user', 'classs', 'section')
-            ->where('parent_id', $guardian_id)
+            ->where('parent_id', $guardian_id)->where("school_id", $this->school->id)
             ->get();
 
         return ParentStudentDetailsResource::collection($students);
@@ -175,7 +187,7 @@ class GuardianController extends Controller
      */
     public function getStudentsAttendance(Request $request)
     {
-        $user = User::findOrFail($request->student_id);
+        $user = User::where("id", $request->student_id)->where("school_id", $this->school->id)->firstOrFail();
         $student = $user->student;
 
         $request->validate([
@@ -188,7 +200,7 @@ class GuardianController extends Controller
             ->where('session_id', adminSetting()->default_session_id)
             ->where('class_id', $student->class_id)
             ->where('section_id', $student->section_id)
-            ->whereMonth('date', $request->month)
+            ->whereMonth('date', $request->month)->where("school_id", $this->school->id)
             ->whereYear('date', $request->year)
             ->orderBy('student_id', 'ASC')
             ->groupBy('student_id')
@@ -197,7 +209,7 @@ class GuardianController extends Controller
         $students = Student::select(['id', 'user_id', 'parent_id', 'session_id', 'class_id', 'section_id', 'roll_no',])
             ->with(['user', 'attendances' => function ($q) {
                 $q->select('id', 'status', 'date', 'student_id');
-            }])->whereIn('id', $student_ids)->get();
+            }])->where("school_id", $this->school->id)->whereIn('id', $student_ids)->get();
 
         $data = [];
         foreach ($students as $student) {
@@ -212,7 +224,7 @@ class GuardianController extends Controller
 
     public function getStudentClassRoutine($student_id, CalendarService $calendarService)
     {
-        $student = Student::where('user_id', $student_id)->firstOrFail();
+        $student = Student::where('user_id', $student_id)->where("school_id", $this->school->id)->firstOrFail();
 
         $routines = ClassRoutine::with(['subject:id,name,code', 'class_room:id,room_no', 'teacher' => function ($q) {
             $q->select(['user_id', 'id']);
@@ -220,6 +232,7 @@ class GuardianController extends Controller
         }, 'section:id,name', 'classs:id,name'])
             ->where('session_id', currentSession())
             ->where('class_id', $student->class_id)
+            ->where("school_id", $this->school->id)
             ->where('section_id', $student->section_id)
             ->get();
 
@@ -234,12 +247,13 @@ class GuardianController extends Controller
 
     public function getStudentSyllabusTerms(Request $request)
     {
-        $class_id = Student::where('user_id', $request->student_id)->value('class_id');
+        $class_id = Student::where('user_id', $request->student_id)->where("school_id", $this->school->id)->value('class_id');
 
         $terms = Syllabus::select('exam_id')
             ->groupBy('exam_id')
             ->with('exam')
             ->where('class_id', $class_id)
+            ->where("school_id", $this->school->id)
             ->where('session_id', adminSetting()->default_session_id)
             ->oldest('exam_id')
             ->get();
@@ -252,7 +266,7 @@ class GuardianController extends Controller
 
     public function getStudentAttendanceReport($student_id)
     {
-        $student_attendance = StudentAttendance::where('student_id', $student_id)->get();
+        $student_attendance = StudentAttendance::where('student_id', $student_id)->where("school_id", $this->school->id)->get();
         $total_attendance = $student_attendance->count();
         $total_absent = $student_attendance->where('status', 0)->count();
         $total_present = $student_attendance->where('status', 1)->count();
@@ -270,7 +284,7 @@ class GuardianController extends Controller
 
     public function getStudentSubject($student_id)
     {
-        $user = User::findOrFail($student_id);
+        $user = User::where("id", $student_id)->where("school_id", $this->school->id)->firstOrFail();
         $student = $user->student;
 
         return response()->json($student->classs->subjects);
@@ -280,10 +294,11 @@ class GuardianController extends Controller
     {
         $fee = Fee::whereParentId(auth()->user()->guardian->id)
             ->whereSessionId(currentSession())
+            ->where("school_id", $this->school->id)
             ->get();
 
-        $total_event = Calendar::count();
-        $total_exam = Exam::where('session_id', adminSetting()->default_session_id)->count();
+        $total_event = Calendar::where("school_id", $this->school->id)->count();
+        $total_exam = Exam::where('session_id', adminSetting()->default_session_id)->where("school_id", $this->school->id)->count();
         $total_expenses = $fee->where('status', 1)->sum('amount');
         $total_due = $fee->where('status', 0)->sum('amount');
 
@@ -300,7 +315,7 @@ class GuardianController extends Controller
         $duefees = Fee::with('student.user', 'type', 'class', 'section')
             ->whereSessionId(currentSession())
             ->whereParentId(auth()->user()->guardian->id)
-            ->whereStudentId($student_id)
+            ->whereStudentId($student_id)->where("school_id", $this->school->id)
             ->whereStatus(0)
             ->get();
 
@@ -314,7 +329,7 @@ class GuardianController extends Controller
             'exam_id' => ['required'],
         ]);
 
-        $student = Student::where('user_id', $request->student_id)->firstOrFail();
+        $student = Student::where('user_id', $request->student_id)->where("school_id", $this->school->id)->firstOrFail();
 
         $session_id = adminSetting()->default_session_id;
 
@@ -335,26 +350,27 @@ class GuardianController extends Controller
             ->where('roll_no', $student->roll_no)
             ->where('session_id', $session_id)
             ->where('class_id', $student->class_id)
+            ->where("school_id", $this->school->id)
             ->where('section_id', $student->section_id)
             ->select(['roll_no', 'id', 'user_id', 'class_id', 'section_id'])
             ->get();
 
         $total_students = Student::where('session_id',  $session_id)
-            ->where('class_id', $student->class_id)
+            ->where('class_id', $student->class_id)->where("school_id", $this->school->id)
             ->where('section_id', $student->section_id)->count();
 
-        $class= DB::table('classses')->where('id', $student->class_id)->get('name');
+        $class= DB::table('classses')->where('id', $student->class_id)->where("school_id", $this->school->id)->get('name');
 
-        $class_section= DB::table('sections')->where('id', $student->section_id)->get('name');
+        $class_section= DB::table('sections')->where('id', $student->section_id)->where("school_id", $this->school->id)->get('name');
 
-        $session= DB::table('sessions')->where('id', $student->session_id)->get('name');
+        $session= DB::table('sessions')->where('id', $student->session_id)->where("school_id", $this->school->id)->get('name');
 
-        $term= DB::table('exams')->where('session_id', $student->session_id)->get('name');
+        $term= DB::table('exams')->where('session_id', $student->session_id)->where("school_id", $this->school->id)->get('name');
 
 
-        $subjects = Subject::where('class_id', $student->class_id)->get();
+        $subjects = Subject::where('class_id', $student->class_id)->where("school_id", $this->school->id)->get();
 
-        $result_rules = ExamResultRule::orderBy('id', 'ASC')->get();
+        $result_rules = ExamResultRule::orderBy('id', 'ASC')->where("school_id", $this->school->id)->get();
 
 
         return response()->json([
@@ -384,6 +400,7 @@ class GuardianController extends Controller
             ->where('exam_id', $request->exam_id)
             ->where('class_id', $student->class_id)
             ->where('section_id', $student->section_id)
+            ->where("school_id", $this->school->id)
             ->oldest('exam_date')
             ->get();
 
@@ -395,6 +412,7 @@ class GuardianController extends Controller
         $fees = Fee::with('student.user', 'type', 'class', 'section')
             ->whereSessionId(currentSession())
             ->whereParentId(auth()->user()->guardian->id)
+            ->where("school_id", $this->school->id)
             ->oldest('status')
             ->get();
 
@@ -415,6 +433,7 @@ class GuardianController extends Controller
             ->whereSessionId(currentSession())
             ->whereClassId($student->class_id)
             ->whereSectionId($student->section_id)
+            ->where("school_id", $this->school->id)
             ->whereStartDate($date)
             ->latest('start_date')
             ->get();

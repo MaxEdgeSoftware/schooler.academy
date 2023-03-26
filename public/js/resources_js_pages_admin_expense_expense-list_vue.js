@@ -100,7 +100,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             case 0:
               _context2.prev = 0;
               _context2.next = 3;
-              return axios.post("/api/expenses/".concat(expenseId));
+              return axios.post("/api/expenses/".concat(expenseId, "/delete"));
             case 3:
               _yield$axios$post = _context2.sent;
               data = _yield$axios$post.data;

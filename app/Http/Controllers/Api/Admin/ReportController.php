@@ -24,6 +24,12 @@ use App\Http\Resources\Classs\ClassRoutineResource;
 class ReportController extends Controller
 {
     use Results;
+    public $school;
+
+    public function __construct()
+    {
+        $this->school = school();
+    }
     /**
      * Get students report by session, class, section
      */
@@ -37,6 +43,7 @@ class ReportController extends Controller
         $students = Student::whereSessionId(currentSession())
             ->whereClassId($request->class_id)
             ->whereSectionId($request->section_id)
+            ->where("school_id", $this->school->id)
             ->with(['user', 'guardian.user'])
             ->get();
 
@@ -52,7 +59,7 @@ class ReportController extends Controller
             'class_id'              =>  ['required'],
         ]);
 
-        $class = Classs::with(['sections', 'subjects',])->withCount('students')->where('id', $request->class_id)->first();
+        $class = Classs::with(['sections', 'subjects',])->withCount('students')->where('id', $request->class_id)->where("school_id", $this->school->id)->first();
 
         return $class;
     }
@@ -64,6 +71,7 @@ class ReportController extends Controller
     {
         $teachers = Staff::whereDesignation('teacher')
             ->with(['user', 'department'])
+            ->where("school_id", $this->school->id)
             ->get();
 
         return StaffResource::collection($teachers);
@@ -72,6 +80,7 @@ class ReportController extends Controller
     public function getStaffReport()
     {
         $teachers = Staff::where('designation', '!=', 'teacher')
+            ->where("school_id", $this->school->id)
             ->with(['user'])
             ->get();
 
@@ -103,6 +112,7 @@ class ReportController extends Controller
             }])
                 ->where('session_id', $session_id)
                 ->where('class_id', $request->class_id)
+                ->where("school_id", $this->school->id)
                 ->where('section_id', $request->section_id)
                 ->whereDate('date', $request->date)
                 ->get();
@@ -112,6 +122,7 @@ class ReportController extends Controller
             $student_ids = StudentAttendance::select('student_id')
                 ->where('session_id', $session_id)
                 ->where('class_id', $request->class_id)
+                ->where("school_id", $this->school->id)
                 ->where('section_id', $request->section_id)
                 ->whereMonth('date', $request->month)
                 ->whereYear('date', $request->year)
@@ -121,7 +132,7 @@ class ReportController extends Controller
 
             $students = Student::with(['user', 'attendances' => function ($q) {
                 $q->select('id', 'status', 'date', 'student_id');
-            }])->whereIn('id', $student_ids)->get();
+            }])->where("school_id", $this->school->id)->whereIn('id', $student_ids)->get();
 
             $data = [];
             foreach ($students as $student) {
@@ -155,11 +166,11 @@ class ReportController extends Controller
             $attendences = TeacherAttendance::with(['teacher' => function ($q) {
                 $q->select(['id', 'user_id', 'designation', 'phone', 'department_id']);
                 $q->with('user:id,name', 'department:id,name');
-            }])->whereDate('date', $request->date)->get();
+            }])->whereDate('date', $request->date)->where("school_id", $this->school->id)->get();
             return responseSuccess('attendences', $attendences);
         } else {
 
-            $teacher_ids = TeacherAttendance::select('teacher_id')
+            $teacher_ids = TeacherAttendance::select('teacher_id')->where("school_id", $this->school->id)
                 ->whereMonth('date', $request->month)
                 ->whereYear('date', $request->year)
                 ->orderBy('teacher_id', 'ASC')
@@ -169,7 +180,7 @@ class ReportController extends Controller
 
             $teachers = Staff::with(['user', 'attendances' => function ($q) {
                 $q->select('id', 'status', 'date', 'teacher_id');
-            }])->whereIn('id', $teacher_ids)->get();
+            }])->where("school_id", $this->school->id)->whereIn('id', $teacher_ids)->get();
 
 
             $data = [];
@@ -197,7 +208,7 @@ class ReportController extends Controller
 
         $routines  = ExamSchedule::with(['subject:name,id', 'room'])
             ->where('exam_id', $request->exam_id)
-            ->where('class_id', $request->class_id)
+            ->where('class_id', $request->class_id)->where("school_id", $this->school->id)
             ->where('section_id', $request->section_id)
             ->where('session_id', $request->session_id)
             ->get();
@@ -244,12 +255,13 @@ class ReportController extends Controller
             $q->with(['subject:id,name,code']);
         }])
             ->where('session_id',  $session_id)
+            ->where("school_id", $this->school->id)
             ->where('class_id', $request->class_id)
             ->where('section_id', $request->section_id)
             ->select(['roll_no', 'id', 'user_id', 'class_id', 'section_id'])
             ->get();
 
-        $subjects = Subject::where('class_id', $request->class_id)->get();
+        $subjects = Subject::where('class_id', $request->class_id)->where("school_id", $this->school->id)->get();
 
         $ranks = [];
 
@@ -274,6 +286,7 @@ class ReportController extends Controller
         }, 'section:id,name', 'classs:id,name'])
             ->where('session_id', $request->session_id)
             ->where('class_id', $request->class_id)
+            ->where("school_id", $this->school->id)
             ->where('section_id', $request->section_id)
             ->get();
 

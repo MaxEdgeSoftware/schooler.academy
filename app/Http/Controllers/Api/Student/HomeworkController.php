@@ -13,6 +13,12 @@ use App\Http\Resources\Student\HomeworkResource;
 
 class HomeworkController extends Controller
 {
+    public $school;
+
+    function __construct()
+    {
+        $this->school = school();
+    }
     /**
      * Display a listing of the resource.
      *
@@ -20,7 +26,7 @@ class HomeworkController extends Controller
      */
     public function index(Request $request)
     {
-        $homeworks = StudentHomework::with('teacher.user:id,name','subject:id,name')->whereSessionId(currentSession())
+        $homeworks = StudentHomework::with('teacher.user:id,name','subject:id,name')->where("school_id", $this->school->id)->whereSessionId(currentSession())
         ->whereClassId($request->class_id)
         ->whereSectionId($request->section_id)
         ->latest('start_date')
@@ -39,7 +45,7 @@ class HomeworkController extends Controller
      */
     public function getTeachers()
     {
-        $teachers = Staff::with('user:id,name')->whereDesignation('teacher')->get();
+        $teachers = Staff::with('user:id,name')->whereDesignation('teacher')->where("school_id", $this->school->id)->get();
         return responseSuccess('teachers', $teachers);
     }
 
@@ -53,7 +59,7 @@ class HomeworkController extends Controller
     {
         $data = $request->all();
         $data['session_id'] = currentSession();
-
+        $data["school_id"] = school()->id;
         StudentHomework::create($data);
 
         return responseSuccess('', '', 'Homework Created Successfully!');
@@ -90,8 +96,9 @@ class HomeworkController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(StudentHomework $homework)
+    public function destroy($homework)
     {
+        $homework = StudentHomework::find($homework);
         $homework->delete();
 
         return responseSuccess('', '', 'Homework Deleted successfully!');

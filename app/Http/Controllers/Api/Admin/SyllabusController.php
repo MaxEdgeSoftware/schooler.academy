@@ -35,6 +35,7 @@ class SyllabusController extends Controller
         }
         $data['exam_id'] = $request->exam_id;
         $data['class_id'] = $request->class_id;
+        $data['school_id'] = school()->id;
         $data['subject_id'] = $request->subject_id;
         $data['session_id'] = adminSetting()->default_session_id;
         Syllabus::create($data);
@@ -76,8 +77,9 @@ class SyllabusController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Syllabus $syllabus)
+    public function destroy($syllabus)
     {
+        $syllabus = Syllabus::find($syllabus);
         try {
             $syllabus->delete();
 
@@ -89,14 +91,14 @@ class SyllabusController extends Controller
 
     public function getSyllabusesByClass($class_id)
     {
-        $syllabuses = Syllabus::where('session_id', currentSession())->with('examTerm:id,name')->where('class_id', $class_id)->get(['id', 'title', 'class_id', 'exam_id']);
+        $syllabuses = Syllabus::where('session_id', currentSession())->with('examTerm:id,name')->where('class_id', $class_id)->where('school_id', school()->id)->get(['id', 'title', 'class_id', 'exam_id']);
 
         return responseSuccess('syllabuses', $syllabuses);
     }
 
     public function getTermsByClass($class_id)
     {
-        $exams = Syllabus::where('session_id', currentSession())->select('exam_id')
+        $exams = Syllabus::where('session_id', currentSession())->where('school_id', school()->id)->select('exam_id')
             ->groupBy('exam_id')
             ->with('exam')
             ->where('class_id', $class_id)
@@ -110,7 +112,7 @@ class SyllabusController extends Controller
     {
         $syllabus_details = Syllabus::with('subject')
             ->where('class_id', $class_id)
-            ->where('exam_id', $exam_id)
+            ->where('exam_id', $exam_id)->where('school_id', school()->id)
             ->get()
             ->transform(fn ($syllabus) => [
                 'id' => $syllabus->id,

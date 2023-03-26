@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateTeacherRequest extends FormRequest
 {
@@ -25,7 +26,9 @@ class UpdateTeacherRequest extends FormRequest
     {
         return [
             'name'      =>  ['required',],
-            'email'      =>  ['required', 'email', 'unique:users,email,' . $this->teacher->user->id],
+            'email' => ['required', Rule::unique('users')->where(function ($query) {
+                return $query->where('email', $this->email)->where('school_id', school()->id)->where("id", "!=", $this->teacher->user->id );
+            })],
             'joining_date'    =>  ['required', 'date',],
             'department_id'    =>  ['required', 'exists:departments,id'],
             'gender'    =>  ['required', 'in:male,female,other',]

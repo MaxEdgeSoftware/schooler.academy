@@ -10,7 +10,7 @@ class StudentHomework extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'teacher_id', 'session_id', 'class_id', 'section_id', 'subject_id', 'start_date', 'end_date', 'description'];
+    protected $fillable = ['title', 'teacher_id', 'session_id', 'class_id', 'section_id', 'subject_id', 'start_date', 'end_date', 'description','school_id'];
 
     protected static function newFactory()
     {

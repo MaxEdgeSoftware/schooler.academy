@@ -8,6 +8,12 @@ use App\Http\Controllers\Controller;
 
 class ExpenseTypeController extends Controller
 {
+    public $school;
+
+    public function __construct()
+    {
+        $this->school = school();
+    }
     /**
      * Display a listing of the resource.
      *
@@ -15,7 +21,7 @@ class ExpenseTypeController extends Controller
      */
     public function index()
     {
-        return responseSuccess('expensetype', ExpenseType::get());
+        return responseSuccess('expensetype', ExpenseType::where("school_id", $this->school->id)->get());
     }
 
     /**
@@ -32,6 +38,7 @@ class ExpenseTypeController extends Controller
 
         $expensetype = ExpenseType::create([
             'name' => $request->name,
+            'school_id' => $this->school->id
         ]);
 
         if ($request->hasFile('image') && $request->file('image')->isValid()) {
@@ -74,8 +81,9 @@ class ExpenseTypeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ExpenseType $expensetype)
+    public function destroy($expensetype)
     {
+        $expensetype = ExpenseType::find($expensetype);
         $expensetype->delete();
 
         return responseSuccess('', '', 'Expensetype Deleted Successfully');

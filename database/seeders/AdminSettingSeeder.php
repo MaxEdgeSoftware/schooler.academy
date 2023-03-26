@@ -16,7 +16,7 @@ class AdminSettingSeeder extends Seeder
     public function run()
     {
         $data = [
-            'name' => 'Schooling - School Management System',
+            'name' => 'Edutech',
             'email' => 'example@mail.com',
             'address' => 'Mohammadpur,  Dhaka-1207, Bangladesh',
             'phone' => '1922296392',

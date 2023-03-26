@@ -201,7 +201,7 @@ export default {
         async deleteData() {
             try {
                 const response = await axios.post(
-                    `/api/classrooms/${this.selectedId}`
+                    `/api/classrooms/${this.selectedId}/delete`
                 );
                 this.$store.commit("classs/REMOVE_CLASSROOM", this.selectedId);
 

@@ -10,6 +10,12 @@ use App\Models\ExamTerm;
 
 class ExamTermController extends Controller
 {
+    public $school;
+
+    public function __construct()
+    {
+        $this->school = school();
+    }
     /**
      * Display a listing of the resource.
      *
@@ -17,7 +23,7 @@ class ExamTermController extends Controller
      */
     public function index()
     {
-        $terms = ExamTerm::all();
+        $terms = ExamTerm::where("school_id", $this->school->id)->get();
 
         return ExamTermResource::collection($terms);
     }
@@ -30,7 +36,7 @@ class ExamTermController extends Controller
      */
     public function store(ExamTermRequest $request)
     {
-        $term = ExamTerm::create($request->all());
+        $term = ExamTerm::create($request->all()+["school_id" => $this->school->id]);
 
         return responseSuccess('term', $term, 'Term create successfully');
     }
@@ -66,8 +72,9 @@ class ExamTermController extends Controller
      * @param  \App\Models\ExamTerm  $examTerm
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ExamTerm $examTerm)
+    public function destroy($examTerm)
     {
+        $examTerm = ExamTerm::find($examTerm);
         $examTerm->delete();
 
         return responseSuccess('term', null, 'Term delete successfully!');
@@ -83,7 +90,7 @@ class ExamTermController extends Controller
 
     public function fetchAllTerms()
     {
-        $terms = ExamTerm::all(['id', 'name']);
+        $terms = ExamTerm::where("school_id", $this->school->id)->get(['id', 'name']);
         return responseSuccess('terms', $terms);
     }
 }

@@ -14,12 +14,18 @@ use App\Http\Resources\Classs\ClassRoutineResource;
 
 class TeacherController extends Controller
 {
+    public $school;
+
+    public function __construct()
+    {
+        $this->school = school();
+    }
     public function getDashboardOverview()
     {
-        $total_event = Calendar::count();
-        $total_exam = Exam::where('session_id', adminSetting()->default_session_id)->count();
-        $total_attendance = TeacherAttendance::where('teacher_id', auth()->user()->staff->id)->count();
-        $students = Student::whereSessionId(currentSession())->get();
+        $total_event = Calendar::where("school_id", $this->school->id)->get()->count();
+        $total_exam = Exam::where('session_id', adminSetting()->default_session_id)->where("school_id", $this->school->id)->count();
+        $total_attendance = TeacherAttendance::where('teacher_id', auth()->user()->staff->id)->where("school_id", $this->school->id)->count();
+        $students = Student::where("school_id", $this->school->id)->whereSessionId(currentSession())->get();
         $total_student = $students->count();
         $male_student = $students->where('gender', 'male')->count();
         $female_student = $students->where('gender', 'female')->count();
@@ -50,6 +56,7 @@ class TeacherController extends Controller
         $routines = ClassRoutine::with(['subject:id,name,code', 'class_room:id,room_no', 'section:id,name', 'classs:id,name'])
             ->where('session_id', currentSession())
             ->where('teacher_id', $teacher->id)
+            ->where("school_id", $this->school->id)
             ->get();
 
         $weekDays     = ClassRoutine::WEEK_DAYS;
@@ -63,7 +70,7 @@ class TeacherController extends Controller
 
     public function getAttendanceChartOverview()
     {
-        $teacher_attendance = TeacherAttendance::where('teacher_id', auth()->user()->staff->id)->get();
+        $teacher_attendance = TeacherAttendance::where('teacher_id', auth()->user()->staff->id)->where("school_id", $this->school->id)->get();
         $total_attendance = $teacher_attendance->count();
         $total_absent = $teacher_attendance->where('status', 0)->count();
         $total_present = $teacher_attendance->where('status', 1)->count();

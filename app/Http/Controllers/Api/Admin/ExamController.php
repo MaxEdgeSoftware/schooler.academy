@@ -11,6 +11,12 @@ use App\Http\Resources\Exam\UpcomingExamResource;
 
 class ExamController extends Controller
 {
+    public $school;
+
+    public function __construct()
+    {
+        $this->school = school();
+    }
     /**
      * Display a listing of the resource.
      *
@@ -20,9 +26,9 @@ class ExamController extends Controller
     {
         if (request()->has('search') && request()->search != null) {
             $search = request('search');
-            $exams = Exam::where('session_id', adminSetting()->default_session_id)->where('name', 'LIKE', "%$search%")->oldest('id')->paginate(10);
+            $exams = Exam::where('session_id', adminSetting()->default_session_id)->where("school_id", $this->school->id)->where('name', 'LIKE', "%$search%")->oldest('id')->paginate(10);
         } else {
-            $exams = Exam::where('session_id', adminSetting()->default_session_id)->oldest('id')->paginate(10);
+            $exams = Exam::where('session_id', adminSetting()->default_session_id)->where("school_id", $this->school->id)->oldest('id')->paginate(10);
         }
 
         return ExamResource::collection($exams);
@@ -42,6 +48,7 @@ class ExamController extends Controller
             'session_id' => adminSetting()->default_session_id,
             'start_date' => $request->start_date,
             'end_date' => $request->end_date,
+            "school_id" => $this->school->id
         ]);
 
         return responseSuccess('exam', $exam, 'Exam Created successfully');
@@ -84,8 +91,9 @@ class ExamController extends Controller
      * @param  \App\Models\Exam  $exam
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Exam $exam)
+    public function destroy($exam)
     {
+        $exam = Exam::find($exam);
         $exam->delete();
 
         return responseSuccess('exam', null, 'Exam delete successfully!');
@@ -96,21 +104,21 @@ class ExamController extends Controller
      */
     public function getExamBySessionAndTerm(Request $request)
     {
-        $exams = Exam::where('session_id', adminSetting()->default_session_id)->get();
+        $exams = Exam::where('session_id', adminSetting()->default_session_id)->where("school_id", $this->school->id)->get();
 
         return ExamResource::collection($exams);
     }
 
     public function getExamBySession()
     {
-        $exams = Exam::where('session_id', adminSetting()->default_session_id)->get();
+        $exams = Exam::where('session_id', adminSetting()->default_session_id)->where("school_id", $this->school->id)->get();
 
         return ExamResource::collection($exams);
     }
 
     public function getExamsList()
     {
-        $exams = Exam::where('session_id', adminSetting()->default_session_id)
+        $exams = Exam::where('session_id', adminSetting()->default_session_id)->where("school_id", $this->school->id)
             ->get(['id', 'name']);
 
         return $exams;
@@ -118,7 +126,7 @@ class ExamController extends Controller
 
     public function getUpcomingExams()
     {
-        $exams = Exam::where('session_id', adminSetting()->default_session_id)->get();
+        $exams = Exam::where('session_id', adminSetting()->default_session_id)->where("school_id", $this->school->id)->get();
         return UpcomingExamResource::collection($exams);
     }
 }

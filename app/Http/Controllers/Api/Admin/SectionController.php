@@ -10,6 +10,12 @@ use App\Http\Resources\Section\ClassSectionResource;
 
 class SectionController extends Controller
 {
+    public $school;
+
+    public function __construct()
+    {
+        $this->school = school();
+    }
     /**
      * Display a listing of the resource.
      *
@@ -17,7 +23,7 @@ class SectionController extends Controller
      */
     public function index()
     {
-        return responseSuccess('sections', Section::all());
+        return responseSuccess('sections', Section::where('school_id', $this->school->id)->get());
     }
 
     /**
@@ -27,7 +33,7 @@ class SectionController extends Controller
      */
     public function fetchAllSections()
     {
-        return responseSuccess('sections', Section::all(['id', 'name']));
+        return responseSuccess('sections', Section::where("school_id", $this->school->id)->get(['id', 'name']));
     }
 
     /**
@@ -39,12 +45,18 @@ class SectionController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'name' => 'required|unique:sections,name',
+            'name' => 'required',
             'capacity' => 'required|numeric'
         ]);
 
+        $isSection = Section::where("name", $request->name)->where("school_id", $this->school->id)->first();
+        if($isSection){
+            return responseError("Section already exist", 322);
+        }
         try {
-            $section = Section::create($request->all());
+            $data = $request->all();
+            $data["school_id"] = $this->school->id;
+            $section = Section::create($data);
 
             return responseSuccess('section', $section, 'Section Created Successfully');
         } catch (\Throwable $th) {
@@ -92,8 +104,9 @@ class SectionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Section $section)
+    public function destroy($section)
     {
+        $section = Section::where("id", $section)->first();
         try {
             $section->delete();
 

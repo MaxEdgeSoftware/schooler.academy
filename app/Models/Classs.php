@@ -11,7 +11,7 @@ class Classs extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'slug', 'numeric'];
+    protected $fillable = ['name', 'slug', 'numeric','school_id'];
 
     /**
      * Class slug mutator.

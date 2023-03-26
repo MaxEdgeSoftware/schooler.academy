@@ -5,10 +5,17 @@ namespace App\Http\Controllers\Api\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SubjectRequest;
 use App\Models\Classs;
+use App\Models\Section;
 use App\Models\Subject;
 
 class SubjectController extends Controller
 {
+    public $school;
+
+    public function __construct()
+    {
+        $this->school = school();
+    }
     /**
      * Display a listing of the resource.
      *
@@ -17,7 +24,7 @@ class SubjectController extends Controller
     public function index()
     {
         return Classs::with('subjects')->get();
-        return responseSuccess('subjects', Subject::all());
+        return responseSuccess('subjects', Subject::where("school_id", $this->school->id)->get());
     }
 
     /**
@@ -27,7 +34,7 @@ class SubjectController extends Controller
      */
     public function create()
     {
-        return responseSuccess('classes', Classs::all(['id', 'name']));
+        return responseSuccess('classes', Classs::where("school_id", $this->school->id)->get(['id', 'name']));
     }
 
     /**
@@ -46,7 +53,7 @@ class SubjectController extends Controller
                 $url = uploadFileToPublic($request->image, 'subjects');
                 $data['image'] =  $url;
             }
-
+            $data['school_id'] =  $this->school->id;
             $subject = Subject::create($data);
 
             return responseSuccess('subject', $subject, 'Subject Created Successfully');
@@ -74,7 +81,7 @@ class SubjectController extends Controller
      */
     public function classSubjects($class_id)
     {
-        $subjects = Subject::whereClassId($class_id)->get();
+        $subjects = Subject::where("school_id", $this->school->id)->whereClassId($class_id)->get();
         return responseSuccess('subjects', $subjects);
     }
 
@@ -111,8 +118,9 @@ class SubjectController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Subject $subject)
+    public function destroy($subject)
     {
+        $subject = Subject::find($subject);
         try {
             $subject->delete();
 

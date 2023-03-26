@@ -22,6 +22,7 @@ class RoleController extends Controller
     {
         $roleWithPermissions = Role::where('name','!=','Student')
                 ->where('name','!=','Guardian')
+                ->where('school_id', school()->id)
                 ->with('permissions')
                 ->paginate(20);
 
@@ -56,6 +57,9 @@ class RoleController extends Controller
      */
     public function store(RoleFormRequest $request)
     {
+        $data = $request->all();
+        $data["school_id"] = school()->id;
+        $role = null;
         $role = CreateRole::create($request);
 
         if ($role) {
@@ -146,6 +150,6 @@ class RoleController extends Controller
 
     public function rolesList()
     {
-        return response()->json(Role::all(['id', 'name']));
+        return response()->json(Role::where('school_id', school()->id)->get(['id', 'name']));
     }
 }

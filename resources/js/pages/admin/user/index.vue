@@ -80,7 +80,7 @@ export default {
             this.selectedId = id;
         },
         async deleteUser() {
-            let response = await axios.post(`/api/users/${this.selectedId}`);
+            let response = await axios.post(`/api/users/${this.selectedId}/delete`);
             this.isModalShow = false;
             this.$store.dispatch("user/fetchUsers");
             this.toastSuccess(response.data.message);

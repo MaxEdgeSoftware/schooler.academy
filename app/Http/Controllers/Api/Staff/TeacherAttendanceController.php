@@ -12,6 +12,12 @@ use App\Http\Requests\TeacherAttendanceRequest;
 
 class TeacherAttendanceController extends Controller
 {
+    public $school;
+
+    public function __construct()
+    {
+        $this->school = school();
+    }
     /**
      * Get students by class.
      *
@@ -27,6 +33,7 @@ class TeacherAttendanceController extends Controller
         $teachers = Staff::select(['id', 'user_id', 'department_id',])
             ->with('user:id,name,image')
             ->where('designation', 'teacher')
+            ->where("school_id", $this->school->id)
             ->get();
 
         $attendances = $this->getTeacherAttendancesByDate($request, $teachers, $session_id);
@@ -52,7 +59,7 @@ class TeacherAttendanceController extends Controller
     {
         foreach ($request->teacher_data as $row) {
             $attendance = TeacherAttendance::where('teacher_id', $row['teacher_id'])
-                ->where('date', $row['date'])
+                ->where('date', $row['date'])->where("school_id", $this->school->id)
                 ->first();
 
             $data = $row;
@@ -61,6 +68,7 @@ class TeacherAttendanceController extends Controller
             if ($attendance) {
                 $attendance->update($data);
             } else {
+                $data["school_id"] = $this->school->id;
                 TeacherAttendance::create($data);
             }
         }
@@ -78,6 +86,7 @@ class TeacherAttendanceController extends Controller
         return  TeacherAttendance::whereIn('teacher_id', $teachers_id)
             ->where('date', $request->date)
             ->where('session_id', $session_id)
+            ->where("school_id", $this->school->id)
             ->get(['teacher_id', 'date', 'status'])
             ->groupBy('teacher_id');
     }
@@ -108,6 +117,7 @@ class TeacherAttendanceController extends Controller
     {
         return TeacherAttendance::where('teacher_id', $teacher->id)
             ->where('session_id', $session_id)
+            ->where("school_id", $this->school->id)
             ->where('date', '>=', Carbon::now()->subDays(7)->format('Y-m-d'))
             ->take(7)
             ->get(['date', 'status'])

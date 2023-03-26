@@ -148,7 +148,7 @@ export default {
         },
         async deleteHomework(id) {
             try {
-                const response = await axios.post(`/api/homeworks/${id}`);
+                const response = await axios.post(`/api/homeworks/${id}/delete`);
                 this.toastSuccess(response.data.message);
                 this.homeworks = this.homeworks.filter(
                     homework => homework.id != id

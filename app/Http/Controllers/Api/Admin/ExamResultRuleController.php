@@ -10,6 +10,12 @@ use Illuminate\Http\Request;
 
 class ExamResultRuleController extends Controller
 {
+    public $school;
+
+    public function __construct()
+    {
+        $this->school = school();
+    }
     /**
      * Display a listing of the resource.
      *
@@ -17,7 +23,7 @@ class ExamResultRuleController extends Controller
      */
     public function index()
     {
-        $exam_result_rules = ExamResultRule::all();
+        $exam_result_rules = ExamResultRule::where("school_id", $this->school->id)->get();
 
         return ExamResultRuleResource::collection($exam_result_rules);
     }
@@ -30,7 +36,7 @@ class ExamResultRuleController extends Controller
      */
     public function store(ExamResultRuleRequest $request)
     {
-        $exam_result_rule = ExamResultRule::create($request->all());
+        $exam_result_rule = ExamResultRule::create($request->all()+["school_id" => $this->school->id]);
 
         return responseSuccess('exam_result_rule', $exam_result_rule, 'Exam result rule create successfully');
     }
@@ -66,8 +72,9 @@ class ExamResultRuleController extends Controller
      * @param  \App\Models\ExamResultRule  $examResultRule
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ExamResultRule $examResultRule)
+    public function destroy($examResultRule)
     {
+        $examResultRule = ExamResultRule::find($examResultRule);
         $examResultRule->delete();
 
         return responseSuccess('schedule', null, 'Exam result rule delete successfully');

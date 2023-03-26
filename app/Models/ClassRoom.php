@@ -9,7 +9,7 @@ class ClassRoom extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['room_no', 'capacity','image'];
+    protected $fillable = ['room_no', 'capacity','image','school_id'];
     protected $appends = ['image_url'];
 
     public function getImageUrlAttribute()

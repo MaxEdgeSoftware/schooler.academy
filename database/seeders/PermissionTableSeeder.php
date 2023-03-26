@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\AdminSetting;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -15,12 +16,14 @@ class PermissionTableSeeder extends Seeder
      */
     public function run()
     {
+        $school = AdminSetting::where('email', env('NEW_SCHOOL'))->first();
+        if(!$school) dd('');
         //  Create roles
-        $roleAdmin = Role::create(['guard_name' => 'api', 'name' => 'Admin']);
-        $roleTeacher = Role::create(['guard_name' => 'api', 'name' => 'Teacher']);
-        $roleAccountant = Role::create(['guard_name' => 'api', 'name' => 'Accountant']);
-        $roleGuardian = Role::create(['guard_name' => 'api', 'name' => 'Guardian']);
-        $roleStudent = Role::create(['guard_name' => 'api', 'name' => 'Student']);
+        $roleAdmin = Role::create(['guard_name' => 'api', 'name' => 'Admin', 'school_id' => $school->id]);
+        $roleTeacher = Role::create(['guard_name' => 'api', 'name' => 'Teacher', 'school_id' => $school->id]);
+        $roleAccountant = Role::create(['guard_name' => 'api', 'name' => 'Accountant', 'school_id' => $school->id]);
+        $roleGuardian = Role::create(['guard_name' => 'api', 'name' => 'Guardian', 'school_id' => $school->id]);
+        $roleStudent = Role::create(['guard_name' => 'api', 'name' => 'Student', 'school_id' => $school->id]);
 
         //  permission List as array
         $permissions = [
@@ -214,7 +217,8 @@ class PermissionTableSeeder extends Seeder
         //================ Admin permissions===============
         //==================================================
         for ($i = 0; $i < count($permissions); $i++) {
-            $permission = Permission::create(['guard_name' => 'api', 'name' => $permissions[$i]]);
+            // $permission = Permission::create(['guard_name' => 'api', 'name' => $permissions[$i]]);
+            $permission = Permission::where(['name' => $permissions[$i]])->first();
             $roleAdmin->givePermissionTo($permission);
             $permission->assignRole($roleAdmin);
         }
@@ -323,5 +327,6 @@ class PermissionTableSeeder extends Seeder
             $permission = Permission::where('name', $permission)->first();
             $roleAccountant->givePermissionTo($permission);
         }
+        setEnv("NEW_SCHOOL", "");
     }
 }

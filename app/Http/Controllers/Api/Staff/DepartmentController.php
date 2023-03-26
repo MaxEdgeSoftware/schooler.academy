@@ -9,6 +9,12 @@ use Illuminate\Http\Request;
 
 class DepartmentController extends Controller
 {
+    public $school;
+
+    public function __construct()
+    {
+        $this->school = school();
+    }
     /**
      * Display a listing of the resource.
      *
@@ -16,7 +22,7 @@ class DepartmentController extends Controller
      */
     public function index()
     {
-        $departments = Department::all();
+        $departments = Department::where("school_id", $this->school->id)->get();
         return DepartmentResource::collection($departments);
     }
 
@@ -31,8 +37,9 @@ class DepartmentController extends Controller
         $request->validate([
             'name' => ['required', 'unique:departments,name']
         ]);
-
-        $department = Department::create($request->all());
+        $data = $request->all();
+        $data["school_id"] = school()->id;
+        $department = Department::create($data);
 
         if ($request->hasFile('image') && $request->file('image')->isValid()) {
             $url = uploadFileToPublic($request->image, 'department');
@@ -65,7 +72,9 @@ class DepartmentController extends Controller
         $request->validate([
             'name' => ['required', 'unique:departments,name,' . $department->id]
         ]);
-
+        if($department->school_id != $this->school->id){
+            return responseError("invalid request", 404);
+        }
         $department->update($request->all());
 
         if ($request->hasFile('image') && $request->file('image')->isValid()) {
@@ -83,8 +92,9 @@ class DepartmentController extends Controller
      * @param  \App\Models\Department  $department
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Department $department)
+    public function destroy($department)
     {
+        $department = Department::where("id", $department)->where("school_id", $this->school->id)->first();
         $department_image = $department->image;
         $deleted = $department->delete();
         $deleted ? deleteImage($department_image) : '';

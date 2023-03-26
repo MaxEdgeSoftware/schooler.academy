@@ -6,9 +6,12 @@ use msztorc\LaravelEnv\Env;
 use App\Models\ClassRoutine;
 use Illuminate\Http\Request;
 use App\Models\StudentAttendance;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Schema;
 
 Route::get('test', function () {
     $user = User::whereEmail('admin@gmail.com')->first();
@@ -27,7 +30,7 @@ Route::get('test', function () {
     // return 123;
 
     $env = new Env();
-    $val = $env->setValue('APP_NAME', 'Schooling - School Management');
+    $val = $env->setValue('APP_NAME', 'Edutech');
 
     echo $val; // Laravel App
 
@@ -38,7 +41,23 @@ Route::get('test', function () {
     return $student_attendance = StudentAttendance::where('student_id', auth()->user()->student->id)->get();
 });
 
-
+Route::get('seed-tables', function(){
+    $tables = DB::select('SHOW TABLES');
+    $dbname = env('DB_DATABASE');
+    foreach($tables as $table)
+    {
+        try {
+            $table = json_decode(json_encode($table), true)['Tables_in_'.$dbname];
+            // add column to array;
+            Schema::table($table, function (Blueprint $table) {
+                $table->unsignedBigInteger('school_id')->nullable();
+            });
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+        dd('smile');
+    }
+});
 // route for checking subscription
 Route::get('/app-subscription/check', [AppSubController::class, 'index']);
 Route::get('/auth-user', function(){return response()->json(auth()->user());});
@@ -81,7 +100,9 @@ Route::middleware('auth:sanctum')->group(function () {
         dd("storage link created");
     });
 });
+Route::middleware('school')->group(function(){
+    Route::get('/{any?}', function () {
+        return view('app');
+    })->where('any', '[\/\w\.-]*');
+});
 
-Route::get('/{any?}', function () {
-    return view('app');
-})->where('any', '[\/\w\.-]*');

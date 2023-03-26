@@ -11,7 +11,7 @@ class Section extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name','slug','capacity'];
+    protected $fillable = ['name','slug','capacity','school_id'];
 
     /**
      * Section slug mutator.

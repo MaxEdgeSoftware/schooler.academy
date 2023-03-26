@@ -9,7 +9,7 @@ class FeeType extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name','image'];
+    protected $fillable = ['name','image','school_id'];
 
     protected $appends = ['image_url'];
 

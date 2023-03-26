@@ -201,7 +201,7 @@
             },
             async deleteData() {
                 try {
-                    const response = await axios.post(`/api/exams/${this.selectedId}`);
+                    const response = await axios.post(`/api/exams/${this.selectedId}/delete`);
                     this.$store.commit("exam/REMOVE_EXAM", this.selectedId);
 
                     this.reset();

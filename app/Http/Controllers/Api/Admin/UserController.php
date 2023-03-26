@@ -12,7 +12,12 @@ use App\Http\Requests\UserFormRequest;
 class UserController extends Controller
 {
     use Settings;
+    public $school;
 
+    public function __construct()
+    {
+        $this->school = school();
+    }
     /**
      * Display a listing of the resource.
      *
@@ -20,7 +25,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::where('id', '!=', auth()->id())->where('role', 'admin')->with('roles')->paginate(12);
+        $users = User::where('id', '!=', auth()->id())->where('role', 'admin')->where("school_id", $this->school->id)->with('roles')->paginate(12);
 
         return responseSuccess('users', $users);
     }
@@ -36,6 +41,7 @@ class UserController extends Controller
         $data = $request->only('name', 'email', 'password');
         $data['role'] = 'admin';
         $data['password'] = bcrypt($data['password']);
+        $data["school_id"] = $this->school->id;
         $user = User::create($data);
         $user->assignRole($request->role);
 
@@ -98,8 +104,9 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(User $user)
+    public function destroy($user)
     {
+        $user = User::find($user);
         if ($user) {
             $user->delete();
         }

@@ -166,7 +166,7 @@ export default {
         },
         async deleteData() {
             try {
-                await axios.post(`/api/sessions/${this.selectedId}`);
+                await axios.post(`/api/sessions/${this.selectedId}/delete`);
                 this.$store.commit("session/REMOVE_SESSION", this.selectedId);
 
                 this.reset();

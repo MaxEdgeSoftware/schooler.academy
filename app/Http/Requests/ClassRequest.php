@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class ClassRequest extends FormRequest
 {
@@ -25,14 +26,22 @@ class ClassRequest extends FormRequest
     {
         if ($this->method() === 'POST') {
             return [
-                'name' => 'required|unique:classses,name',
-                'numeric' => 'required|unique:classses,numeric|numeric|digits_between:1,2',
+                'name' => ['required', Rule::unique('classses')->where(function ($query) {
+                    return $query->where('name', $this->name)->where('school_id', school()->id);
+                })],                
+                'numeric' => ['required', 'digits_between:0,10', Rule::unique('classses')->where(function ($query) {
+                    return $query->where('numeric', $this->numeric)->where('school_id', school()->id);
+                })], 
                 'sections' => 'required'
             ];
         }else{
             return [
-                'name' => "required|unique:classses,name,{$this->class->id}",
-                'numeric' => "required|unique:classses,numeric,{$this->class->id}|numeric|digits_between:1,2",
+                'name' => ['required', Rule::unique('classses')->where(function ($query) {
+                    return $query->where('name', $this->name)->where('school_id', school()->id)->where("id", "!=", $this->class->id );
+                })], 
+                'numeric' => ['required', 'digits_between:0,10', Rule::unique('classses')->where(function ($query) {
+                    return $query->where('numeric', $this->numeric)->where('school_id', school()->id)->where("id", "!=", $this->class->id );
+                })], 
                 'sections' => 'required'
             ];
         }

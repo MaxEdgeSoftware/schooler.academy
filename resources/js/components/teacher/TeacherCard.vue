@@ -69,7 +69,7 @@
             },
             async deleteTeacher() {
                 try {
-                    const response = await axios.post(`/api/teachers/${this.teacher.id}`);
+                    const response = await axios.post(`/api/teachers/${this.teacher.id}/delete`);
 
                     this.$emit("delete-item");
                     this.toastSuccess("Teacher delete successfully!");

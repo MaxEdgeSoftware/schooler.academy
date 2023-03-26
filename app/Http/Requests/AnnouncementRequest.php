@@ -25,7 +25,7 @@ class AnnouncementRequest extends FormRequest
     {
         if ($this->method() === 'POST') {
             return [
-                'title'          =>  ['required', 'max:255', 'unique:announcements,title'],
+                'title'          =>  ['required', 'max:255'],
                 'date'           =>  ['required', 'date'],
                 'starting_time'  =>  ['required'],
                 'ending_time'    =>  ['required'],
@@ -34,7 +34,7 @@ class AnnouncementRequest extends FormRequest
             ];
         } else {
             return [
-                'title'          =>  ['required', 'max:255', "unique:announcements,title,{$this->announcement->id}"],
+                'title'          =>  ['required', 'max:255'],
                 'date'           =>  ['required', 'date'],
                 'starting_time'  =>  ['required'],
                 'ending_time'    =>  ['required'],

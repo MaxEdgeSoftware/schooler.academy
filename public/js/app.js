@@ -6001,7 +6001,7 @@ var render = function render() {
   }, [_c("img", {
     attrs: {
       src: _vm.setting.dark_logo ? _vm.setting.dark_logo_url : _vm.logo,
-      alt: "Schooling - School Management System PHP Script"
+      alt: "Edutech"
     }
   })])], 1), _vm._v(" "), _c("vue-page-transition", {
     attrs: {
@@ -10717,19 +10717,22 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               return axios__WEBPACK_IMPORTED_MODULE_0___default().get("/api/setting");
             case 3:
               response = _context.sent;
+              if (response.data.setting == 'not-found') {
+                window.location.assign('/not-found');
+              }
               context.commit("SET_ADMIN_SETTING", response.data.setting);
-              _context.next = 11;
+              _context.next = 12;
               break;
-            case 7:
-              _context.prev = 7;
+            case 8:
+              _context.prev = 8;
               _context.t0 = _context["catch"](0);
               _this.toastError(_context.t0.response.data.message);
               console.log(_context.t0);
-            case 11:
+            case 12:
             case "end":
               return _context.stop();
           }
-        }, _callee, null, [[0, 7]]);
+        }, _callee, null, [[0, 8]]);
       }))();
     }
   }

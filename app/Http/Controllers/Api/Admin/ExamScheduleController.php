@@ -10,6 +10,12 @@ use App\Http\Resources\Exam\ExamScheduleResource;
 
 class ExamScheduleController extends Controller
 {
+    public $school;
+
+    public function __construct()
+    {
+        $this->school = school();
+    }
     /**
      * Display a listing of the resource.
      *
@@ -32,7 +38,7 @@ class ExamScheduleController extends Controller
     {
         $data = $request->only(['exam_id', 'room_id', 'class_id', 'subject_id', 'section_id', 'exam_date', 'start_time', 'end_time']);
         $data['session_id'] = adminSetting()->default_session_id;
-
+        $data["school_id"] = $this->school->id;
         ExamSchedule::create($data);
 
         return responseSuccess('', '', 'Exam Schedule Create Successfully');
@@ -70,8 +76,9 @@ class ExamScheduleController extends Controller
      * @param  \App\Models\ExamSchedule  $examSchedule
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ExamSchedule $schedule)
+    public function destroy($schedule)
     {
+        $schedule = ExamSchedule::find($schedule);
         $schedule->delete();
 
         return responseSuccess('schedule', null, 'Exam schedule delete successfully');

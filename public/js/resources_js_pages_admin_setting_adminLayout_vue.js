@@ -70,41 +70,11 @@ var render = function render() {
     staticClass: "nav-link",
     attrs: {
       to: {
-        name: "setting-admin-system"
-      },
-      "data-bs-toggle": "tab"
-    }
-  }, [_vm._v("\n                            " + _vm._s(_vm.$t("system")))])], 1), _vm._v(" "), _c("li", {
-    staticClass: "nav-item"
-  }, [_c("router-link", {
-    staticClass: "nav-link",
-    attrs: {
-      to: {
         name: "setting-admin-theme"
       },
       "data-bs-toggle": "tab"
     }
-  }, [_vm._v("\n                            " + _vm._s(_vm.$t("theme")))])], 1), _vm._v(" "), _c("li", {
-    staticClass: "nav-item"
-  }, [_c("router-link", {
-    staticClass: "nav-link",
-    attrs: {
-      to: {
-        name: "setting-admin-mail"
-      },
-      "data-bs-toggle": "tab"
-    }
-  }, [_vm._v("\n                            " + _vm._s(_vm.$t("mail")))])], 1), _vm._v(" "), _c("li", {
-    staticClass: "nav-item"
-  }, [_c("router-link", {
-    staticClass: "nav-link",
-    attrs: {
-      to: {
-        name: "setting-admin-payment"
-      },
-      "data-bs-toggle": "tab"
-    }
-  }, [_vm._v("\n                            " + _vm._s(_vm.$t("payment")))])], 1)]), _vm._v(" "), _c("div", {
+  }, [_vm._v("\n                            " + _vm._s(_vm.$t("theme")))])], 1)]), _vm._v(" "), _c("div", {
     staticClass: "card-body"
   }, [_c("vue-page-transition", {
     attrs: {

@@ -9,7 +9,7 @@ class Expense extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['session_id','type_id', 'amount', 'description','transaction_no'];
+    protected $fillable = ['session_id','type_id', 'amount', 'description','transaction_no','school_id'];
 
     public function expenseType()
     {

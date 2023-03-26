@@ -245,7 +245,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             case 0:
               _context2.prev = 0;
               _context2.next = 3;
-              return axios.post("/api/sessions/".concat(_this2.selectedId));
+              return axios.post("/api/sessions/".concat(_this2.selectedId, "/delete"));
             case 3:
               _this2.$store.commit("session/REMOVE_SESSION", _this2.selectedId);
               _this2.reset();

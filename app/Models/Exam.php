@@ -10,7 +10,7 @@ class Exam extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name', 'note', 'session_id', 'start_date', 'end_date'
+        'name', 'note', 'session_id', 'start_date', 'end_date','school_id'
     ];
 
 

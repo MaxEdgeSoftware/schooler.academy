@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\AdminSetting;
 use Illuminate\Support\Facades\Storage;
 
 function responseSuccess($responseName = null, $data = null, $msg = null)
@@ -75,12 +76,12 @@ function setEnv($key, $value)
 
 function adminSetting()
 {
-    return \App\Models\AdminSetting::first();
+    return school();
 }
 
 function currentSession()
 {
-    return \App\Models\AdminSetting::value('default_session_id');
+    return school()->default_session_id;
 }
 
 function checkSetup($type = 'mail')
@@ -101,4 +102,9 @@ function checkSetup($type = 'mail')
     }
 
     return $status ? 1 : 0;
+}
+
+function school(){
+    $http = $_SERVER["HTTP_HOST"];
+    return AdminSetting::where('domain', $http)->first();
 }

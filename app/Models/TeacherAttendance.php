@@ -10,7 +10,7 @@ class TeacherAttendance extends Model
     use HasFactory;
 
     protected $fillable = [
-        'teacher_id', 'status', 'date', 'session_id'
+        'teacher_id', 'status', 'date', 'session_id','school_id'
     ];
 
     protected $casts = [

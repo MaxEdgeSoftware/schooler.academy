@@ -9,6 +9,12 @@ use SebastianBergmann\Environment\Console;
 
 class FeesTypeController extends Controller
 {
+    public $school;
+
+    public function __construct()
+    {
+        $this->school = school();
+    }
     /**
      * Display a listing of the resource.
      *
@@ -16,7 +22,7 @@ class FeesTypeController extends Controller
      */
     public function index()
     {
-        return responseSuccess('feestype', FeeType::get());
+        return responseSuccess('feestype', FeeType::where("school_id", $this->school->id)->get());
     }
 
     /**
@@ -33,6 +39,7 @@ class FeesTypeController extends Controller
 
         $feetype = FeeType::create([
             'name' => $request->name,
+            'school_id' => $this->school->id
         ]);
 
         if ($request->hasFile('image') && $request->file('image')->isValid()) {
@@ -75,8 +82,9 @@ class FeesTypeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(FeeType $feetype)
+    public function destroy($feetype)
     {
+        $feetype = FeeType::find($feetype);
         $feetype->delete();
 
         return responseSuccess('', '', 'Feetype Deleted Successfully');

@@ -10,7 +10,7 @@ class ExpenseType extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'slug','image'];
+    protected $fillable = ['name', 'slug','image','school_id'];
     protected $appends = ['image_url'];
 
     public function setNameAttribute($name)

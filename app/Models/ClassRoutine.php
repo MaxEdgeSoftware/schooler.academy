@@ -16,7 +16,7 @@ class ClassRoutine extends Model
     use HasFactory;
 
     protected $fillable = [
-        'session_id', 'class_id', 'section_id', 'class_room_id', 'teacher_id', 'subject_id', 'weekday', 'start_time', 'end_time'
+        'session_id', 'class_id', 'section_id', 'class_room_id', 'teacher_id', 'subject_id', 'weekday', 'start_time', 'end_time','school_id'
     ];
 
     const WEEK_DAYS = [

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Subscription extends Model
 {
     use HasFactory;
-    protected $fillable = ['session_id',  'transaction_no', 'amount'];
+    protected $fillable = ['session_id',  'transaction_no', 'amount','school_id'];
 
     public function scopeCurrentSession($query)
     {

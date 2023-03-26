@@ -53,6 +53,7 @@ trait PaymentTrait
             'income_type' => $type ?? '',
             'expense_type' => $type ?? '',
             'payment_type' => $payment_type ?? '',
+            'school_id' => school()->id,
             'amount' =>  $amount,
             'type' => $transaction_type == 'income' ? 'income' : 'expense',
         ]);
@@ -76,6 +77,7 @@ trait PaymentTrait
             'transaction_no' => $transaction_no,
             'session_id' => currentSession(),
             'expense_type' => $type,
+            'school_id' => school()->id,
             'amount' =>  $amount,
             'type' => 'expense',
         ]);
@@ -102,6 +104,7 @@ trait PaymentTrait
             'session_id' => currentSession(),
             'student_id' => $student_id,
             'income_type' => $type,
+            'school_id' => school()->id,
             'payment_type' => $payment_type,
             'amount' =>  $amount,
             'type' => 'income',
@@ -115,6 +118,7 @@ trait PaymentTrait
             'transaction_no' => $transaction_no ?? uniqid(),
             'session_id' => currentSession(),
             'amount' =>  $amount,
+            'school_id' => school()->id,
         ]);
     }
 

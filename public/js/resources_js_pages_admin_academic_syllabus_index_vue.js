@@ -96,7 +96,7 @@ function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input ==
             case 0:
               _context2.prev = 0;
               _context2.next = 3;
-              return axios.post("/api/syllabuses/".concat(syllabus_id));
+              return axios.post("/api/syllabuses/".concat(syllabus_id, "/delete"));
             case 3:
               response = _context2.sent;
               _this2.syllabuses.splice(_this2.syllabuses.findIndex(function (syllabus) {

@@ -11,6 +11,12 @@ use App\Http\Requests\ExamMarkSaveRequest;
 
 class ExamMarkController extends Controller
 {
+    public $school;
+
+    public function __construct()
+    {
+        $this->school = school();
+    }
     /**
      * Get Students by session_id, class_id, section_id
      *
@@ -21,6 +27,7 @@ class ExamMarkController extends Controller
             ->where('session_id', adminSetting()->default_session_id)
             ->where('class_id', $request->class_id)
             ->where('section_id', $request->section_id)
+            ->where("school_id", $this->school->id)
             ->get();
 
         return response($students);
@@ -40,12 +47,14 @@ class ExamMarkController extends Controller
                 ->where('subject_id', $row['subject_id'])
                 ->where('section_id', $row['section_id'])
                 ->where('roll_no', $row['roll_no'])
+                ->where("school_id", $this->school->id)
                 ->first();
 
             if ($mark) {
                 $mark->update($row);
             } else {
                 $row['session_id'] = $session_id;
+                $row["school_id"] = $this->school->id;
                 ExamMark::create($row);
             }
         }
@@ -68,6 +77,7 @@ class ExamMarkController extends Controller
             ->where('class_id', $request->class_id)
             ->where('subject_id', $request->subject_id)
             ->where('section_id', $request->section_id)
+            ->where("school_id", $this->school->id)
             ->get();
 
         return response($marks);

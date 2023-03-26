@@ -10,7 +10,7 @@ class Transaction extends Model
     use HasFactory;
 
     protected $fillable = [
-        'session_id',  'transaction_no', 'student_id', 'income_type', 'expense_type', 'payment_type', 'amount', 'type'
+        'session_id',  'transaction_no', 'student_id', 'income_type', 'expense_type', 'payment_type', 'amount', 'type','school_id'
     ];
 
     public function scopeCurrentSession($query)

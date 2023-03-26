@@ -8,6 +8,12 @@ use App\Models\Classs;
 
 class ClassController extends Controller
 {
+    public $school;
+
+    public function __construct()
+    {
+        $this->school = school();
+    }
     /**
      * Display a listing of the resource.
      *
@@ -15,7 +21,7 @@ class ClassController extends Controller
      */
     public function index()
     {
-        return responseSuccess('classes', Classs::with('sections:id,name')->get(['id', 'name', 'slug', 'numeric']));
+        return responseSuccess('classes', Classs::with('sections:id,name')->where("school_id", $this->school->id)->get(['id', 'name', 'slug', 'numeric']));
     }
 
     /**
@@ -26,7 +32,15 @@ class ClassController extends Controller
      */
     public function store(ClassRequest $request)
     {
-        $class = Classs::create($request->except(['sections']));
+        // if(Classs::where("name", $request->name)->where("school_id", school()->id)->first()){
+        //     return responseError('Class already exist', 404);
+        // }
+        // if(Classs::where("numeric", $request->numeric)->where("school_id", school()->id)->first()){
+        //     return responseError('Class already exist', );
+        // }
+        $data = $request->except(['sections']);
+        $data["school_id"] = $this->school->id;
+        $class = Classs::create($data);
         $this->classSectionSave($class, $request->sections);
 
         return responseSuccess('', '', 'Class Created Successfully');
@@ -64,8 +78,9 @@ class ClassController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Classs $class)
+    public function destroy($class)
     {
+        $class = Classs::where("id", $class)->first();
         try {
             $class->delete();
             $class->sections()->delete();

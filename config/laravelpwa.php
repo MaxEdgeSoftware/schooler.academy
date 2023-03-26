@@ -1,10 +1,10 @@
 <?php
 
 return [
-    'name' => env('APP_SHORT_NAME', 'Schooling'),
+    'name' => env('APP_SHORT_NAME', 'Edutech'),
     'manifest' => [
-        'name' => env('APP_SHORT_NAME', 'Schooling'),
-        'short_name' => env('APP_SHORT_NAME', 'Schooling'),
+        'name' => env('APP_SHORT_NAME', 'Edutech'),
+        'short_name' => env('APP_SHORT_NAME', 'Edutech'),
         'start_url' => env('APP_URL').'/auth/login',
         'background_color' => '#206bc4',
         'theme_color' => '#ffffff',
@@ -60,7 +60,7 @@ return [
         'shortcuts' => [
             [
                 'name' => env('APP_SHORT_NAME'),
-                'description' => 'Schooling - School Management System',
+                'description' => 'Edutech - School Management System',
                 'url' => env('APP_URL').'/auth/login',
                 'icons' => [
                     "src" => "/images/icons/icon-72x72.png",
@@ -69,7 +69,7 @@ return [
             ],
             [
                 'name' => env('APP_SHORT_NAME'),
-                'description' => 'Schooling - School Management System',
+                'description' => 'Edutech - School Management System',
                 'url' => env('APP_URL').'/auth/login'
             ]
         ],

@@ -218,7 +218,7 @@ export default {
     methods: {
         async saveSetting() {
             try {
-                let response = await this.form.put(`/api/setting/system`);
+                let response = await this.form.post(`/api/setting/system`);
 
                 this.toastSuccess(response.message);
                 setTimeout(() => {

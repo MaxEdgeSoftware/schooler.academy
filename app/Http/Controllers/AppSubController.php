@@ -11,23 +11,29 @@ use Illuminate\Http\Request;
 
 class AppSubController extends Controller
 {
+    public $school;
+
+    public function __construct()
+    {
+        $this->school = school();
+    }
     //
     public function index(){
         if(!auth()->check()) return response()->json(false);
         // get last session 
-        $currentSession = Session::orderBy("id", "desc")->first();
+        $currentSession = Session::orderBy("id", "desc")->where("school_id", $this->school->id)->first();
         //if(!$currentSession) return response()->json(true);
         
          // get last term
-        $currentTerm = Exam::orderBy("id", "desc")->first();
+        $currentTerm = Exam::orderBy("id", "desc")->where("school_id", $this->school->id)->first();
 
-        $usage = Exam::count();
+        $usage = Exam::where("school_id", $this->school->id)->get('id')->count();
         
         if($usage <= 1) return response()->json(true);
         
 
         // get last sub
-        $sub = AppSub::where('status', AppSub::$paid)->where([["session_id", $currentSession->id], ["exam_id", $currentTerm->id]])->orderBy("id", "DESC")->first();
+        $sub = AppSub::where('status', AppSub::$paid)->where([["session_id", $currentSession->id], ["exam_id", $currentTerm->id]])->where("school_id", $this->school->id)->orderBy("id", "DESC")->first();
         if(!$sub) return response()->json(false);
         return response()->json(true);
     }
@@ -71,15 +77,16 @@ class AppSubController extends Controller
 
         if ($new_res->data->status == "success") {
             // get last session added
-            $lastSession = Session::orderBy("id", "DESC")->first();
+            $lastSession = Session::orderBy("id", "DESC")->where("school_id", $this->school->id)->first();
 
             // get last Term added
-            $lastTerm = Exam::orderBy("id", "DESC")->first();
+            $lastTerm = Exam::orderBy("id", "DESC")->where("school_id", $this->school->id)->first();
             AppSub::create([
                 "user_id" => $customer->id,
                 "session_id" => $lastSession->id,
                 "exam_id" => $lastTerm->id,
                 "reference_id" => $ref,
+                "school_id" => school()->id,
                 "status" => AppSub::$paid,
                 "transaction_id" => \Illuminate\Support\Str::random(10)
             ]);

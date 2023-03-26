@@ -23,7 +23,7 @@
                                     <has-error :form="settingForm" field="short_name"></has-error>
                                 </div>
                             </div>
-                            <div class="form-group mb-3 row">
+                            <div class="form-group mb-3 row d-none">
                                 <label for="email" class="form-label col-md-3 col-form-label">{{ $t("email") }}</label>
                                 <div class="col-md-9">
                                     <input v-model="settingForm.email"
@@ -184,14 +184,24 @@ export default {
             this.preview_logo = this.setting.logo_url;
             this.preview_dark_logo = this.setting.dark_logo_url;
         }
-    },
-    computed: {
-        setting() {
-            return this.$store.getters["setting/setting"];
+        ,
+        async getSettings(){
+            let response = await axios.get("/api/setting");
+            if(response.data.setting == 'not-found'){
+                window.location.assign('/not-found');
+            }
+            console.log(response.data.setting)
+            this.setting = response.data.setting;
+            setTimeout(() => {
+                this.loadData();
+            }, 500);
         }
     },
+    computed: {
+        
+    },
     created() {
-        this.loadData();
+        this.getSettings();        
     }
 };
 </script>

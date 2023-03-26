@@ -10,6 +10,12 @@ use App\Http\Resources\Calendar\UpcomingEventResource;
 
 class CalendarController extends Controller
 {
+    public $school;
+
+    public function __construct()
+    {
+        $this->school = school();
+    }
     /**
      * Display a listing of the resource.
      *
@@ -17,7 +23,7 @@ class CalendarController extends Controller
      */
     public function index()
     {
-        $calendars = Calendar::all();
+        $calendars = Calendar::where("school_id", $this->school->id)->get();
 
         return CalendarResource::collection($calendars);
     }
@@ -32,6 +38,7 @@ class CalendarController extends Controller
     {
         $data = $request->validated();
         $data['session_id'] = currentSession();
+        $data['school_id'] = school()->id;
         $calendar = Calendar::create($data);
         return responseSuccess('calendar', $calendar, 'Calendar created successfully!');
     }
@@ -66,8 +73,9 @@ class CalendarController extends Controller
      * @param  \App\Models\Calendar  $calendar
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Calendar $calendar)
+    public function destroy($calendar)
     {
+        $calendar = Calendar::find($calendar);
         $calendar->delete();
 
         return responseSuccess('calendar', $calendar, 'Calendar deleted successfully!');
@@ -76,6 +84,7 @@ class CalendarController extends Controller
     public function upcomingEvents(){
         $calendars = Calendar::whereSessionId(currentSession())
         ->where('start_date', '>', now()->format('Y-m-d'))
+        ->where("school_id", $this->school->id)
         ->oldest('start_date')
         ->take(3)
         ->get();

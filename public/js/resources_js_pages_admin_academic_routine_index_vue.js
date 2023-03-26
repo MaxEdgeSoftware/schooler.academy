@@ -451,7 +451,7 @@ function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input ==
             case 0:
               _context6.prev = 0;
               _context6.next = 3;
-              return axios.post("/api/remove-class-routines/".concat(_this8.selectedId));
+              return axios.post("/api/remove-class-routines/".concat(_this8.selectedId, "/delete"));
             case 3:
               response = _context6.sent;
               _this8.toggleDeleteModal();

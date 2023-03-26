@@ -1,8 +1,5 @@
 <template>
-    <div v-if="!isMailConfigured" class="alert alert-danger my-1" role="alert">
-        <h4 class="alert-title">Please configuration mail setting</h4>
-        <div class="text-muted">You need to configure your mail setting to send mail. <router-link :to="{name: 'setting-admin-mail'}">Go to setting</router-link></div>
-    </div>
+    <div></div>
 </template>
 
 <script>

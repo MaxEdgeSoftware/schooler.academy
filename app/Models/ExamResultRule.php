@@ -10,7 +10,7 @@ class ExamResultRule extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name', 'min_mark', 'max_mark'
+        'name', 'min_mark', 'max_mark','school_id'
     ];
 
     protected $casts = [

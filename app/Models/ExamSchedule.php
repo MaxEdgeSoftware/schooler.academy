@@ -10,7 +10,7 @@ class ExamSchedule extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name', 'session_id','exam_id','room_id','class_id','subject_id','section_id','exam_date','start_time','end_time','note'
+        'name', 'session_id','exam_id','room_id','class_id','subject_id','section_id','exam_date','start_time','end_time','note','school_id'
     ];
 
 

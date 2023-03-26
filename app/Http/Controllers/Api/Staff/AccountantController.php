@@ -20,7 +20,12 @@ use App\Http\Requests\UpdateAccountantRequest;
 class AccountantController extends Controller
 {
     use UploadAble;
+    public $school;
 
+    public function __construct()
+    {
+        $this->school = school();
+    }
     /**
      * Display a listing of the resource.
      *
@@ -30,12 +35,12 @@ class AccountantController extends Controller
     {
         if (request()->has('search') && request()->search != null) {
             $search = request('search');
-            $staffs = Staff::where(['designation' => 'accountant'])->whereHas('user', function ($q) use ($search) {
+            $staffs = Staff::where(['designation' => 'accountant'])->where("school_id", $this->school->id)->whereHas('user', function ($q) use ($search) {
                 $q->where('name', 'LIKE', "%$search%");
             })
                 ->paginate(10);
         } else {
-            $staffs = Staff::with('user')->where(['designation' => 'accountant'])->paginate(12);
+            $staffs = Staff::with('user')->where("school_id", $this->school->id)->where(['designation' => 'accountant'])->paginate(12);
         }
 
         return StaffResource::collection($staffs);
@@ -52,6 +57,7 @@ class AccountantController extends Controller
         // User info
         $user_data = $request->only('name', 'email', 'password');
         $user_data['role'] = 'staff';
+        $user_data['user_id'] = $this->school->id;
         $user_data['password'] = bcrypt($user_data['password']);
         $user = User::create($user_data);
         $user->assignRole('Accountant');
@@ -61,6 +67,7 @@ class AccountantController extends Controller
         $accountant_data['user_id'] = $user->id;
         $accountant_data['session_id'] = currentSession();
         $accountant_data['designation'] = 'accountant';
+        $accountant_data['school_id'] = school()->id;
 
         if ($request->hasFile('joining_letter')) {
             $accountant_data['joining_letter'] = $this->uploadOne($request->file('joining_letter'), 'joining_letters');
@@ -100,6 +107,9 @@ class AccountantController extends Controller
     {
         // User info
         $user = $accountant->user;
+        if($user->school_id != $this->school->id){
+            return responseError("Invalid request", 404);
+        }
         $user->name = $request->name;
         $user->email = $request->email;
         if ($request->password) {
@@ -137,8 +147,9 @@ class AccountantController extends Controller
      * @param  \App\Models\Staff  $staff
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Staff $teacher)
+    public function destroy($teacher)
     {
+        $teacher = Staff::find($teacher);
         //Need Improvements
         $this->deleteOne($teacher->joining_letter);
         $this->deleteOne($teacher->resumes);
@@ -151,9 +162,9 @@ class AccountantController extends Controller
 
     public function getDashboardOverview()
     {
-        $total_student = Student::whereSessionId(currentSession())->count();
-        $total_event = Calendar::count();
-        $transactions = Transaction::all();
+        $total_student = Student::where("school_id", $this->school->id)->whereSessionId(currentSession())->count();
+        $total_event = Calendar::where("school_id", $this->school->id)->count();
+        $transactions = Transaction::where("school_id", $this->school->id)->get();
 
         $data = [
             'total_students' => $total_student,
@@ -167,7 +178,7 @@ class AccountantController extends Controller
 
     public function getIncomeExpense()
     {
-        $transactions = Transaction::whereSessionId(currentSession())
+        $transactions = Transaction::where("school_id", $this->school->id)->whereSessionId(currentSession())
             ->latest()
             ->get(['id', 'income_type', 'expense_type', 'payment_type', 'amount', 'type']);
         $incomes = $transactions->where('type', 'income')->take(10);
@@ -185,31 +196,31 @@ class AccountantController extends Controller
 
         switch ($filter) {
             case 'today':
-                $data = Transaction::currentSession()->whereDate('created_at', Carbon::today())->get();
+                $data = Transaction::currentSession()->whereDate('created_at', Carbon::today())->where("school_id", $this->school->id)->get();
                 break;
             case 'yesterday':
-                $data = Transaction::currentSession()->whereDate('created_at', Carbon::yesterday())->get();
+                $data = Transaction::currentSession()->whereDate('created_at', Carbon::yesterday())->where("school_id", $this->school->id)->get();
                 break;
             case 'this_week':
-                $data = Transaction::currentSession()->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->get();
+                $data = Transaction::currentSession()->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->where("school_id", $this->school->id)->get();
                 break;
             case 'last_week':
-                $data = Transaction::currentSession()->whereBetween('created_at', [Carbon::now()->subWeek()->startOfWeek(), Carbon::now()->subWeek()->endOfWeek()])->get();
+                $data = Transaction::currentSession()->whereBetween('created_at', [Carbon::now()->subWeek()->startOfWeek(), Carbon::now()->subWeek()->endOfWeek()])->where("school_id", $this->school->id)->get();
                 break;
             case 'this_month':
-                $data = Transaction::currentSession()->whereMonth('created_at', Carbon::now()->month)->get();
+                $data = Transaction::currentSession()->whereMonth('created_at', Carbon::now()->month)->where("school_id", $this->school->id)->get();
                 break;
             case 'last_month':
-                $data = Transaction::currentSession()->whereBetween('created_at', [Carbon::now()->subMonth()->startOfMonth(), Carbon::now()->subMonth()->endOfMonth()])->get();
+                $data = Transaction::currentSession()->whereBetween('created_at', [Carbon::now()->subMonth()->startOfMonth(), Carbon::now()->subMonth()->endOfMonth()])->where("school_id", $this->school->id)->get();
                 break;
             case 'last_6_month':
-                $data = Transaction::currentSession()->whereBetween('created_at', [Carbon::now()->subMonth(6), Carbon::now()])->get();
+                $data = Transaction::currentSession()->whereBetween('created_at', [Carbon::now()->subMonth(6), Carbon::now()])->where("school_id", $this->school->id)->get();
                 break;
             case 'this_year':
-                $data = Transaction::currentSession()->whereBetween('created_at', [Carbon::now()->startOfYear(), Carbon::now()->endOfYear()])->get();
+                $data = Transaction::currentSession()->whereBetween('created_at', [Carbon::now()->startOfYear(), Carbon::now()->endOfYear()])->where("school_id", $this->school->id)->get();
                 break;
             case 'last_year':
-                $data = Transaction::currentSession()->whereDate('created_at', '>', now()->subYear())->get();
+                $data = Transaction::currentSession()->whereDate('created_at', '>', now()->subYear())->where("school_id", $this->school->id)->get();
                 break;
             default:
                 return  $filter;

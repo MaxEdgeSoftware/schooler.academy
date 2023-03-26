@@ -15,6 +15,12 @@ use App\Http\Resources\Staff\StaffResource;
 class TeacherController extends Controller
 {
     use UploadAble;
+    public $school;
+
+    public function __construct()
+    {
+        $this->school = school();
+    }
     /**
      * Display a listing of the resource.
      *
@@ -28,11 +34,11 @@ class TeacherController extends Controller
             $search = request('search');
             $staffs = Staff::where(['designation' => 'teacher'])->whereHas('user', function ($q) use ($search) {
                 $q->where('name', 'LIKE', "%$search%");
-            })
+            })->where("school_id", $this->school->id)
                 ->with('user', 'department')
                 ->paginate(10);
         } else {
-            $staffs = Staff::where(['designation' => 'teacher'])->with('user', 'department')->paginate(12);
+            $staffs = Staff::where(['designation' => 'teacher'])->where("school_id", $this->school->id)->with('user', 'department')->paginate(12);
         }
 
 
@@ -50,6 +56,7 @@ class TeacherController extends Controller
         // User info
         $user_data = $request->only('name', 'email', 'password');
         $user_data['role'] = 'staff';
+        $user_data["school_id"] = school()->id;
         $user_data['password'] = bcrypt($request->password);
         $user = User::create($user_data);
         $user->assignRole('Teacher');
@@ -59,6 +66,7 @@ class TeacherController extends Controller
         $teacher_data['user_id'] = $user->id;
         $teacher_data['session_id'] = currentSession();
         $teacher_data['designation'] = 'teacher';
+        $teacher_data['school_id'] = $this->school->id;
 
         if ($request->hasFile('joining_letter')) {
             $teacher_data['joining_letter'] = $this->uploadOne($request->file('joining_letter'), 'joining_letters');
@@ -83,6 +91,9 @@ class TeacherController extends Controller
      */
     public function show(Staff $teacher)
     {
+        if($teacher->school_id != $this->school->id){
+            return responseError("invalid request", 404);
+        }
         //Need Improvements
         return new StaffResource($teacher->load('user', 'department'));
     }
@@ -98,6 +109,9 @@ class TeacherController extends Controller
     {
         // User info
         $user = $teacher->user;
+        if($user->school_id != $this->school->id){
+            return responseError("invalid request", 404);
+        }
         $user->name = $request->name;
         $user->email = $request->email;
         if ($request->password) {
@@ -142,8 +156,9 @@ class TeacherController extends Controller
      * @param  \App\Models\Staff  $staff
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Staff $teacher)
+    public function destroy($teacher)
     {
+        $teacher = Staff::where("id", $teacher)->where("school_id", $this->school->id)->first();
         //Need Improvements
         $this->deleteOne($teacher->joining_letter);
         $this->deleteOne($teacher->resumes);
@@ -157,7 +172,7 @@ class TeacherController extends Controller
     public function getAllTeacher()
     {
         $staffs = Staff::where('designation', 'teacher')
-            ->with('user:name,id')
+            ->with('user:name,id')->where("school_id", $this->school->id)
             ->get();
 
         return $staffs;

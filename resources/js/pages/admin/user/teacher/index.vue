@@ -107,7 +107,7 @@ export default {
         },
         async deleteUser() {
             let response = await axios.post(
-                `/api/teachers/${this.selectedId}`
+                `/api/teachers/${this.selectedId}/delete`
             );
             this.isModalShow = false;
             this.$store.commit("teacher/REMOVE_TEACHER", this.selectedId);
