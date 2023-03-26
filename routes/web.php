@@ -60,6 +60,8 @@ Route::get('seed-tables', function(){
 });
 // route for checking subscription
 Route::get('/app-subscription/check', [AppSubController::class, 'index']);
+Route::get('/create-school', [AppSubController::class, 'createSchool']);
+
 Route::get('/auth-user', function(){return response()->json(auth()->user());});
 Route::get('/edutech-plans', [AppSubController::class, 'EdutechPlans']);
 Route::get('/get-paystack-key', [AppSubController::class, 'PaystackKey']);
