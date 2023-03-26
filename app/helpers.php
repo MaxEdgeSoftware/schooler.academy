@@ -106,5 +106,5 @@ function checkSetup($type = 'mail')
 
 function school(){
     $http = $_SERVER["HTTP_HOST"];
-    return AdminSetting::where('domain', $http)->first();
+    return AdminSetting::where('domain', $http)->firstOrFail();
 }
