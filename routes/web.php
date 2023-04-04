@@ -72,7 +72,7 @@ Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
 include(base_path('routes/payment.php'));
 
 // ====================Artisan command======================
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware('auth')->group(function () {
     Route::get('route-clear', function () {
         \Artisan::call('route:clear');
         dd("Route Cleared");

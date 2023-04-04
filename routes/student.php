@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Student\StudentController;
 
-Route::group(['middleware' => 'auth:sanctum', 'namespace' => 'Student', 'prefix' => 'student'], function () {
+Route::group(['middleware' => 'auth', 'namespace' => 'Student', 'prefix' => 'student'], function () {
     Route::get('/dashboard/overview', [StudentController::class, 'getDashboardOverview']);
     Route::get('/get-class-routines', [StudentController::class, 'getClassRoutine']);
     Route::post('/get-attendance', [StudentController::class, 'getAttendance']);

@@ -7,9 +7,9 @@ use App\Http\Controllers\Payment\StripeController;
 use App\Http\Controllers\Payment\PaystackController;
 use App\Http\Controllers\Payment\RazorpayController;
 
-Route::get('/payment/{fee}/fee', [PaymentController::class, 'paymentFee'])->middleware('auth:sanctum');
-Route::get('/payment/successfull', [PaymentController::class, 'paymentSuccess'])->name('payment.successfull')->middleware('auth:sanctum');
-Route::get('/subscribe', [PaymentController::class, 'subscribe'])->middleware('auth:sanctum');
+Route::get('/payment/{fee}/fee', [PaymentController::class, 'paymentFee'])->middleware('auth');
+Route::get('/payment/successfull', [PaymentController::class, 'paymentSuccess'])->name('payment.successfull')->middleware('auth');
+Route::get('/subscribe', [PaymentController::class, 'subscribe'])->middleware('auth');
 
 //Paypal
 Route::post('paypal/payment', [PaypalController::class, 'processTransaction'])->name('paypal.post');

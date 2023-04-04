@@ -47,7 +47,7 @@ include(base_path('routes/teacher.php'));
 include(base_path('routes/parent.php'));
 include(base_path('routes/accountant.php'));
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+Route::middleware('auth')->get('/user', function (Request $request) {
     return $request->user();
 });
 
@@ -63,8 +63,7 @@ Route::get('app/default', function () {
 });
 
 // protected api routes
-Route::middleware('auth:sanctum')->group(function () {
-
+Route::middleware('auth')->group(function () {
     Route::get('/users/details', [UserController::class, 'details']);
     Route::get('/get-current-session', [SessionController::class, 'getCurrentSession']);
 
@@ -75,7 +74,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
 
     // admin setting
-    Route::get('/setting', [AdminSettingController::class, 'fetchSetting'])->withoutMiddleware('auth:sanctum');
+    Route::get('/setting', [AdminSettingController::class, 'fetchSetting'])->withoutMiddleware('auth');
     Route::post('/setting', [AdminSettingController::class, 'updateSetting']);
     Route::get('/setting/system', [AdminSettingController::class, 'getSystemSettings']);
     Route::post('/setting/system', [AdminSettingController::class, 'updateSystemSettings']);

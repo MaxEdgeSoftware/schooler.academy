@@ -4,7 +4,7 @@ use App\Http\Controllers\Api\Guardian\GuardianController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Student\StudentController;
 
-Route::group(['middleware' => 'auth:sanctum', 'namespace' => 'Student', 'prefix' => 'parent'], function () {
+Route::group(['middleware' => 'auth', 'namespace' => 'Student', 'prefix' => 'parent'], function () {
     Route::get('/dashboard/overview', [GuardianController::class, 'getDashboardOverview']);
     Route::get('/dashboard/{student_id}/due-fees', [GuardianController::class, 'getDashboardDueFees']);
     Route::get('/students', [GuardianController::class, 'getStudentByGuardian']);
