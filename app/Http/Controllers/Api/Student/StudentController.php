@@ -269,9 +269,10 @@ class StudentController extends Controller
         $session_id = adminSetting()->default_session_id;
         $admin = adminSetting()->head;
         $school = adminSetting()->name;
+        $address = adminSetting()->address;
 
         $students = Student::with(['user:name,id', 'marks' => function ($q) use ($request, $student, $session_id) {
-            $q->select('id', 'subject_id', 'roll_no', 'class_work', 'assign', 'attend', 'project', 'ca', 'ca2', 'ca3', 'mark');
+            $q->select('id', 'subject_id', 'roll_no', 'class_work', 'assign', 'attend', 'project', 'ca', 'ca2', 'ca3', 'mark', 'cum');
             $q->where('session_id', $session_id);
             $q->where('exam_id', $request->exam_id);
             $q->where('class_id', $student->class_id);
@@ -330,7 +331,7 @@ class StudentController extends Controller
             'result_rules' =>$result_rules,
             'session'  =>$session,
             'term'  =>$term,
-            'school_info' =>['school'=>$school, 'admin'=>$admin],
+            'school_info' =>['school'=>$school, 'admin'=>$admin, 'address'=>$address],
             //'ranks' => $this->formatStudentsRanks($studentsRank, $subjects, $ranks)
         ]);
     }

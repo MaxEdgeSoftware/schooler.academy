@@ -215,6 +215,10 @@
                                 <div class="row">
                                     <div class="col-12">
                                         <table>
+                                             <tr>
+                                                <th><h3>{{school_info.school}}</h3></th>
+                                                <th colspan='4'><h3>{{school_info.address}}</h3></th>
+                                            </tr>
                                             <tr>
                                                 <th>Name</th>
                                                 <td colspan='4'>{{students[0].user.name}}</td>
@@ -302,7 +306,7 @@
                                                 <span v-html="setMarks(subject.id)"></span>
                                             </td>
                                              <td>
-                                                <span v-html="setMarks(subject.id)"></span>
+                                                <span v-html="setCum(subject.id)"></span>
                                             </td>
                                              <!-- <td>
                                                <span></span>
@@ -584,7 +588,7 @@ export default {
                 const subjectMark = this.subjectmarks.find(
                     subject => subject.subject_id == subject_id
                 );
-                return subjectMark.total;
+                return subjectMark?.total;
             } else {
                 return `<span class="text-danger">(Null)</span>`;
             }
@@ -595,7 +599,7 @@ export default {
                 const subjectMark = this.subjectmarks.find(
                     subject => subject.subject_id == subject_id
                 );
-                return subjectMark.ca;
+                return subjectMark?.ca;
             } else {
                 return `<span class="text-danger">(Null)</span>`;
             }
@@ -606,7 +610,7 @@ export default {
                 const subjectMark = this.subjectmarks.find(
                     subject => subject.subject_id == subject_id
                 );
-                return subjectMark.ca2;
+                return subjectMark?.ca2;
             } else {
                 return `<span class="text-danger">(Null)</span>`;
             }
@@ -617,7 +621,7 @@ export default {
                 const subjectMark = this.subjectmarks.find(
                     subject => subject.subject_id == subject_id
                 );
-                return subjectMark.ca3;
+                return subjectMark?.ca3;
             } else {
                 return `<span class="text-danger">(Null)</span>`;
             }
@@ -628,7 +632,7 @@ export default {
                 const subjectMark = this.subjectmarks.find(
                     subject => subject.subject_id == subject_id
                 );
-                return subjectMark.overall_ca;
+                return subjectMark?.overall_ca;
             } else {
                 return `<span class="text-danger">(Null)</span>`;
             }
@@ -638,7 +642,18 @@ export default {
                 const subjectMark = this.subjectmarks.find(
                     subject => subject.subject_id == subject_id
                 );
-                return subjectMark.mark;
+                return subjectMark?.mark;
+            } else {
+                return `<span class="text-danger">(Null)</span>`;
+            }
+        },
+
+        setCum(subject_id) {
+            if (this.subjectmarks && this.subjectmarks.length) {
+                const subjectMark = this.subjectmarks.find(
+                    subject => subject.subject_id == subject_id
+                );
+                return subjectMark?.mark;
             } else {
                 return `<span class="text-danger">(Null)</span>`;
             }

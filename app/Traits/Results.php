@@ -20,6 +20,18 @@ trait Results
         foreach ($students as $student) {
             $marks = $student->marks->groupBy('subject_id');
             foreach($marks as $mark){
+                $mark[0]['ca'] = (int) $mark[0]['ca'];
+                $mark[0]['ca2'] = (int) $mark[0]['ca2'];
+                $mark[0]['ca3'] = (int) $mark[0]['ca3'];
+                $mark[0]['assign'] = (int) $mark[0]['assign'];
+                $mark[0]['class_work'] = (int) $mark[0]['class_work'];
+                $mark[0]['project'] = (int) $mark[0]['project'];
+                $mark[0]['attend'] = (int) $mark[0]['attend'];
+                $mark[0]['subject_id'] = (int) $mark[0]['subject_id'];
+                $mark[0]['roll_no'] = (int) $mark[0]['roll_no'];
+                $mark[0]['mark'] = (int) $mark[0]['mark'];
+                $mark[0]['cum'] = (int) $mark[0]['cum'];
+
                 if($template == 'a'){
                     $mark[0]['total'] = (int) $mark[0]['class_work']  + (int) $mark[0]['assign'] + (int) $mark[0]['attend']  +
                     (int) $mark[0]['project'] + (int) $mark[0]['ca'] + (int) $mark[0]['mark'];
@@ -29,7 +41,6 @@ trait Results
                }
 
                 else if($template == 'b'){
-
                     $ca = ((int) $mark[0]['ca']  + (int) $mark[0]['ca2'] + (int) $mark[0]['ca3'])/3;
                     $ca = round($ca, 2);
 
@@ -37,7 +48,11 @@ trait Results
     
                     $exam = (int) $mark[0]['mark'];
                     
-                    $mark[0]['total'] = round(($ca + $exam)/2, 2);
+                    $total = round(($ca + $exam)/2, 2);
+
+                    $cum = (int) $mark[0]['cum'];
+
+                    $mark[0]['total'] = round(($total + $cum)/2, 2);
                 }
 
                

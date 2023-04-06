@@ -236,6 +236,11 @@
                                     <div class="col-12">
                                         <table>
                                             <tr>
+                                                <th><h3>{{school_info.school}}</h3></th>
+                                                <th colspan='4'><h3>{{school_info.address}}</h3></th>
+                                            </tr>
+
+                                            <tr>
                                                 <th>Name</th>
                                                 <td colspan='4'>{{students[0].user.name}}</td>
                                             </tr>
@@ -322,7 +327,7 @@
                                                 <span v-html="setMarks(subject.id)"></span>
                                             </td>
                                              <td>
-                                                <span v-html="setMarks(subject.id)"></span>
+                                                <span v-html="setCum(subject.id)"></span>
                                             </td>
                                              <!-- <td>
                                                <span></span>
@@ -504,7 +509,7 @@ export default {
                 );
                 this.students = response.data.students;
                 this.subjects = response.data.subjects;
-                 this.total_students = response.data.total_students;
+                this.total_students = response.data.total_students;
                 this.classs = response.data.classs;
                 this.class_section = response.data.class_section;
                 this.result_rules = response.data.result_rules;
@@ -523,7 +528,7 @@ export default {
            axios.get("/api/setting")
                 .then((response) => {
                     this.template = response.data.setting.template;
-                    console.log(response.data.setting.template);
+                   // console.log(response.data.setting.template);
                 })
         },
 
@@ -565,65 +570,83 @@ export default {
                 const subjectMark = this.subjectmarks.find(
                     subject => subject.subject_id == subject_id
                 );
-                return subjectMark.total;
+                return subjectMark?.total;
             } else {
                 return `<span class="text-danger">(Null)</span>`;
             }
         },
-         setCa1(subject_id) {
+        setCa1(subject_id) {
             if (this.subjectmarks && this.subjectmarks.length) {
                 const subjectMark = this.subjectmarks.find(
                     subject => subject.subject_id == subject_id
                 );
-                return subjectMark.ca;
-            } else {
-                return `<span class="text-danger">(Null)</span>`;
-            }
-        },
-
-         setCa2(subject_id) {
-            if (this.subjectmarks && this.subjectmarks.length) {
-                const subjectMark = this.subjectmarks.find(
-                    subject => subject.subject_id == subject_id
-                );
-                return subjectMark.ca2;
+               // console.log(subjectMark);
+                return subjectMark?.ca;
             } else {
                 return `<span class="text-danger">(Null)</span>`;
             }
         },
 
-         setCa3(subject_id) {
+       setCa2(subject_id) {
             if (this.subjectmarks && this.subjectmarks.length) {
                 const subjectMark = this.subjectmarks.find(
                     subject => subject.subject_id == subject_id
                 );
-                return subjectMark.ca3;
+                //console.log(subjectMark);
+                return subjectMark?.ca2;
             } else {
                 return `<span class="text-danger">(Null)</span>`;
             }
         },
 
-         setAllCa(subject_id) {
+        setCa3(subject_id) {
             if (this.subjectmarks && this.subjectmarks.length) {
                 const subjectMark = this.subjectmarks.find(
                     subject => subject.subject_id == subject_id
                 );
-                return subjectMark.overall_ca;
+               // console.log(subjectMark);
+                return subjectMark?.ca3;
             } else {
                 return `<span class="text-danger">(Null)</span>`;
             }
         },
 
-         setExam(subject_id) {
+        setAllCa(subject_id) {
             if (this.subjectmarks && this.subjectmarks.length) {
                 const subjectMark = this.subjectmarks.find(
                     subject => subject.subject_id == subject_id
                 );
-                return subjectMark.mark;
+                //console.log(subjectMark);
+                return subjectMark?.overall_ca;
+            } else {
+                return `<span class="text-danger">(Null)</span>`;
+            }
+        },
+
+        setExam(subject_id) {
+            if (this.subjectmarks && this.subjectmarks.length) {
+                const subjectMark = this.subjectmarks.find(
+                    subject => subject.subject_id == subject_id
+                );
+                //console.log(subjectMark);
+                return subjectMark?.mark;
+            } else {
+                return `<span class="text-danger">(Null)</span>`;
+            }
+        },
+
+         setCum(subject_id) {
+            if (this.subjectmarks && this.subjectmarks.length) {
+                const subjectMark = this.subjectmarks.find(
+                    subject => subject.subject_id == subject_id
+                );
+                //console.log(subjectMark);
+                return subjectMark?.cum;
             } else {
                 return `<span class="text-danger">(Null)</span>`;
             }
         }
+
 
 
     },

@@ -89,6 +89,7 @@
                                      <th>{{ $t("ca2") }}</th>
                                      <th>{{ $t("ca3") }}</th>
                                     <th>{{ $t("Exam") }}</th>
+                                    <th>{{ $t("Pre_cum") }}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -158,6 +159,10 @@
                                             {{ getExamValidationErrorMessage(index) }}
                                         </div>
                                     </td>
+
+                                     <td>
+                                        <input type="number" min="0" max="100" v-model="cum_form[index]" class="form-control" />
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -197,6 +202,7 @@ export default {
             sections: [],
             students: [],
             mark_form: [],
+            cum_form: [],
             ca_form: [],
             ca_form2: [],
             ca_form3: [],
@@ -206,6 +212,7 @@ export default {
             pro_form: [],
             roll_form: {},
             mark_errors: [],
+            cum_errors: [],
             ca_errors: [],
             cw_errors: [],
             assign_errors: [],
@@ -234,6 +241,7 @@ export default {
                 this.pro_form = [];
                 this.ca_form = [];
                 this.mark_form = [];
+                this.cum_form = [];
                 const subjectResponse = await axios.get(
                     `/api/classes/${this.form.class_id}/subjects`
                 );
@@ -362,6 +370,7 @@ export default {
                     (single_student.ca2 = this.ca_form2[index]);
                     (single_student.ca3 = this.ca_form3[index]);
                     (single_student.mark = this.mark_form[index]);
+                    (single_student.cum = this.cum_form[index]);
                     single_student.roll_no = this.students[index].roll_no;
                     data.push(single_student);
                 });
@@ -385,6 +394,7 @@ export default {
             try {
                 this.mark_load = false;
                 this.mark_form = [];
+                this.cum_form = [];
                 this.ca_form = [];
                 this.ca_form2 = [];
                 this.ca_form3 = [];
@@ -415,6 +425,7 @@ export default {
                     this.ca_form2[index] = mark.ca2;
                     this.ca_form3[index] = mark.ca3;
                     this.mark_form[index] = mark.mark;
+                    this.cum_form[index] = mark.cum;
                 });
                 this.mark_load = true;
             } catch (error) {
