@@ -87,6 +87,17 @@
                 <span class="nav-link-title"> {{ $t("teachers_list") }} </span>
             </router-link>
         </li>
+
+         <li class="nav-item">
+            <router-link class="nav-link" :to="{ name: 'user-profile' }">
+                 <span class="nav-link-icon d-md-none d-lg-inline-block">
+                    <icon-user />
+                </span>
+                <span class="nav-link-title"> {{ $t('profile') }} </span>
+            </router-link> 
+        </li>
+
+
         <li class="nav-item">
             <logout linkClass="nav-link" :title="false">
                 <span class="nav-link-icon d-md-none d-lg-inline-block">

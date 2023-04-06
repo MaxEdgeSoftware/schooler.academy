@@ -247,7 +247,7 @@ class ReportController extends Controller
         $session_id = adminSetting()->default_session_id;
 
         $students = Student::with(['user:name,id', 'marks' => function ($q) use ($request, $session_id) {
-            $q->select('id', 'subject_id', 'roll_no', 'class_work', 'assign', 'attend', 'project', 'ca', 'mark');
+            $q->select('id', 'subject_id', 'roll_no', 'class_work', 'assign', 'attend', 'project', 'ca', 'ca2', 'ca3', 'mark', 'cum');
             $q->where('session_id',  $session_id);
             $q->where('exam_id', $request->exam_id);
             $q->where('class_id', $request->class_id);
@@ -268,7 +268,7 @@ class ReportController extends Controller
         return response()->json([
             'students'       =>  $this->formatStudentsResultData($students, $subjects),
             'subjects' =>  $subjects,
-            'ranks' => $this->formatStudentsRanks($students, $subjects, $ranks),
+            //'ranks' => $this->formatStudentsRanks($students, $subjects, $ranks),
         ]);
     }
 

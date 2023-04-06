@@ -29,64 +29,9 @@
                 </div>
             </div>
 
-            <!-- <div class="col-12" v-if="students.length">
-                <div class="card mt-3">
-                    <div class="card-header">
-                        <div class="card-title">{{ $t('results') }}</div>
-                    </div>
-                    <div class="card-body">
-                        <template>
-                            <table class="table table-hover ">
-                                <thead>
-                                    <tr>
-                                        <th>{{ $t('subject') }}</th>
-                                        <th>{{ $t('marks') }}</th>
-                                        <th>{{ $t('grade') }} / {{ $t('remark') }}</th>
-                                        <th>{{ $t('status') }}</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr v-for="(subject,index) in subjects" :key="index">
-                                        <td>{{ subject.name }}</td>
-                                        <td>
-                                            <span v-html="setMarks(subject.id)"></span>
-                                            <span v-if="subjectmarks && subjectmarks.length">
-                                                {{ $t('out_of') }} {{ subject.total_marks }}
-                                            </span>
-                                        </td>
-                                        <td v-if="students[0]"
-                                            v-html="setPointGrade(students[0].subjects[subject.id].results)" />
-                                        <td v-if="students[0]">
-                                            <span class="pass" v-if="students[0].subjects[subject.id].pass">
-                                                {{ $t('passed') }}
-                                            </span>
-                                            <span class="fail" v-else>
-                                                {{ $t('failed') }}
-                                            </span>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <div>
-                                <div class="row justify-content-end">
-                                    <div class="col-md-3">
-                                        <h2>{{ $t('Total Score') }}: {{ finalResult.gpa }}</h2>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <h1>
-                                            <span v-if="finalResult.pass" class="text-success">{{ $t('passed') }}</span>
-                                            <span v-else class="text-danger">{{ $t('failed') }}</span>
-                                        </h1>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </template>
-                    </div>
-                </div>
-            </div> -->
     <div id="report_sheet" class="container" v-if="students.length">
-    <div class='mt-5 justify-content-center align-items-center mx-auto text-center' style='max-width:700px'>
+
+    <div v-if="template == 'a'" class='mt-5 justify-content-center align-items-center mx-auto text-center' style='max-width:700px'>
       <div class="row justify-content-center align-items-center mx-auto text-center">
         <!-- <div class="col-12 viewResult">
 
@@ -167,7 +112,7 @@
                 <tr  v-for="(subject,index) in subjects" :key="index">
                   <td>{{subject.name}}</td>
                   <td>
-                       <span v-html="setCa(subject.id)"></span>
+                       <span v-html="setAllCa(subject.id)"></span>
                  </td>
                   <td>
                       <span v-html="setExam(subject.id)"></span>
@@ -281,6 +226,243 @@
         <!-- <div id='print' class='col ml-5'><a href=''><i class='fa fa-print'></i></a></div>  <div id='close' class='col mr-5'><a href='result.php'><i class='fa fa-times'></i></a></div> -->
       </div>
     </div>
+
+
+                    <div v-if="template == 'b'" class='mt-5 justify-content-center align-items-center mx-auto text-center' style='max-width:700px'>
+                    <div class="row justify-content-center align-items-center mx-auto text-center">
+                        <div style='border:3px solid grey'>
+                            <div class="col-12 mb-3">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <table>
+                                            <tr>
+                                                <th><h3>{{school_info.school}}</h3></th>
+                                                <th colspan='4'><h3>{{school_info.address}}</h3></th>
+                                            </tr>
+
+                                            <tr>
+                                                <th>Name</th>
+                                                <td colspan='4'>{{students[0].user.name}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Class</th>
+                                                <td colspan='4'>{{classs[0].name}} ({{class_section[0].name}})</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Gender</th>
+                                                <td colspan='4'>{{students[0].user.gender}}</td>
+                                            </tr>
+
+                                            <tr>
+                                                <th>Term</th>
+                                                <td id='term'>{{term[0].name}}</td>
+                                                <th colspan='2'>School Session:</th>
+                                                <td>{{session[0].name}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Attendance</th>
+                                                <td colspan="2">{{attendance.total_present}} out of {{attendance.total_attendance}}</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <!-- <div class="col-3 mt-3" style='min-width:50px'>
+                                        <table class='image'>
+                                            <tr>
+                                                <td>
+                                                    <img :src="students[0].user.image_url" alt='passport' />
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div> -->
+                                </div>
+                            </div>
+                      <h1>Assessment of Cognitive Domain</h1>
+                            <div class="col-12">
+                                <table class='table-striped table-responsive'>
+                                    <thead>
+                                        <tr>
+                                            <th>Mark Obtained</th>
+                                            <th>100</th>
+                                            <th>100</th>
+                                            <th>100</th>
+                                            <th>100</th>
+                                            <th>100</th>
+                                            <th>100</th>
+                                            <th>100</th>
+                                            <th colspan="2"></th>
+                                        </tr>
+                                        <tr>
+                                            <th>Subject</th>
+                                            <th>T1</th>
+                                            <th>T2</th>
+                                            <th>T3</th>
+                                            <th>T4 (T1+T2+T3/3)</th>
+                                            <th>Exam</th>
+                                            <th>Total (T4+Exam/2)</th>
+                                            <th>Pre_cum</th>
+                                            <!-- <th>Grade</th> -->
+                                            <!-- <th>Pos</th> -->
+                                            <th>Remarks</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="(subject,index) in subjects" :key="index">
+                                            <td>{{subject.name}}</td>
+                                            <td>
+                                                <span v-html="setCa1(subject.id)"></span>
+                                            </td>
+                                            <td>
+                                                <span v-html="setCa2(subject.id)"></span>
+                                            </td>
+                                             <td>
+                                                <span v-html="setCa3(subject.id)"></span>
+                                            </td>
+                                             <td>
+                                                <span v-html="setAllCa(subject.id)"></span>
+                                            </td>
+                                             <td>
+                                                <span v-html="setExam(subject.id)"></span>
+                                            </td>
+                                             <td>
+                                                <span v-html="setMarks(subject.id)"></span>
+                                            </td>
+                                             <td>
+                                                <span v-html="setCum(subject.id)"></span>
+                                            </td>
+                                             <!-- <td>
+                                               <span></span>
+                                            </td> -->
+                                            <!-- <td>
+                                                <span></span>
+                                            </td> -->
+                                            <!-- <td>100%</td> -->
+                                            <td v-if="students[0]" v-html="setRemark(students[0].subjects[subject.id].results)" />
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="col-12">
+                                <div class="row justify-content-center align-items-center">
+                                    <div class="col-6">
+                                        <table>
+                                            <tr>
+                                                <th>Affective Domain</th>
+                                                <th>Ratings</th>
+                                            </tr>
+                                            <tr>
+                                                <td>Punctuality</td>
+                                                <td></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Attendance</td>
+                                                <td></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Neatness</td>
+                                                <td></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Relationship with others</td>
+                                                <td></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Self-control</td>
+                                                <td></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Promptness in completing work</td>
+                                                <td></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="col-6">
+                                        <table>
+                                             <tr>
+                                                <th>Psychomotor Domain</th>
+                                                <th>Ratings</th>
+                                            </tr>
+                                            <tr>
+                                                <th>Handwriting</th>
+                                                <td></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Games & Sports</th>
+                                                <td></td>
+                                            </tr>
+
+                                            <tr>
+                                                <td>Handling tools</td>
+                                                <td></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Drawing & Painting</td>
+                                                <td></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Musical skills</td>
+                                                <td></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="col-12">
+                                <div class="row justify-content-center align-items-center">
+                                    <div class="col-8">
+                                        <table>
+                                            <tr>
+                                                <td>Class Tutor's Comment</td>
+                                                <td>
+                                                   <span v-if="finalResult.pass" class="text-success">{{ $t('Good Result, keep it up') }}</span>
+                                                  <span v-else class="text-danger">{{ $t('Poor result, put more effort') }}</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Administrator</td>
+                                                <td></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Administrator's Comment</td>
+                                                <td>
+                                                   <span v-if="finalResult.pass" class="text-success">{{ $t('Good Result, keep it up') }}</span>
+                                                  <span v-else class="text-danger">{{ $t('Poor result, put more effort') }}</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Resumption Day</td>
+                                                <td></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="col-4">
+                                        <table>
+                                            <thead>
+                                                <tr>
+                                                    <th>Key</th>
+                                                    <th>Point</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody v-for="(result_rule, index) in result_rules" :key="index">
+                                                <tr>
+                                                    <td>{{result_rule.min_mark}}-{{result_rule.max_mark}}%</td>
+                                                    <td>{{result_rule.name}}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+
+                        </div>
+                        <!-- <div id='print' class='col ml-5'><a href=''><i class='fa fa-print'></i></a></div>  <div id='close' class='col mr-5'><a href='result.php'><i class='fa fa-times'></i></a></div> -->
+                    </div>
+                </div>
   </div>
 
             <template v-else>
@@ -314,6 +496,8 @@ export default {
             result_rules: [],
             session: '',
             term: '',
+            template: "",
+            attendance: "",
             url: "/images/default.png"
         };
     },
@@ -325,7 +509,7 @@ export default {
                 );
                 this.students = response.data.students;
                 this.subjects = response.data.subjects;
-                 this.total_students = response.data.total_students;
+                this.total_students = response.data.total_students;
                 this.classs = response.data.classs;
                 this.class_section = response.data.class_section;
                 this.result_rules = response.data.result_rules;
@@ -339,6 +523,20 @@ export default {
                 console.log(error);
             }
         },
+
+        async getTemplate() {
+           axios.get("/api/setting")
+                .then((response) => {
+                    this.template = response.data.setting.template;
+                   // console.log(response.data.setting.template);
+                })
+        },
+
+         async getAttendance(){
+                let response = await axios.get("/api/student/attendance-chart");
+                this.attendance = response.data;
+            },
+
         getResult(subject, student) {
             const subjectResult = student.subjects[subject.id];
             if (subjectResult.entry == false) {
@@ -372,31 +570,83 @@ export default {
                 const subjectMark = this.subjectmarks.find(
                     subject => subject.subject_id == subject_id
                 );
-                return subjectMark.total;
+                return subjectMark?.total;
             } else {
                 return `<span class="text-danger">(Null)</span>`;
             }
         },
-         setCa(subject_id) {
+        setCa1(subject_id) {
             if (this.subjectmarks && this.subjectmarks.length) {
                 const subjectMark = this.subjectmarks.find(
                     subject => subject.subject_id == subject_id
                 );
-                return subjectMark.overall_ca;
+               // console.log(subjectMark);
+                return subjectMark?.ca;
             } else {
                 return `<span class="text-danger">(Null)</span>`;
             }
         },
-         setExam(subject_id) {
+
+       setCa2(subject_id) {
             if (this.subjectmarks && this.subjectmarks.length) {
                 const subjectMark = this.subjectmarks.find(
                     subject => subject.subject_id == subject_id
                 );
-                return subjectMark.mark;
+                //console.log(subjectMark);
+                return subjectMark?.ca2;
+            } else {
+                return `<span class="text-danger">(Null)</span>`;
+            }
+        },
+
+        setCa3(subject_id) {
+            if (this.subjectmarks && this.subjectmarks.length) {
+                const subjectMark = this.subjectmarks.find(
+                    subject => subject.subject_id == subject_id
+                );
+               // console.log(subjectMark);
+                return subjectMark?.ca3;
+            } else {
+                return `<span class="text-danger">(Null)</span>`;
+            }
+        },
+
+        setAllCa(subject_id) {
+            if (this.subjectmarks && this.subjectmarks.length) {
+                const subjectMark = this.subjectmarks.find(
+                    subject => subject.subject_id == subject_id
+                );
+                //console.log(subjectMark);
+                return subjectMark?.overall_ca;
+            } else {
+                return `<span class="text-danger">(Null)</span>`;
+            }
+        },
+
+        setExam(subject_id) {
+            if (this.subjectmarks && this.subjectmarks.length) {
+                const subjectMark = this.subjectmarks.find(
+                    subject => subject.subject_id == subject_id
+                );
+                //console.log(subjectMark);
+                return subjectMark?.mark;
+            } else {
+                return `<span class="text-danger">(Null)</span>`;
+            }
+        },
+
+         setCum(subject_id) {
+            if (this.subjectmarks && this.subjectmarks.length) {
+                const subjectMark = this.subjectmarks.find(
+                    subject => subject.subject_id == subject_id
+                );
+                //console.log(subjectMark);
+                return subjectMark?.cum;
             } else {
                 return `<span class="text-danger">(Null)</span>`;
             }
         }
+
 
 
     },
@@ -417,6 +667,8 @@ export default {
             this.searchForm.exam_id = this.exams[0].id;
             this.getExamResults();
         }
+        this.getTemplate();
+        this.getAttendance();
     }
 };
 </script>

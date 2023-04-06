@@ -86,12 +86,15 @@
                                      <th>{{ $t("Attendance") }}</th>
                                      <th>{{ $t("Project") }}</th>
                                      <th>{{ $t("ca") }}</th>
+                                     <th>{{ $t("ca2") }}</th>
+                                     <th>{{ $t("ca3") }}</th>
                                     <th>{{ $t("Exam") }}</th>
+                                    <th>{{ $t("Pre_cum") }}</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr v-for="(student, index) in students" :key="student.id">
-                                    <td>{{ student.user.name }} {{ student.id }}</td>
+                                    <td>{{ student.user.name }}</td>
                                     <td>{{ student.roll_no }}</td>
                                     <td>{{ student.classs.name }}</td>
                                     <td>{{ student.section.name }}</td>
@@ -138,6 +141,16 @@
                                             {{ getCaValidationErrorMessage(index) }}
                                         </div>
                                     </td>
+
+                                      <td>
+                                        <input type="number" min="0" max="100" v-model="ca_form2[index]"
+                                            class="form-control" />
+                                    </td>
+
+                                      <td>
+                                        <input type="number" min="0" max="100" v-model="ca_form3[index]" class="form-control" />
+                                    </td>
+
                                     <td>
                                         <input type="number" min="0" max="100" v-model="mark_form[index]" 
                                         class="form-control" :class="{ 'is-invalid': isExamValidationError(index) }" />
@@ -145,6 +158,10 @@
                                      <div class="help-block invalid-feedback" v-if="isExamValidationError(index)">
                                             {{ getExamValidationErrorMessage(index) }}
                                         </div>
+                                    </td>
+
+                                     <td>
+                                        <input type="number" min="0" max="100" v-model="cum_form[index]" class="form-control" />
                                     </td>
                                 </tr>
                             </tbody>
@@ -185,13 +202,17 @@ export default {
             sections: [],
             students: [],
             mark_form: [],
+            cum_form: [],
             ca_form: [],
+            ca_form2: [],
+            ca_form3: [],
             cw_form: [],
             assign_form: [],
             attend_form: [],
             pro_form: [],
             roll_form: {},
             mark_errors: [],
+            cum_errors: [],
             ca_errors: [],
             cw_errors: [],
             assign_errors: [],
@@ -213,11 +234,14 @@ export default {
         async changeClass() {
             try {
                 this.cw_form = [];
+                this.cw_form2 = [];
+                this.cw_form3 = [];
                 this.assign_form = [];
                 this.attend_form = [];
                 this.pro_form = [];
                 this.ca_form = [];
                 this.mark_form = [];
+                this.cum_form = [];
                 const subjectResponse = await axios.get(
                     `/api/classes/${this.form.class_id}/subjects`
                 );
@@ -301,13 +325,13 @@ export default {
             return false;
         },
 
-
         getCaValidationErrorMessage(index) {
             if (this.ca_errors.hasOwnProperty(`student_data.${index}.ca`)) {
                 return this.ca_errors[`student_data.${index}.ca`][0];
             }
             return "";
         },
+
         isCaValidationError(index) {
             if (this.ca_errors.hasOwnProperty(`student_data.${index}.ca`)) {
                 return true;
@@ -321,6 +345,7 @@ export default {
             }
             return "";
         },
+
         isExamValidationError(index) {
             if (this.ca_errors.hasOwnProperty(`student_data.${index}.exam`)) {
                 return true;
@@ -342,7 +367,10 @@ export default {
                     (single_student.attend = this.attend_form[index]);
                     (single_student.project = this.pro_form[index]);
                     (single_student.ca = this.ca_form[index]);
+                    (single_student.ca2 = this.ca_form2[index]);
+                    (single_student.ca3 = this.ca_form3[index]);
                     (single_student.mark = this.mark_form[index]);
+                    (single_student.cum = this.cum_form[index]);
                     single_student.roll_no = this.students[index].roll_no;
                     data.push(single_student);
                 });
@@ -366,7 +394,10 @@ export default {
             try {
                 this.mark_load = false;
                 this.mark_form = [];
+                this.cum_form = [];
                 this.ca_form = [];
+                this.ca_form2 = [];
+                this.ca_form3 = [];
                 this.cw_form = [];
                 this.assign_form = [];
                 this.attend_form = [];
@@ -391,7 +422,10 @@ export default {
                     this.attend_form[index] = mark.attend;
                     this.pro_form[index] = mark.project;
                     this.ca_form[index] = mark.ca;
+                    this.ca_form2[index] = mark.ca2;
+                    this.ca_form3[index] = mark.ca3;
                     this.mark_form[index] = mark.mark;
+                    this.cum_form[index] = mark.cum;
                 });
                 this.mark_load = true;
             } catch (error) {

@@ -46,6 +46,8 @@ class AdminSettingController extends Controller
         $setting['phone'] = $request->phone;
         $setting['address'] = $request->address;
         $setting['head'] = $request->head;
+        $setting['pass'] = $request->pass;
+        $setting['template'] = $request->template;
 
         // if ($request->has('name') && $request->name != config('app.name')) {
         //     $env->setValue('APP_NAME', $request->name);
@@ -55,7 +57,7 @@ class AdminSettingController extends Controller
         //     $env->setValue('APP_SHORT_NAME', $request->short_name);
         // }
 
-        if ($request->has('short_name') || $request->has('name')) \Artisan::call('config:clear');
+       // if ($request->has('short_name') || $request->has('name')) \Artisan::call('config:clear');
 
         if ($request->hasFile('favicon') && $request->file('favicon')->isValid()) {
             $url = uploadFileToPublic($request->favicon, 'favicon');
@@ -323,7 +325,7 @@ class AdminSettingController extends Controller
             setEnv('MAIL_FROM_ADDRESS', $request->from_address);
         }
 
-        \Artisan::call('config:clear');
+      //  \Artisan::call('config:clear');
 
         return responseSuccess('', '', 'Setting Update Successfully');
     }

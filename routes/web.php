@@ -35,7 +35,6 @@ Route::get('test', function () {
     echo $val; // Laravel App
 
 
-
     // return auth()->user()->student->id;
     $session_id = adminSetting()->default_session_id;
     return $student_attendance = StudentAttendance::where('student_id', auth()->user()->student->id)->get();
@@ -68,6 +67,13 @@ Route::get('/get-paystack-key', [AppSubController::class, 'PaystackKey']);
 Route::post("/payment-validate", [AppSubController::class, 'validatePayment']);
 Auth::routes();
 Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
+
+Route::get('/getid/{student_id}', function(Request $request){   
+    $user = User::findOrFail($request->student_id);
+    $student = $user->student;
+    return response()->json($student->id);
+});
+
 
 include(base_path('routes/payment.php'));
 
@@ -107,4 +113,3 @@ Route::middleware('school')->group(function(){
         return view('app');
     })->where('any', '[\/\w\.-]*');
 });
-

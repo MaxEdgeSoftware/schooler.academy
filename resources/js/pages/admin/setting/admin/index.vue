@@ -45,7 +45,7 @@
                             </div>
                              <div class="form-group mb-3 row">
                                 <label for="head" class="form-label col-md-3 col-form-label">
-                                    {{ $t("head") }}
+                                    {{ $t("Admin") }}
                                 </label>
                                 <div class="col-md-9">
                                     <input v-model="settingForm.head"
@@ -54,6 +54,20 @@
                                     <has-error :form="settingForm" field="head"></has-error>
                                 </div>
                             </div>
+
+                              <div class="form-group mb-3 row">
+                                <label for="pass" class="form-label col-md-3 col-form-label">
+                                    {{ $t("Pass Mark") }}
+                                </label>
+                                <div class="col-md-9">
+                                    <input v-model="settingForm.pass"  :class="{ 'is-invalid': settingForm.errors.has('pass') }" type="number" 
+                                    class="form-control" 
+                                    />
+                                <has-error :form="settingForm" field="pass"></has-error>
+                                </div>
+                            </div>
+
+
                             <div class="form-group mb-3 row">
                                 <label for="email" class="form-label col-md-3 col-form-label">{{ $t("address") }}</label>
                                 <div class="col-md-9">
@@ -84,6 +98,16 @@
                                     <img class="mb-3 border border-secondary" width="200px" height="50px" :src="preview_dark_logo" alt="image"
                                         /><br />
                                     <input @change="onDarkLogoChange" type="file" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-12">
+                             <div class="form-group mb-3 row">
+                                <label for="name" class="form-label col-md-3 col-form-label">{{ $t("Result Template") }}</label>
+                                <div class="col-md-9">
+                                    <input v-model="settingForm.template" name="template1" value="a" type="radio" /><img @click="fullImage = !fullImage" :class="{full:fullImage}" class="mb-3 border border-secondary" width="100" height="50" src="/template/1.png" alt="image"/>
+                                    <br />
+                                    <input v-model="settingForm.template" name="template2" value="b" type="radio" /><img @click="fullImage = !fullImage" :class="{full:fullImage}" class="mb-3 border border-secondary" width="100" height="50" src="/template/2.png" alt="image"/>
                                 </div>
                             </div>
                         </div>
@@ -121,16 +145,21 @@ export default {
                 short_name: "",
                 email: "",
                 address: "",
-                head:"",
+                head: "",
+                pass: "",
+                template: "",
                 phone: "",
                 favicon: "",
                 logo: "",
-                dark_logo: ""
+                dark_logo: "",
             }),
 
             preview_favicon: "",
             preview_logo: "",
-            preview_dark_logo: ""
+            preview_dark_logo: "",
+
+            fullImage: false,
+        
         };
     },
     methods: {
@@ -171,7 +200,7 @@ export default {
             } catch (err) {
                 this.toastError();
 
-                console.log(err.response);
+                console.log(err);
             }
         },
         async loadData() {
@@ -205,3 +234,9 @@ export default {
     }
 };
 </script>
+<style lang="scss" scoped>  
+.full{
+    width:100%;
+    height:auto;
+}
+</style>

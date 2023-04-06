@@ -25,18 +25,18 @@ class SystemSettingFormRequest extends FormRequest
     {
         return [
             // db
-            'db_connection' => 'required',
-            'db_host' => 'required',
-            'db_port' => 'required',
-            'db_name' => 'required',
-            'db_username' => 'required',
-            'db_password' => 'required',
+           // 'db_connection' => 'required',
+           // 'db_host' => 'required',
+          //  'db_port' => 'required',
+          //  'db_name' => 'required',
+         //   'db_username' => 'required',
+        //    'db_password' => 'required',
 
             // app
-            'app_debug' => 'required',
-            'app_url' => 'required',
-            'timezone' => 'required',
-            'currency_sign' => 'required',
+         //   'app_debug' => 'required',
+         //   'app_url' => 'required',
+        //    'timezone' => 'required',
+        //    'currency_sign' => 'required',
 
             // class routine
             'time_diff' => 'required',

@@ -59,7 +59,7 @@ class AttendanceController extends Controller
     public function saveStudentAttendance(StudentAttendanceSaveRequest $request)
     {
         $session_id = adminSetting()->default_session_id;
-
+//dd($request->student_data);
         foreach ($request->student_data as $row) {
             $row['session_id'] = $session_id;
             $attendance = StudentAttendance::where('student_id', $row['student_id'])

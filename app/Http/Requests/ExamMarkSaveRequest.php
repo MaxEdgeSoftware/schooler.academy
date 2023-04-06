@@ -29,8 +29,8 @@ class ExamMarkSaveRequest extends FormRequest
             'student_data.*.subject_id'        =>  ['required', 'exists:subjects,id'],
             'student_data.*.section_id'        =>  ['required', 'exists:sections,id'],
             'student_data.*.roll_no'           =>  ['required',],
-            'student_data.*.class_work'              =>  ['required', 'numeric', 'max:100', 'min:0', '']
-           // 'student_data.*.ca'              =>  ['required', 'numeric', 'max:100', 'min:0', '']
+           // 'student_data.*.class_work'              =>  ['required', 'numeric', 'max:100', 'min:0', '']
+            //'student_data.*.ca'              =>  ['required', 'numeric', 'max:100', 'min:0', '']
             //'student_data.*.mark'              =>  ['required', 'numeric', 'max:100', 'min:0', '']
 
         ];

@@ -10,12 +10,12 @@ class ExamMark extends Model
     use HasFactory;
 
     protected $fillable = [
-        'session_id', 'exam_id', 'class_id', 'section_id', 'subject_id', 'roll_no', 'class_work', 'assign', 'attend', 'project', 'ca', 'mark', 'note','school_id'
+        'session_id', 'exam_id', 'class_id', 'section_id', 'subject_id', 'roll_no', 'class_work', 'assign', 'attend', 'project', 'ca', 'ca2', 'ca3', 'mark', 'cum', 'note','school_id'
     ];
 
     public function setSessionIdAttribute()
     {
-        $this->attributes['session_id'] = adminSetting()->default_session_id;
+        $this->attributes['session_id'] = school()->default_session_id;
     }
 
     public function exam()
