@@ -19,6 +19,9 @@ export default {
         async fetchSetting(context) {
             try {
                 let response = await axios.get("/api/setting");
+                let response_ = await axios.get("/app/setting");
+                console.log(response_)
+                console.log(response)
                 if(response.data.setting == 'not-found'){
                     window.location.assign('/not-found');
                 }

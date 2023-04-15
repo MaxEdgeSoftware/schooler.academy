@@ -8832,13 +8832,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             case 0:
               commit = _ref.commit, dispatch = _ref.dispatch;
               _context.next = 3;
-              return axios__WEBPACK_IMPORTED_MODULE_0___default().get('/sanctum/csrf-cookie');
-            case 3:
-              _context.next = 5;
               return form.post('/login');
-            case 5:
+            case 3:
               return _context.abrupt("return", dispatch('authUser'));
-            case 6:
+            case 4:
             case "end":
               return _context.stop();
           }
@@ -8866,7 +8863,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     authUser: function authUser(_ref3) {
       var commit = _ref3.commit,
         dispatch = _ref3.dispatch;
-      return axios__WEBPACK_IMPORTED_MODULE_0___default().get('/api/user').then(function (response) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default().get('/app/user').then(function (response) {
         commit('SET_AUTHENTICATED', true);
         commit('SET_USER', response.data);
         localStorage.setItem("auth", true);
@@ -10708,7 +10705,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     fetchSetting: function fetchSetting(context) {
       var _this = this;
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-        var response;
+        var response, response_;
         return _regeneratorRuntime().wrap(function _callee$(_context) {
           while (1) switch (_context.prev = _context.next) {
             case 0:
@@ -10717,22 +10714,28 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               return axios__WEBPACK_IMPORTED_MODULE_0___default().get("/api/setting");
             case 3:
               response = _context.sent;
+              _context.next = 6;
+              return axios__WEBPACK_IMPORTED_MODULE_0___default().get("/app/setting");
+            case 6:
+              response_ = _context.sent;
+              console.log(response_);
+              console.log(response);
               if (response.data.setting == 'not-found') {
                 window.location.assign('/not-found');
               }
               context.commit("SET_ADMIN_SETTING", response.data.setting);
-              _context.next = 12;
+              _context.next = 17;
               break;
-            case 8:
-              _context.prev = 8;
+            case 13:
+              _context.prev = 13;
               _context.t0 = _context["catch"](0);
               _this.toastError(_context.t0.response.data.message);
               console.log(_context.t0);
-            case 12:
+            case 17:
             case "end":
               return _context.stop();
           }
-        }, _callee, null, [[0, 8]]);
+        }, _callee, null, [[0, 13]]);
       }))();
     }
   }
@@ -10976,7 +10979,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   actions: {
     fetchUsers: function fetchUsers(context) {
-      axios__WEBPACK_IMPORTED_MODULE_0___default().get('/api/users').then(function (response) {
+      axios__WEBPACK_IMPORTED_MODULE_0___default().get('/app/users').then(function (response) {
         context.commit('FETCH_USERS', response.data.users);
       })["catch"](function (err) {
         console.log(err);
@@ -15585,7 +15588,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.page-loading[data-v-e79ec684] {\n    height: 50px;\n    width: 100%;\n    display: flex;\n    justify-content: center;\n    align-items: center;\n}\n.page-loading span[data-v-e79ec684]{\n    display: contents\n}\n.page-loading span div[data-v-e79ec684]{\n    width: 30px;\n    height: 30px;\n    border-width: 2px;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.page-loading[data-v-e79ec684] {\r\n    height: 50px;\r\n    width: 100%;\r\n    display: flex;\r\n    justify-content: center;\r\n    align-items: center;\n}\n.page-loading span[data-v-e79ec684]{\r\n    display: contents\n}\n.page-loading span div[data-v-e79ec684]{\r\n    width: 30px;\r\n    height: 30px;\r\n    border-width: 2px;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 

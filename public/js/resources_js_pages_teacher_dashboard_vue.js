@@ -16114,7 +16114,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\nbody[data-v-2614b919]{\n    margin-top:20px;\n}\n.bg-light-gray[data-v-2614b919] {\n    background-color: #f7f7f7;\n}\n.bg-sky.box-shadow[data-v-2614b919] {\n    box-shadow: 0px 5px 0px 0px #00a2a7\n}\n.bg-orange.box-shadow[data-v-2614b919] {\n    box-shadow: 0px 5px 0px 0px #af4305\n}\n.bg-green.box-shadow[data-v-2614b919] {\n    box-shadow: 0px 5px 0px 0px #4ca520\n}\n.bg-yellow.box-shadow[data-v-2614b919] {\n    box-shadow: 0px 5px 0px 0px #dcbf02\n}\n.bg-pink.box-shadow[data-v-2614b919] {\n    box-shadow: 0px 5px 0px 0px #e82d8b\n}\n.bg-purple.box-shadow[data-v-2614b919] {\n    box-shadow: 0px 5px 0px 0px #8343e8\n}\n.bg-lightred.box-shadow[data-v-2614b919] {\n    box-shadow: 0px 5px 0px 0px #d84213\n}\n.bg-sky[data-v-2614b919] {\n    background-color: #02c2c7\n}\n.bg-orange[data-v-2614b919] {\n    background-color: #e95601\n}\n.bg-green[data-v-2614b919] {\n    background-color: #5bbd2a\n}\n.bg-yellow[data-v-2614b919] {\n    background-color: #f0d001\n}\n.bg-pink[data-v-2614b919] {\n    background-color: #ff48a4\n}\n.bg-purple[data-v-2614b919] {\n    background-color: #9d60ff\n}\n.bg-lightred[data-v-2614b919] {\n    background-color: #ff5722\n}\n.padding-15px-lr[data-v-2614b919] {\n    padding-left: 15px;\n    padding-right: 15px;\n}\n.padding-5px-tb[data-v-2614b919] {\n    padding-top: 5px;\n    padding-bottom: 5px;\n}\n.margin-10px-bottom[data-v-2614b919] {\n    margin-bottom: 10px;\n}\n.border-radius-5[data-v-2614b919] {\n    border-radius: 5px;\n}\n.margin-10px-top[data-v-2614b919] {\n    margin-top: 10px;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\nbody[data-v-2614b919]{\r\n    margin-top:20px;\n}\n.bg-light-gray[data-v-2614b919] {\r\n    background-color: #f7f7f7;\n}\n.bg-sky.box-shadow[data-v-2614b919] {\r\n    box-shadow: 0px 5px 0px 0px #00a2a7\n}\n.bg-orange.box-shadow[data-v-2614b919] {\r\n    box-shadow: 0px 5px 0px 0px #af4305\n}\n.bg-green.box-shadow[data-v-2614b919] {\r\n    box-shadow: 0px 5px 0px 0px #4ca520\n}\n.bg-yellow.box-shadow[data-v-2614b919] {\r\n    box-shadow: 0px 5px 0px 0px #dcbf02\n}\n.bg-pink.box-shadow[data-v-2614b919] {\r\n    box-shadow: 0px 5px 0px 0px #e82d8b\n}\n.bg-purple.box-shadow[data-v-2614b919] {\r\n    box-shadow: 0px 5px 0px 0px #8343e8\n}\n.bg-lightred.box-shadow[data-v-2614b919] {\r\n    box-shadow: 0px 5px 0px 0px #d84213\n}\n.bg-sky[data-v-2614b919] {\r\n    background-color: #02c2c7\n}\n.bg-orange[data-v-2614b919] {\r\n    background-color: #e95601\n}\n.bg-green[data-v-2614b919] {\r\n    background-color: #5bbd2a\n}\n.bg-yellow[data-v-2614b919] {\r\n    background-color: #f0d001\n}\n.bg-pink[data-v-2614b919] {\r\n    background-color: #ff48a4\n}\n.bg-purple[data-v-2614b919] {\r\n    background-color: #9d60ff\n}\n.bg-lightred[data-v-2614b919] {\r\n    background-color: #ff5722\n}\n.padding-15px-lr[data-v-2614b919] {\r\n    padding-left: 15px;\r\n    padding-right: 15px;\n}\n.padding-5px-tb[data-v-2614b919] {\r\n    padding-top: 5px;\r\n    padding-bottom: 5px;\n}\n.margin-10px-bottom[data-v-2614b919] {\r\n    margin-bottom: 10px;\n}\n.border-radius-5[data-v-2614b919] {\r\n    border-radius: 5px;\n}\n.margin-10px-top[data-v-2614b919] {\r\n    margin-top: 10px;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -16144,7 +16144,7 @@ var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBP
 ___CSS_LOADER_EXPORT___.i(_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_fullcalendar_core_main_css__WEBPACK_IMPORTED_MODULE_1__["default"]);
 ___CSS_LOADER_EXPORT___.i(_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_fullcalendar_daygrid_main_css__WEBPACK_IMPORTED_MODULE_2__["default"]);
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n@media (max-width: 425px) {\n.fc-left h2 {\n        font-size: 17px;\n}\n.fc-button {\n        font-size: 8px;\n}\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n@media (max-width: 425px) {\n.fc-left h2 {\r\n        font-size: 17px;\n}\n.fc-button {\r\n        font-size: 8px;\n}\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -16192,7 +16192,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.header[data-v-42e171e4] {\n    position: sticky;\n    top: 0;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.header[data-v-42e171e4] {\r\n    position: sticky;\r\n    top: 0;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 

@@ -29,7 +29,7 @@ export default {
 
     actions: {
         async login ({ commit, dispatch }, form) {
-            await axios.get('/sanctum/csrf-cookie')
+            // await axios.get('/sanctum/csrf-cookie')
             await form.post('/login')
             
             return dispatch('authUser')
@@ -41,7 +41,7 @@ export default {
         },
 
         authUser ({ commit, dispatch }) {
-            return axios.get('/api/user').then((response) => {
+            return axios.get('/app/user').then((response) => {
                 commit('SET_AUTHENTICATED', true)
                 commit('SET_USER', response.data)
                 localStorage.setItem("auth", true);

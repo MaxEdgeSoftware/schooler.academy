@@ -76,9 +76,15 @@ Route::get('/getid/{student_id}', function(Request $request){
 
 
 include(base_path('routes/payment.php'));
-
+Route::get('/u', function(){
+    if(!auth()->check()){
+        Auth::login(User::first());
+        dd("not active", User::first()->id);
+    }
+    dd(auth()->guard('web')->user());
+});
 // ====================Artisan command======================
-Route::middleware('auth')->group(function () {
+Route::middleware('auth:web')->group(function () {
     Route::get('route-clear', function () {
         \Artisan::call('route:clear');
         dd("Route Cleared");

@@ -62,6 +62,10 @@ Route::get('app/default', function () {
     ]);
 });
 
+// Route::get('/setting', function(){
+//     return response(auth()->user());
+// });
+Route::get('/setting', [AdminSettingController::class, 'fetchSetting']);
 // protected api routes
 Route::middleware('auth')->group(function () {
     Route::get('/users/details', [UserController::class, 'details']);
@@ -74,7 +78,6 @@ Route::middleware('auth')->group(function () {
 
 
     // admin setting
-    Route::get('/setting', [AdminSettingController::class, 'fetchSetting'])->withoutMiddleware('auth');
     Route::post('/setting', [AdminSettingController::class, 'updateSetting']);
     Route::get('/setting/system', [AdminSettingController::class, 'getSystemSettings']);
     Route::post('/setting/system', [AdminSettingController::class, 'updateSystemSettings']);

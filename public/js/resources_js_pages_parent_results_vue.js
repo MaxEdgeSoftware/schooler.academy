@@ -166,7 +166,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         var subjectMark = this.subjectmarks.find(function (subject) {
           return subject.subject_id == subject_id;
         });
-        return subjectMark.total;
+        return subjectMark === null || subjectMark === void 0 ? void 0 : subjectMark.total;
       } else {
         return "<span class=\"text-danger\">(Null)</span>";
       }
@@ -176,7 +176,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         var subjectMark = this.subjectmarks.find(function (subject) {
           return subject.subject_id == subject_id;
         });
-        return subjectMark.ca;
+        return subjectMark === null || subjectMark === void 0 ? void 0 : subjectMark.ca;
       } else {
         return "<span class=\"text-danger\">(Null)</span>";
       }
@@ -186,7 +186,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         var subjectMark = this.subjectmarks.find(function (subject) {
           return subject.subject_id == subject_id;
         });
-        return subjectMark.ca2;
+        return subjectMark === null || subjectMark === void 0 ? void 0 : subjectMark.ca2;
       } else {
         return "<span class=\"text-danger\">(Null)</span>";
       }
@@ -196,7 +196,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         var subjectMark = this.subjectmarks.find(function (subject) {
           return subject.subject_id == subject_id;
         });
-        return subjectMark.ca3;
+        return subjectMark === null || subjectMark === void 0 ? void 0 : subjectMark.ca3;
       } else {
         return "<span class=\"text-danger\">(Null)</span>";
       }
@@ -206,7 +206,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         var subjectMark = this.subjectmarks.find(function (subject) {
           return subject.subject_id == subject_id;
         });
-        return subjectMark.overall_ca;
+        return subjectMark === null || subjectMark === void 0 ? void 0 : subjectMark.overall_ca;
       } else {
         return "<span class=\"text-danger\">(Null)</span>";
       }
@@ -216,7 +216,17 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         var subjectMark = this.subjectmarks.find(function (subject) {
           return subject.subject_id == subject_id;
         });
-        return subjectMark.mark;
+        return subjectMark === null || subjectMark === void 0 ? void 0 : subjectMark.mark;
+      } else {
+        return "<span class=\"text-danger\">(Null)</span>";
+      }
+    },
+    setCum: function setCum(subject_id) {
+      if (this.subjectmarks && this.subjectmarks.length) {
+        var subjectMark = this.subjectmarks.find(function (subject) {
+          return subject.subject_id == subject_id;
+        });
+        return subjectMark === null || subjectMark === void 0 ? void 0 : subjectMark.mark;
       } else {
         return "<span class=\"text-danger\">(Null)</span>";
       }
@@ -520,7 +530,11 @@ var render = function render() {
     staticClass: "row"
   }, [_c("div", {
     staticClass: "col-12"
-  }, [_c("table", [_c("tr", [_c("th", [_vm._v("Name")]), _vm._v(" "), _c("td", {
+  }, [_c("table", [_c("tr", [_c("th", [_c("h3", [_vm._v(_vm._s(_vm.school_info.school))])]), _vm._v(" "), _c("th", {
+    attrs: {
+      colspan: "4"
+    }
+  }, [_c("h3", [_vm._v(_vm._s(_vm.school_info.address))])])]), _vm._v(" "), _c("tr", [_c("th", [_vm._v("Name")]), _vm._v(" "), _c("td", {
     attrs: {
       colspan: "4"
     }
@@ -577,7 +591,7 @@ var render = function render() {
       }
     })]), _vm._v(" "), _c("td", [_c("span", {
       domProps: {
-        innerHTML: _vm._s(_vm.setMarks(subject.id))
+        innerHTML: _vm._s(_vm.setCum(subject.id))
       }
     })]), _vm._v(" "), _vm.students[0] ? _c("td", {
       domProps: {

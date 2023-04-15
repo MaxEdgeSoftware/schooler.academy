@@ -17,7 +17,7 @@ export default {
     },
     actions: {
         fetchUsers(context){
-            axios.get('/api/users').then((response) => {
+            axios.get('/app/users').then((response) => {
                 context.commit('FETCH_USERS', response.data.users)
             }).catch((err) => {
               console.log(err);
