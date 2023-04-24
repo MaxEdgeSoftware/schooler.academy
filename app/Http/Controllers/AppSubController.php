@@ -23,7 +23,7 @@ class AppSubController extends Controller
     public function index(){
         if(!auth()->check()) return response()->json(false);
         // get last session 
-        $currentSession = Session::orderBy("id", "desc")->where("school_id", $this->school->id)->first();
+        $currentSession = Session::where("id", $this->school->default_session_id)->first();
         //if(!$currentSession) return response()->json(true);
         
          // get last term

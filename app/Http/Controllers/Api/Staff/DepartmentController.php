@@ -35,7 +35,7 @@ class DepartmentController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => ['required', 'unique:departments,name']
+            'name' => ['required']
         ]);
         $data = $request->all();
         $data["school_id"] = school()->id;

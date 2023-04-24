@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Storage;
+use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
@@ -92,9 +93,10 @@ class User extends Authenticatable
 
     public function getOriginalRoleAttribute()
     {
-        return $this->role;
-        info($this->load('roles:id,name')->roles[0]);
-        return $this->load('roles:id,name')->roles[0]->name;
+        $role = $this->role;
+        $role = Role::where("name", ucwords($role))->where("school_id", school()->id)->first();
+        return $role->name;
+        // return $this->load('roles:id,name')->roles[0]->name;
     }
 
     public function student()
