@@ -108,3 +108,44 @@ function school(){
     $http = $_SERVER["HTTP_HOST"];
     return AdminSetting::where('domain', $http)->firstOrFail();
 }
+
+
+function sendTribearc($receiver_email, $subject, $message)
+{
+        $curl = curl_init();
+        curl_setopt(
+            $curl,
+            CURLOPT_URL,
+            "https://mail.tribearc.com/api/campaigns/send_now.php"
+        );
+        curl_setopt($curl, CURLOPT_FOLLOWLOCATION, 1);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false); //
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false); //
+        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "POST"); //
+        curl_setopt($curl, CURLOPT_POSTFIELDS, [
+            "api_key" => env("Tribearc_API_KEY"),
+            "from_name" => "SCHOOLERTECH ACADEMY",
+            "from_email" => "noreply@edutech.com",
+            "reply_to" => "noreply@edutech.com",
+            "subject" => $subject,
+            "html_text" => $message,
+            "track_opens" => "1",
+            "track_clicks" => "1",
+            "send_campaign" => "1",
+            "json" => "1",
+            "emails" => $receiver_email,
+            "business_address" => "EC3N 4EE 1 TOWER HILL TERRACE, LONDON, UK",
+            "business_name" => "SCHOOLERTECH ACADEMY",
+        ]);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, array('Api-Token:' . env('TRIBEARC_MAIL_API_KEY')));
+
+        $response = curl_exec($curl);
+        $res = $response;
+        curl_close($curl);
+        if($res == 'Message sent!'){
+            return $res;
+        }else{
+            return 'An error occurred';
+        }
+}

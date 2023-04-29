@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\StudentAttendance;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
@@ -60,11 +61,24 @@ Route::get('seed-tables', function(){
 // route for checking subscription
 Route::get('/app-subscription/check', [AppSubController::class, 'index']);
 Route::get('/create-school', [AppSubController::class, 'createSchool']);
+Route::get('/ui', function(){
+    return view("emails.messages.template");
+});
 
 Route::get('/auth-user', function(){return response()->json(auth()->user());});
 Route::get('/edutech-plans', [AppSubController::class, 'EdutechPlans']);
 Route::get('/get-paystack-key', [AppSubController::class, 'PaystackKey']);
 Route::post("/payment-validate", [AppSubController::class, 'validatePayment']);
+Route::get("/token", function(Request $request){
+    $token = $request->get("token");
+
+    if($token == "") abort(404);
+
+    $crypt = Crypt::decrypt($token);
+    $u = User::where("school_id", school()->id)->where("email", $crypt)->first();
+    Auth::login($u);
+    return redirect("/sms");
+});
 Auth::routes();
 Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
 
