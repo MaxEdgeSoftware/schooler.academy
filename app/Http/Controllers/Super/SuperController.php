@@ -142,7 +142,7 @@ class SuperController extends Controller
         ];
     
         $content = view("emails.messages.template", $data)->render();
-        sendTribearc("horphy1@gmail.com", "WELCOME TO EDUTECH SCHOOLS", $content);
+        sendTribearc($request->email, "WELCOME TO EDUTECH SCHOOLS", $content);
         // send email
         return response()->json([
             'code' => 200,
